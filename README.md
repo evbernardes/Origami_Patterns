@@ -55,4 +55,5 @@ magic-ball
 - Add more patterns if necessary
 - Add styles as option (dashed, etc)
 - Add option to draw points
+- Finish implementing unit selector (everything is drawn in milimeters, the selector does not do anything yet)
 
