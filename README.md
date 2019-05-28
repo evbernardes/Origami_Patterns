@@ -14,29 +14,38 @@ To simplify editing, ungrouping it you get three distinct groups of objects: the
 ```
 magic-ball
 ├── enclosures
-│   ├── bottom
-│   ├── left
-│   ├── right
-│   └── top
+│   ├── bottom
+│   ├── left
+│   ├── right
+│   └── top
 ├── mountains
-│   ├── horizontal lines
-│   └── vertical lines
+│   ├── horizontal lines
+│   └── vertical lines
 └── valleys
     ├── line 1
-    │   ├── bottom
-    │   └── top
+    │   ├── bottom
+    │   └── top
     ├── line 2
-    │   ├── bottom
-    │   └── top
+    │   ├── bottom
+    │   └── top
     ├── line 3
-    │   ├── bottom
-    │   └── top
+    │   ├── bottom
+    │   └── top
     └── line ...
         ├── bottom
         └── top
 ```
 
-## Origami tesselation patterns implemented until now:
+## Installation:
+To install a new extension, download and unpack the archive file. Copy the files into the directory listed at `Edit > Preferences > System: User extensions`
+
+On Windows, the default directory is:
+`C:\Program Files\Inkscape\share\extensions`
+
+While on Linux, the directory is:
+`/home/$USER/.config/inkscape/extensions/`
+
+## Patterns implemented until now:
 - Magic ball
 
 ## Todo:
