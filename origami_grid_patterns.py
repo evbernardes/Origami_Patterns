@@ -129,18 +129,7 @@ def paths_to_group(paths,group,style):
             attribs = { 'style': simplestyle.formatStyle(style), 'd': subpaths}
             inkex.etree.SubElement(group, inkex.addNS('path','svg'), attribs )
 
-# def points_to_group(points,group,style):
-#     for subpaths in paths:
-#         if type(subpaths) == list:
-#             subgroup = inkex.etree.SubElement(group, 'g')
-#             paths_to_group(subpaths,subgroup,style)
-#         else:
-#             attribs = { 'style': simplestyle.formatStyle(style), 'd': subpaths}
-#             inkex.etree.SubElement(group, inkex.addNS('path','svg'), attribs )
-
-### Your main function subclasses the inkex.Effect class
-
-class OrigamiGridPatterns(inkex.Effect): # choose a better name
+class OrigamiGridPatterns(inkex.Effect): 
     
     def __init__(self):
         " define how the options are mapped from the inx file "
