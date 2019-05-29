@@ -91,24 +91,17 @@ def create_magic_ball(lines,columns,length):
 
             valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
 
-        
-
-
 	
     # create a list for enclosure strokes
     enclosures = []
-    enclosures.append(points_to_path([  (x_grid[0][1],y_grid[0][1]),    # left
-                                        (x_grid[0][1],y_grid[-1][1])]))
-
-    enclosures.append(points_to_path([  (x_grid[-1][1],y_grid[0][1]),   # right
-                                        (x_grid[-1][1],y_grid[-1][1])]))
-
     enclosures.append(points_to_path([  (x_grid[0][1],y_grid[0][1]),    # top
                                         (x_grid[-1][1],y_grid[0][1])]))
-
+    enclosures.append(points_to_path([  (x_grid[-1][1],y_grid[0][1]),   # right
+                                        (x_grid[-1][1],y_grid[-1][1])]))
     enclosures.append(points_to_path([  (x_grid[0][1],y_grid[-1][1]),   # bottom
                                         (x_grid[-1][1],y_grid[-1][1])]))
-    
+    enclosures.append(points_to_path([  (x_grid[0][1],y_grid[0][1]),    # left
+                                        (x_grid[0][1],y_grid[-1][1])]))
 	
     return points,mountains,valleys,enclosures
 
