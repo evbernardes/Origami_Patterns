@@ -178,18 +178,58 @@ class OrigamiGridPatterns(inkex.Effect):
                                      action="store", type="int",
                                      dest="accuracy", default=0,
                                      help="command line help")
-        self.OptionParser.add_option('-v', '--valleyColor', action = 'store',
-                                     type = 'string', dest = 'valleyColor',
+
+        self.OptionParser.add_option('-v', '--valley_stroke_color', action = 'store',
+                                     type = 'string', dest = 'valley_stroke_color',
                                      default = 65535, # Blue
                                      help = 'The valley creases color.')
-        self.OptionParser.add_option('-m', '--mountainColor', action = 'store',
-                                     type = 'string', dest = 'mountainColor',
+        self.OptionParser.add_option('', '--valley_stroke_width', action = 'store',
+                                     type = 'float', dest = 'valley_stroke_width',
+                                     default = 0.1,
+                                     help = 'Width of valley strokes.')
+        self.OptionParser.add_option('', '--valley_dashes_number', action = 'store',
+                                     type = 'float', dest = 'valley_dashes_number',
+                                     default = 6,
+                                     help = 'Dashes per length unit.')
+        self.OptionParser.add_option('', '--valley_dashes_bool', action = 'store',
+                                     type = 'inkbool', dest = 'valley_dashes_bool',
+                                     default = True,
+                                     help = 'Dashed strokes?.')
+
+        self.OptionParser.add_option('-m', '--mountain_stroke_color', action = 'store',
+                                     type = 'string', dest = 'mountain_stroke_color',
                                      default = 4278190335, # Red
                                      help = 'The mountain creases color.')
-        self.OptionParser.add_option('-e', '--enclosureColor', action = 'store',
-                                     type = 'string', dest = 'enclosureColor',
+        self.OptionParser.add_option('', '--mountain_stroke_width', action = 'store',
+                                     type = 'float', dest = 'mountain_stroke_width',
+                                     default = 0.1,
+                                     help = 'Width of mountain strokes.')
+        self.OptionParser.add_option('', '--mountain_dashes_number', action = 'store',
+                                     type = 'float', dest = 'mountain_dashes_number',
+                                     default = 6,
+                                     help = 'Dashes per length unit.')
+        self.OptionParser.add_option('', '--mountain_dashes_bool', action = 'store',
+                                     type = 'inkbool', dest = 'mountain_dashes_bool',
+                                     default = True,
+                                     help = 'Dashed strokes?.')
+
+        self.OptionParser.add_option('-e', '--enclosure_stroke_color', action = 'store',
+                                     type = 'string', dest = 'enclosure_stroke_color',
                                      default = 16711935, # Green
                                      help = 'The mountain creases color.')
+        self.OptionParser.add_option('', '--enclosure_stroke_width', action = 'store',
+                                     type = 'float', dest = 'enclosure_stroke_width',
+                                     default = 0.1,
+                                     help = 'Width of enclosure strokes.')
+        self.OptionParser.add_option('', '--enclosure_dashes_number', action = 'store',
+                                     type = 'float', dest = 'enclosure_dashes_number',
+                                     default = 6,
+                                     help = 'Dashes per length unit.')
+        self.OptionParser.add_option('', '--enclosure_dashes_bool', action = 'store',
+                                     type = 'inkbool', dest = 'enclosure_dashes_bool',
+                                     default = False,
+                                     help = 'Dashed strokes?.')
+
         # here so we can have tabs - but we do not use it directly - else error
         self.OptionParser.add_option("", "--active-tab",
                                      action="store", type="string",
@@ -252,9 +292,6 @@ class OrigamiGridPatterns(inkex.Effect):
               iterate through them
             - Turn on other visual features e.g. cross, rack, annotations, etc
         """
-        valley_stroke_color = self.getColorString(self.options.valleyColor)
-        mountain_stroke_color = self.getColorString(self.options.mountainColor)
-        enclosure_stroke_color = self.getColorString(self.options.enclosureColor)
         # gather incoming params and convert
         lines = self.options.lines
         columns = self.options.columns
@@ -280,17 +317,29 @@ class OrigamiGridPatterns(inkex.Effect):
         points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
         
         # Create mountain group and add them to top group
-        mountain_style = { 'stroke': mountain_stroke_color, 'fill': 'none', 'stroke-width': 0.1 }
+        mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.mountain_stroke_width}
+        if(self.options.mountain_dashes_bool): 
+            mountain_style['stroke-dasharray'] = (length/2)/self.options.mountain_dashes_number
         mountain_group = inkex.etree.SubElement(topgroup, 'g')
         paths_to_group(mountains,mountain_group,mountain_style)
         
         # Create valley group and add them to top group
-        valley_style = { 'stroke': valley_stroke_color, 'fill': 'none', 'stroke-width': 0.1 }
+        valley_style = {    'stroke': self.getColorString(self.options.valley_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.valley_stroke_width}
+        if(self.options.valley_dashes_bool): 
+            valley_style['stroke-dasharray'] = (length/2)/self.options.valley_dashes_number
         valley_group = inkex.etree.SubElement(topgroup, 'g')
         paths_to_group(valleys,valley_group,valley_style)
         
         # Create enclosure group and add them to top group
-        enclosure_style = { 'stroke': enclosure_stroke_color, 'fill': 'none', 'stroke-width': 0.2 }
+        enclosure_style = { 'stroke': self.getColorString(self.options.enclosure_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.enclosure_stroke_width}
+        if(self.options.enclosure_dashes_bool): 
+            enclosure_style['stroke-dasharray'] = (length/2)/self.options.enclosure_dashes_number
         enclosure_group = inkex.etree.SubElement(topgroup, 'g')
         paths_to_group(enclosures,enclosure_group,enclosure_style)
         

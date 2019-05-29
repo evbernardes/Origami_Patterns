@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-	<!-- _name must have same name as .py file but capitalise it. Shows on Menu this way-->
 	<_name>Origami grid patterns</_name>
-	<!-- id should be unique. Associates entered values with this menu -->
 	<id>org.inkscape.Origami_grid_patterns</id>
-	<!-- mention a dependency here and will check for existence (optional)-->
 	<dependency type="executable" location="extensions">origami_grid_patterns.py</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
 
@@ -20,7 +17,7 @@
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>
 			<param name="columns" type="int" min="1" max="100" _gui-text="Number of columns">16</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
-			<param name="length" type="float" max="10000" precision=".01"  _gui-text="Length of grid square">10.0</param>
+			<param name="length" type="float" max="10000"  _gui-text="Length of grid square">10.0</param>
 			<param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
 				<option value="cm">cm</option>
@@ -31,19 +28,25 @@
 		</page>
 		<!-- next tab -->
 		<page name="valleys" _gui-text="Valley creases">
+			<param name="valley_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="valley_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">10</param>
+			<param name="valley_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of valley strokes">0.1</param>
 			<param name="desc_unit" type="description">Set the strokes for the valley creases</param>
-			<!-- color is just like an int. BUT only single use on a page-->
-			<param name="valleyColor" type="color" gui-text="Valley creases color: ">65535</param>
+			<param name="valley_stroke_color" type="color" gui-text="Valley creases color: ">65535</param>
 		</page>
 		<page name="mountains" _gui-text="Mountain creases">
+			<param name="mountain_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="mountain_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">6</param>
+			<param name="mountain_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of mountain strokes">0.1</param>
 			<param name="desc_unit" type="description">Set the strokes for the mountain creases</param>
-			<!-- color is just like an int. BUT only single use on a page-->
-			<param name="mountainColor" type="color" gui-text="Mountain creases color: ">4278190335</param>
+			<param name="mountain_stroke_color" type="color" gui-text="Mountain creases color: ">4278190335</param>
 		</page>
 		<page name="enclosure" _gui-text="Enclosure">
+			<param name="enclosure_dashes_bool" type="boolean" _gui-text="Dashed strokes?">false</param>
+			<param name="enclosure_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">1</param>
+			<param name="enclosure_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of mountain strokes">0.1</param>
 			<param name="desc_unit" type="description">Set the strokes for the enclosure</param>
-			<!-- color is just like an int. BUT only single use on a page-->
-			<param name="enclosureColor" type="color" gui-text="Mountain creases color: ">16711935</param>
+			<param name="enclosure_stroke_color" type="color" gui-text="Mountain creases color: ">16711935</param>
 		</page>
 	</param>
 	<!-- classify which menu it appears under - can be new name -->

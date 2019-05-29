@@ -17,7 +17,8 @@ The extension can be found on `Extensions > Origami > Origami grid patterns`
 - Number of lines
 - Number of columns
 - Length of each grid square
-- Colors or mountain creases, valley creases and enclosure
+- Colors of mountain creases, valley creases and enclosure
+- Dashed strokes of mountain creases, valley creases and enclosure
 
 ## Output:
 Creates the pattern. 
@@ -53,7 +54,6 @@ magic-ball
 
 ## Todo:
 - Add more patterns if necessary
-- Add styles as option (dashed, etc)
 - Add option to draw points
 - Finish implementing unit selector (everything is drawn in milimeters, the selector does not do anything yet)
 
