@@ -211,7 +211,7 @@ class OrigamiGridPatterns(inkex.Effect):
 
         self.OptionParser.add_option('-e', '--enclosure_stroke_color', action = 'store',
                                      type = 'string', dest = 'enclosure_stroke_color',
-                                     default = 16711935, # Green
+                                     default = 255, # Black
                                      help = 'The mountain creases color.')
         self.OptionParser.add_option('', '--enclosure_stroke_width', action = 'store',
                                      type = 'float', dest = 'enclosure_stroke_width',
