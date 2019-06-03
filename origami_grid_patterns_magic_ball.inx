@@ -9,9 +9,9 @@
 	<param name='active-tab' type="notebook">
 		<!-- one per page(tab) - unique names. Can discover which page in program-->
 		<page name="title" _gui-text="Options">
-			<param name="pattern" type="optiongroup" _gui-text="Magic ball pattern" >
+			<param name="pattern" type="optiongroup" _gui-text="Type of magic ball" >
 				<!-- underscores indicate translatability -->
-				<_option value="magic_ball">Regular Magic Ball grid</_option>
+				<_option value="magic_ball">Regular Magic Ball</_option>
 			</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>
