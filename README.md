@@ -1,4 +1,4 @@
-# Origami_Grid_Pattern
+# Origami Grid Patterns
 Inkscape extension that creates origami tesselation patterns, create for the Origabot project
 
 ## Installation:
