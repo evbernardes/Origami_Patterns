@@ -8,7 +8,9 @@ Example of extensions template for inkscape
 import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
+import numpy as np
 # many other useful ones in extensions folder. E.g. simplepath, cubicsuperpath, ...
+
 
 from math import cos, sin, radians
 
@@ -108,6 +110,120 @@ def create_magic_ball(lines,columns,length):
 	
     return points,mountains,valleys,enclosures
 
+def create_kresling(lines,n,R,angle_ratio):
+    theta = (np.pi/2)*(1 - 2/n)
+    l = 2*R*np.cos(theta*(1-angle_ratio))
+    a = 2*R*np.sin(np.pi/n)
+    b = np.sqrt(a*a + l*l - 2*a*l*np.cos(angle_ratio*theta))
+
+    cos_phi = (l*l + b*b - a*a)/(2*l*b)
+    dy = b*cos_phi
+    dx = b*np.sqrt((1 - cos_phi*cos_phi))
+
+    # inkex.debug('a = {}'.format(a))
+    # inkex.debug('b = {}'.format(b))
+    # inkex.debug('l = {}'.format(l))
+    # inkex.debug('dx = {}'.format(dx))
+    # inkex.debug('dy = {}'.format(dy))
+    
+    # create grid
+    x_grid = []
+    y_grid = []
+    for j in range(lines + 1):
+        x_grid_ = [dx*j + a*i for i in range(0,n + 1)]
+        x_grid.append(x_grid_)
+        y_grid.append(dy*j)
+    
+
+    # create points
+    points = []
+    # for y in zip(*y_grid)[1]:
+    #     points.append([(x,y) for x in zip(*x_grid)[1]])
+    
+    # create a list for the horizontal creases and another for the vertical creases
+    # alternate strokes to minimize laser cutter path
+    mountain_path_h = []
+    for i in range(1,lines):
+        if i % 2 == 0:	
+            mountain_path_h.append(points_to_path([(x_grid[i][0],y_grid[i]),(x_grid[i][-1],y_grid[i])]))
+        else:
+            mountain_path_h.append(points_to_path([(x_grid[i][-1],y_grid[i]),(x_grid[i][0],y_grid[i])]))
+
+    mountain_path_v = []
+    for i in range(1,n):	
+        if i % 2 == 0:	
+            mountain_path_v.append(points_to_path([ (x_grid[ 0][i],y_grid[ 0]),(x_grid[-1][i],y_grid[-1])]))
+        else:
+            mountain_path_v.append(points_to_path([ (x_grid[-1][i],y_grid[-1]),(x_grid[ 0][i],y_grid[ 0])]))
+
+    mountains = [mountain_path_h,mountain_path_v]
+    
+    # create a list for valley creases
+    valleys = []
+    valleys.append(points_to_path([ (x_grid[ 0][-2],y_grid[ 0]),(x_grid[1][-1],y_grid[1])]))
+    # for i in range(n+lines-1):
+        # valleys.append(points_to_path([ (x_grid[ 0][-2],y_grid[ 0]),(x_grid[1][-1],y_grid[1])]))
+
+    # for y in y_grid[1:-1:2]:
+        
+    #     if ((y[0] + 1)/2)%2 == 0:
+    #         top_points = [(x_grid[0][1],y_grid[y[0]-1][1])]
+    #         for i in range(1,len(x_grid),2):  # even lines (X's), upper half
+    #             if ((i+2)/2) % 2 == 1:
+    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #                 top_points.append((x_grid[i+1][1],y_grid[y[0]+1][1]))
+    #             else:
+    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #                 top_points.append((x_grid[i+1][1],y_grid[y[0]-1][1]))
+
+    #         if ((len(x_grid)+2)/2) % 2 == 0:
+    #             bottom_points = [(x_grid[-1][1],y_grid[y[0]-1][1])]
+    #         else:
+    #             bottom_points = [(x_grid[-1][1],y_grid[y[0]+1][1])]
+    #         for i in range(len(x_grid)-2,0,-2):  # even lines (X's), bottom half
+    #             if ((i+1)/2) % 2 == 1:
+    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #                 bottom_points.append((x_grid[i-1][1],y_grid[y[0]+1][1]))
+    #             else:
+    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #                 bottom_points.append((x_grid[i-1][1],y_grid[y[0]-1][1]))
+
+    #         valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+            
+    #     else:
+    #         top_points = [(x_grid[0][1],y_grid[y[0]][1])]
+    #         for i in range(1,len(x_grid)):  # odd lines (losanges), upper half
+    #             if i % 2 == 0:
+    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #             else:
+    #                 top_points.append((x_grid[i][1],y_grid[y[0]-1][1]))
+
+    #         bottom_points = []    
+    #         for i in range(len(x_grid)-1,0,-1): # odd lines (losanges), bottom half
+    #             if i % 2 == 0:
+    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
+    #             else:
+    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]+1][1]))
+    #         bottom_points.append((x_grid[0][1],y_grid[y[0]][1]))
+
+    #         valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+
+    # create a list for enclosure strokes
+    enclosures = []
+    enclosures.append(points_to_path([  (x_grid[ 0][ 0],y_grid[ 0]),    # top
+                                        (x_grid[ 0][-1],y_grid[ 0])]))
+
+    enclosures.append(points_to_path([  (x_grid[ 0][-1],y_grid[ 0]),    # right
+                                        (x_grid[-1][-1],y_grid[-1])]))
+    
+    enclosures.append(points_to_path([  (x_grid[-1][-1],y_grid[-1]),    # bottom
+                                        (x_grid[-1][ 0],y_grid[-1])]))
+
+    enclosures.append(points_to_path([  (x_grid[-1][ 0],y_grid[-1]),    # left
+                                        (x_grid[ 0][ 0],y_grid[ 0])]))
+	
+    return points,mountains,valleys,enclosures
+
 def points_to_path(points,closed=False):
     path = ''
     for i in range(len(points)-1):
@@ -154,6 +270,12 @@ class OrigamiGridPatterns(inkex.Effect):
                                      action="store", type="int", 
                                      dest="columns", default=16,
                                      help="Number of columns")
+
+
+        self.OptionParser.add_option("", "--angle_ratio",
+                                     action="store", type="float", 
+                                     dest="angle_ratio", default=1,
+                                     help="Angle ratio")
 
         self.OptionParser.add_option("", "--length",
                                      action="store", type="float", 
@@ -300,7 +422,7 @@ class OrigamiGridPatterns(inkex.Effect):
         # This finds center of current view in inkscape
         t = 'translate(%s,%s)' % (self.view_center[0], self.view_center[1] )
         t = 'translate(%s,%s)' % (0, 0 )
-        g_attribs = { inkex.addNS('label','inkscape'): '({},{}){} Origami pattern'.format(lines,columns,self.options.pattern),
+        g_attribs = { inkex.addNS('label','inkscape'): '{} Origami pattern'.format(self.options.pattern),
                     #   inkex.addNS('transform-center-x','inkscape'): str(-bbox_center[0]),
                     #   inkex.addNS('transform-center-y','inkscape'): str(-bbox_center[1]),
                       inkex.addNS('transform-center-x','inkscape'): str(0),
@@ -310,7 +432,10 @@ class OrigamiGridPatterns(inkex.Effect):
         topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs )
         
         # get paths for selected origami pattern
-        points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
+        if(self.options.pattern == 'magic_ball'):
+            points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
+        elif(self.options.pattern == 'kresling'):
+            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.angle_ratio)
         
         # Create mountain group and add them to top group
         mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
