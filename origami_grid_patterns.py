@@ -116,9 +116,10 @@ def create_kresling(lines,n,R,angle_ratio):
     a = 2*R*np.sin(np.pi/n)
     b = np.sqrt(a*a + l*l - 2*a*l*np.cos(angle_ratio*theta))
 
-    cos_phi = (l*l + b*b - a*a)/(2*l*b)
-    dy = b*cos_phi
-    dx = b*np.sqrt((1 - cos_phi*cos_phi))
+    phi = np.arccos((l*l + b*b - a*a)/(2*l*b))
+    gamma = np.pi/2 - angle_ratio*theta - phi
+    dy = b*np.cos(gamma)
+    dx = b*abs(np.sin(gamma))
 
     # inkex.debug('a = {}'.format(a))
     # inkex.debug('b = {}'.format(b))
@@ -132,7 +133,7 @@ def create_kresling(lines,n,R,angle_ratio):
     for j in range(lines,-1,-1):
         x_grid_ = [dx*j + a*i for i in range(0,n + 1)]
         x_grid.append(x_grid_)
-    y_grid = [dx*j for j in range(0,lines + 1)]
+    y_grid = [dy*j for j in range(0,lines + 1)]
     
 
     # create points
