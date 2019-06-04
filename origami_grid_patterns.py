@@ -129,10 +129,10 @@ def create_kresling(lines,n,R,angle_ratio):
     # create grid
     x_grid = []
     y_grid = []
-    for j in range(lines + 1):
+    for j in range(lines,-1,-1):
         x_grid_ = [dx*j + a*i for i in range(0,n + 1)]
         x_grid.append(x_grid_)
-        y_grid.append(dy*j)
+    y_grid = [dx*j for j in range(0,lines + 1)]
     
 
     # create points
@@ -160,53 +160,19 @@ def create_kresling(lines,n,R,angle_ratio):
     
     # create a list for valley creases
     valleys = []
-    valleys.append(points_to_path([ (x_grid[ 0][-2],y_grid[ 0]),(x_grid[1][-1],y_grid[1])]))
-    # for i in range(n+lines-1):
-        # valleys.append(points_to_path([ (x_grid[ 0][-2],y_grid[ 0]),(x_grid[1][-1],y_grid[1])]))
-
-    # for y in y_grid[1:-1:2]:
-        
-    #     if ((y[0] + 1)/2)%2 == 0:
-    #         top_points = [(x_grid[0][1],y_grid[y[0]-1][1])]
-    #         for i in range(1,len(x_grid),2):  # even lines (X's), upper half
-    #             if ((i+2)/2) % 2 == 1:
-    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #                 top_points.append((x_grid[i+1][1],y_grid[y[0]+1][1]))
-    #             else:
-    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #                 top_points.append((x_grid[i+1][1],y_grid[y[0]-1][1]))
-
-    #         if ((len(x_grid)+2)/2) % 2 == 0:
-    #             bottom_points = [(x_grid[-1][1],y_grid[y[0]-1][1])]
-    #         else:
-    #             bottom_points = [(x_grid[-1][1],y_grid[y[0]+1][1])]
-    #         for i in range(len(x_grid)-2,0,-2):  # even lines (X's), bottom half
-    #             if ((i+1)/2) % 2 == 1:
-    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #                 bottom_points.append((x_grid[i-1][1],y_grid[y[0]+1][1]))
-    #             else:
-    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #                 bottom_points.append((x_grid[i-1][1],y_grid[y[0]-1][1]))
-
-    #         valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
-            
-    #     else:
-    #         top_points = [(x_grid[0][1],y_grid[y[0]][1])]
-    #         for i in range(1,len(x_grid)):  # odd lines (losanges), upper half
-    #             if i % 2 == 0:
-    #                 top_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #             else:
-    #                 top_points.append((x_grid[i][1],y_grid[y[0]-1][1]))
-
-    #         bottom_points = []    
-    #         for i in range(len(x_grid)-1,0,-1): # odd lines (losanges), bottom half
-    #             if i % 2 == 0:
-    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
-    #             else:
-    #                 bottom_points.append((x_grid[i][1],y_grid[y[0]+1][1]))
-    #         bottom_points.append((x_grid[0][1],y_grid[y[0]][1]))
-
-    #         valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+    for i in range(1,n+lines):
+        if i <= len(x_grid)-1 and i <= len(x_grid[0])-1:
+            valleys.append(points_to_path([ (x_grid[i       ][       0],y_grid[       i]),
+                                            (x_grid[0       ][       i],y_grid[       0])]))
+        elif i > len(x_grid)-1 and i <= len(x_grid[0])-1:
+            diff = i - (len(x_grid)-1)
+            valleys.append(points_to_path([ (x_grid[i-diff  ][    diff],y_grid[  i-diff]),
+                                            (x_grid[       0][       i],y_grid[       0])]))
+        elif i > len(x_grid)-1 and i > len(x_grid[0])-1:
+            diff_x = i - (len(x_grid[0])-1)
+            diff_y = i - (len(x_grid)-1)
+            valleys.append(points_to_path([ (x_grid[      -1][  diff_y],y_grid[i-diff_y]),
+                                            (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
 
     # create a list for enclosure strokes
     enclosures = []
@@ -221,6 +187,8 @@ def create_kresling(lines,n,R,angle_ratio):
 
     enclosures.append(points_to_path([  (x_grid[-1][ 0],y_grid[-1]),    # left
                                         (x_grid[ 0][ 0],y_grid[ 0])]))
+
+                                        
 	
     return points,mountains,valleys,enclosures
 

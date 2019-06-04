@@ -51,6 +51,7 @@ magic-ball
 
 ## Patterns implemented until now:
 - Magic ball
+- Kresling tower
 
 ## Todo:
 - Add more patterns if necessary
