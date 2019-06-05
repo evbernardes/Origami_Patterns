@@ -8,7 +8,7 @@ Example of extensions template for inkscape
 import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
-import numpy as np
+import math
 # many other useful ones in extensions folder. E.g. simplepath, cubicsuperpath, ...
 
 
@@ -111,15 +111,15 @@ def create_magic_ball(lines,columns,length):
     return points,mountains,valleys,enclosures
 
 def create_kresling(lines,n,R,angle_ratio):
-    theta = (np.pi/2)*(1 - 2/n)
-    l = 2*R*np.cos(theta*(1-angle_ratio))
-    a = 2*R*np.sin(np.pi/n)
-    b = np.sqrt(a*a + l*l - 2*a*l*np.cos(angle_ratio*theta))
+    theta = (math.pi/2)*(1 - 2/n)
+    l = 2*R*math.cos(theta*(1-angle_ratio))
+    a = 2*R*math.sin(math.pi/n)
+    b = math.sqrt(a*a + l*l - 2*a*l*math.cos(angle_ratio*theta))
 
-    phi = np.arccos((l*l + b*b - a*a)/(2*l*b))
-    gamma = np.pi/2 - angle_ratio*theta - phi
-    dy = b*np.cos(gamma)
-    dx = b*abs(np.sin(gamma))
+    phi = math.acos((l*l + b*b - a*a)/(2*l*b))
+    gamma = math.pi/2 - angle_ratio*theta - phi
+    dy = b*math.cos(gamma)
+    dx = b*abs(math.sin(gamma))
 
     # inkex.debug('a = {}'.format(a))
     # inkex.debug('b = {}'.format(b))
