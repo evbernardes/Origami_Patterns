@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-	<_name>Kresling Tower (angle ratio)</_name>
+	<_name>Kresling(cells, n of sides, angle ratio)</_name>
 	<id>org.inkscape.Origami_grid_patterns.kresling</id>
 	<dependency type="executable" location="extensions">origami_grid_patterns.py</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
@@ -16,15 +16,15 @@
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of cells">3</param>
 			<param name="columns" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param>
-			<param name="length" type="float" max="10000"  _gui-text="Radius of tower">10.0</param>
+			<param name="length" type="float" max="10000"  _gui-text="Radius of tower (mm)">10.0</param>
 			<param name="ratio" type="float" min="0.5" max="1" appearance="full" _gui-text="Angle Ratio">1.0</param>
 			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.</_param>
-			<param name="units" type="optiongroup" appearance="minimal" _gui-text="">
+			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
 				<option value="cm">cm</option>
 				<option value="in">in</option>
 				<option value="pt">pt</option>
-				<option value="px">px</option></param>
+				<option value="px">px</option></param> -->
 			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param>-->
 		</page>
 		<!-- next tab -->
@@ -54,7 +54,9 @@
 	<effect>
 	<object-type>all</object-type>
 		<effects-menu>
-			<submenu _name="Origami grid patterns"/> <!-- which menu under Extensions -->
+			<submenu _name="Origami grid patterns">
+				<submenu _name="Kresling tower" />
+			</submenu>
 		</effects-menu>
 	</effect>
 	<!-- py file again -->

@@ -56,5 +56,5 @@ magic-ball
 ## Todo:
 - Add more patterns if necessary
 - Add option to draw points
-- Finish implementing unit selector (everything is drawn in milimeters, the selector does not do anything yet)
+- Finish implementing unit selector (only milimiters for now)
 
