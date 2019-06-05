@@ -21,91 +21,88 @@ inkex.localize()
 def create_magic_ball(lines,columns,length):
     
     # create grid
-    x_grid = [[i,length*i/2.] for i in range(0,2*columns + 1)]  # each element is [i,x(i)]
-    y_grid = [[i,length*i/2.] for i in range(0,2*lines + 1)]    # each element is [i,y(i)]
+    x_grid = [length*i/2. for i in range(0,2*columns + 1)]  # each element is [i,x(i)]
+    y_grid = [length*i/2. for i in range(0,2*lines + 1)]    # each element is [i,y(i)]
 
     # create points
     points = []
-    for y in zip(*y_grid)[1]:
-        points.append([(x,y) for x in zip(*x_grid)[1]])
+    for y in zip(y_grid):
+        points.append([(x,y) for x in zip(x_grid)])
     
     # create a list for the horizontal creases and another for the vertical creases
     # alternate strokes to minimize laser cutter path
     mountain_path_h = []
-    for y in y_grid[2:-1:2]:
-        if y[0] % 4 == 0:		
-            mountain_path_h.append(points_to_path([(x_grid[-1][1],y[1]),(x_grid[0][1],y[1])]))
+    for j in range(2,2*lines,2):
+        if j % 4 == 0:		
+            mountain_path_h.append(points_to_path([(x_grid[-1],y_grid[ j]),(x_grid[ 0],y_grid[ j])]))
         else:
-            mountain_path_h.append(points_to_path([(x_grid[0][1],y[1]),(x_grid[-1][1],y[1])]))
+            mountain_path_h.append(points_to_path([(x_grid[ 0],y_grid[ j]),(x_grid[-1],y_grid[ j])]))
     mountain_path_v = []
-    for x in x_grid[1:-1:1]:
-        if x[0] % 2 == 0:
-            mountain_path_v.append(points_to_path([(x[1],y_grid[-1][1]),(x[1],y_grid[0][1])]))
-            # inkex.debug(str(mountain_path_v))
+    # for x in x_grid[1:-1:1]:
+    for i in range(1,2*columns):
+        if i % 2 == 0:
+            mountain_path_v.append(points_to_path([(x_grid[ i],y_grid[-1]),(x_grid[ i],y_grid[ 0])]))
         else:
-            mountain_path_v.append(points_to_path([(x[1],y_grid[0][1]),(x[1],y_grid[-1][1])]))
+            mountain_path_v.append(points_to_path([(x_grid[ i],y_grid[ 0]),(x_grid[ i],y_grid[-1])]))
     mountains = [mountain_path_h,mountain_path_v]
     
     # create a list for valley creases
     valleys = []
-    for y in y_grid[1:-1:2]:
-        
-        if ((y[0] + 1)/2)%2 == 0:
-            top_points = [(x_grid[0][1],y_grid[y[0]-1][1])]
-            for i in range(1,len(x_grid),2):  # even lines (X's), upper half
+    for j in range(1,2*lines,2):
+
+        if ((j + 1)/2)%2 == 0:
+            top_points = [(x_grid[0],y_grid[j-1])]
+            for i in range(1,2*columns+1,2):  # even lines (X's), upper half
                 if ((i+2)/2) % 2 == 1:
-                    top_points.append((x_grid[i][1],y_grid[y[0]][1]))
-                    top_points.append((x_grid[i+1][1],y_grid[y[0]+1][1]))
+                    top_points.append((x_grid[  i],y_grid[  j]))
+                    top_points.append((x_grid[i+1],y_grid[j+1]))
                 else:
-                    top_points.append((x_grid[i][1],y_grid[y[0]][1]))
-                    top_points.append((x_grid[i+1][1],y_grid[y[0]-1][1]))
+                    top_points.append((x_grid[  i],y_grid[  j]))
+                    top_points.append((x_grid[i+1],y_grid[j-1]))
 
             if ((len(x_grid)+2)/2) % 2 == 0:
-                bottom_points = [(x_grid[-1][1],y_grid[y[0]-1][1])]
+                bottom_points = [(x_grid[-1],y_grid[j-1])]
             else:
-                bottom_points = [(x_grid[-1][1],y_grid[y[0]+1][1])]
+                bottom_points = [(x_grid[-1],y_grid[j+1])]
             for i in range(len(x_grid)-2,0,-2):  # even lines (X's), bottom half
                 if ((i+1)/2) % 2 == 1:
-                    bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
-                    bottom_points.append((x_grid[i-1][1],y_grid[y[0]+1][1]))
+                    bottom_points.append((x_grid[  i],y_grid[  j]))
+                    bottom_points.append((x_grid[i-1],y_grid[j+1]))
                 else:
-                    bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
-                    bottom_points.append((x_grid[i-1][1],y_grid[y[0]-1][1]))
-
-            valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+                    bottom_points.append((x_grid[  i],y_grid[  j]))
+                    bottom_points.append((x_grid[i-1],y_grid[j-1]))
             
         else:
-            top_points = [(x_grid[0][1],y_grid[y[0]][1])]
-            for i in range(1,len(x_grid)):  # odd lines (losanges), upper half
+            top_points = [(x_grid[0],y_grid[j])]
+            for i in range(1,2*columns+1):  # odd lines (losanges), upper half
                 if i % 2 == 0:
-                    top_points.append((x_grid[i][1],y_grid[y[0]][1]))
+                    top_points.append((x_grid[i],y_grid[  j]))
                 else:
-                    top_points.append((x_grid[i][1],y_grid[y[0]-1][1]))
+                    top_points.append((x_grid[i],y_grid[j-1]))
 
             bottom_points = []    
-            for i in range(len(x_grid)-1,0,-1): # odd lines (losanges), bottom half
+            for i in range(2*columns,0,-1): # odd lines (losanges), bottom half
                 if i % 2 == 0:
-                    bottom_points.append((x_grid[i][1],y_grid[y[0]][1]))
+                    bottom_points.append((x_grid[i],y_grid[  j]))
                 else:
-                    bottom_points.append((x_grid[i][1],y_grid[y[0]+1][1]))
-            bottom_points.append((x_grid[0][1],y_grid[y[0]][1]))
+                    bottom_points.append((x_grid[i],y_grid[j+1]))
+            bottom_points.append((x_grid[0],y_grid[j]))
 
-            valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+        valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
 
-	
     # create a list for enclosure strokes
     enclosures = []
-    enclosures.append(points_to_path([  (x_grid[ 0][1],y_grid[ 0][1]),    # top
-                                        (x_grid[-1][1],y_grid[ 0][1])]))
+    enclosures.append(points_to_path([  (x_grid[ 0],y_grid[ 0]),    # top
+                                        (x_grid[-1],y_grid[ 0])]))
                                         
-    enclosures.append(points_to_path([  (x_grid[-1][1],y_grid[ 0][1]),   # right
-                                        (x_grid[-1][1],y_grid[-1][1])]))
+    enclosures.append(points_to_path([  (x_grid[-1],y_grid[ 0]),   # right
+                                        (x_grid[-1],y_grid[-1])]))
                                         
-    enclosures.append(points_to_path([  (x_grid[-1][1],y_grid[-1][1]),   # bottom
-                                        (x_grid[ 0][1],y_grid[-1][1])]))
+    enclosures.append(points_to_path([  (x_grid[-1],y_grid[-1]),   # bottom
+                                        (x_grid[ 0],y_grid[-1])]))
                                         
-    enclosures.append(points_to_path([  (x_grid[ 0][1],y_grid[-1][1]),    # left
-                                        (x_grid[ 0][1],y_grid[ 0][1])]))
+    enclosures.append(points_to_path([  (x_grid[ 0],y_grid[-1]),    # left
+                                        (x_grid[ 0],y_grid[ 0])]))
 	
     return points,mountains,valleys,enclosures
 
