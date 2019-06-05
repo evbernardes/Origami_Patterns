@@ -104,12 +104,6 @@ def create_kresling(lines,n,R,angle_ratio):
     gamma = math.pi/2 - angle_ratio*theta - phi
     dy = b*math.cos(gamma)
     dx = b*math.sin(gamma)
-
-    # inkex.debug('a = {}'.format(a))
-    # inkex.debug('b = {}'.format(b))
-    # inkex.debug('l = {}'.format(l))
-    # inkex.debug('dx = {}'.format(dx))
-    # inkex.debug('dy = {}'.format(dy))
     
     # create grid
     x_grid = []
