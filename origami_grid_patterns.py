@@ -162,27 +162,11 @@ def create_kresling(lines,n,R,angle_ratio):
     # create a list for valley creases
     valleys = []
     for i in range(1,n+lines):
-        diff_x = i - (len(x_grid[0])-1)
-        diff_y = i - (len(x_grid)-1)
+        diff_x = max(i - (len(x_grid[0])-1),0)  # account for limits of grid
+        diff_y = max(i - (len(x_grid)-1),0)     # in both directions
 
-        if i <= len(x_grid)-1 and i <= len(x_grid[0])-1:
-            # inkex.debug('a, i = {}, diff_x = {}, diff_y = {}'.format(i,diff_x,diff_y))
-            valleys.append(points_to_path([ (x_grid[i       ][       0],y_grid[       i]),
-                                            (x_grid[0       ][       i],y_grid[       0])]))
-
-        elif i > len(x_grid)-1 and i <= len(x_grid[0])-1:
-            # inkex.debug('b, i = {}, diff_x = {}, diff_y = {}'.format(i,diff_x,diff_y))
-            valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[  i-diff_y]),
-                                            (x_grid[       0][       i],y_grid[       0])]))
-        elif i <= len(x_grid)-1 and i > len(x_grid[0])-1:   
-            # inkex.debug('c, i = {}, diff_x = {}, diff_y = {}'.format(i,diff_x,diff_y))
-            valleys.append(points_to_path([ (x_grid[i       ][       0],y_grid[       i]),
-                                            (x_grid[  diff_x][      -1],y_grid[  diff_x])]))
-
-        elif i > len(x_grid)-1 and i > len(x_grid[0])-1:
-            # inkex.debug('d, i = {}, diff_x = {}, diff_y = {}'.format(i,diff_x,diff_y))
-            valleys.append(points_to_path([ (x_grid[      -1][  diff_y],y_grid[i-diff_y]),
-                                            (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
+        valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
+                                        (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
 
     # create a list for enclosure strokes
     enclosures = []
