@@ -36,7 +36,6 @@ def create_magic_ball(lines,columns,length):
         mountain_path_h.append(points_to_path([ (x_grid[-1],y_grid[ j]),
                                                 (x_grid[ 0],y_grid[ j])],inverse = j % 4 == 0))
     mountain_path_v = []
-    # for x in x_grid[1:-1:1]:
     for i in range(1,2*columns):
         mountain_path_v.append(points_to_path([ (x_grid[ i],y_grid[-1]),
                                                 (x_grid[ i],y_grid[ 0])],inverse = i % 2 == 0))
@@ -145,7 +144,6 @@ def create_kresling(lines,n,R,angle_ratio):
                                       (x_grid[ 0][-1],y_grid[ 0]), # top right
                                       (x_grid[-1][-1],y_grid[-1]), # bottom right
                                       (x_grid[-1][ 0],y_grid[-1])])# bottom left                                 
-	
     return points,mountains,valleys,enclosures
 
 def points_to_path(points,closed=False,inverse=False):
@@ -208,9 +206,9 @@ class OrigamiGridPatterns(inkex.Effect):
                                      help="Number of columns")
 
 
-        self.OptionParser.add_option("", "--angle_ratio",
+        self.OptionParser.add_option("", "--ratio",
                                      action="store", type="float", 
-                                     dest="angle_ratio", default=1,
+                                     dest="ratio", default=1,
                                      help="Angle ratio")
 
         self.OptionParser.add_option("", "--length",
@@ -371,7 +369,16 @@ class OrigamiGridPatterns(inkex.Effect):
         if(self.options.pattern == 'magic_ball'):
             points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
         elif(self.options.pattern == 'kresling'):
-            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.angle_ratio)
+            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
+        elif(self.options.pattern == 'kresling_radial_ratio'):
+            radial_ratio = self.options.ratio
+            max_radial_ratio = math.sin((math.pi/4)*(1. - 2./columns))
+            if (radial_ratio > max_radial_ratio):
+                inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
+                radial_ratio = max_radial_ratio
+            angular_ratio = 1 - 2*columns*math.asin(radial_ratio)/((columns-2)*math.pi)
+            # print(angular_ratio)
+            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,angular_ratio)
         
         # Create mountain group and add them to top group
         mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 

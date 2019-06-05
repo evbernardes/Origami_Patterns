@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-	<_name>Kresling Tower (angle ratio)</_name>
-	<id>org.inkscape.Origami_grid_patterns.kresling</id>
+	<_name>Kresling Tower (radial ratio)</_name>
+	<id>org.inkscape.Origami_grid_patterns.kresling_radial_ratio</id>
 	<dependency type="executable" location="extensions">origami_grid_patterns.py</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
 
@@ -11,14 +11,14 @@
 		<page name="title" _gui-text="Options">
 			<param name="pattern" type="optiongroup" _gui-text="Type of Kresling tower" >
 				<!-- underscores indicate translatability -->
-				<_option value="kresling">Regular Kresling Tower</_option>
+				<_option value="kresling_radial_ratio">Regular Kresling Tower</_option>
 			</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of cells">3</param>
 			<param name="columns" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param>
 			<param name="length" type="float" max="10000"  _gui-text="Radius of tower">10.0</param>
-			<param name="ratio" type="float" min="0.5" max="1" appearance="full" _gui-text="Angle Ratio">1.0</param>
-			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.</_param>
+			<param name="ratio" type="float" min="0" max="0.707" appearance="full" _gui-text="Radial Ratio">0.2</param>
+			<_param name="help"   type="description" xml:space="preserve">Ratio between internal radius and external radius. &#xA; Translates to an angle ratio parameter: &#xA; For angle ratio = 1, radial ratio = 0. &#xA; For angle ratio = 0.5, radial ratio = sin[(pi/4)*(1 - 2/n)], where n is the number of sides of the polygon. &#xA; Max value for some values of n: &#xA;n = 3, ratio = 0.258819045103&#xA;n = 4, ratio = 0.382683432365&#xA;n = 5, ratio = 0.45399049974&#xA;n = 6, ratio = 0.5&#xA;n = 7, ratio = 0.532032076515&#xA;n = 8, ratio = 0.55557023302&#xA;n = 9, ratio = 0.573576436351&#xA; It approaches 1/sqrt(2) for a really big number (and the polygon approaches a circle). If a value bigger than the accepted value is given, the maximum accepted value will be taken as the chosen value.</_param>
 			<param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
 				<option value="cm">cm</option>
