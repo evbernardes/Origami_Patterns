@@ -32,18 +32,14 @@ def create_magic_ball(lines,columns,length):
     # create a list for the horizontal creases and another for the vertical creases
     # alternate strokes to minimize laser cutter path
     mountain_path_h = []
-    for j in range(2,2*lines,2):
-        if j % 4 == 0:		
-            mountain_path_h.append(points_to_path([(x_grid[-1],y_grid[ j]),(x_grid[ 0],y_grid[ j])]))
-        else:
-            mountain_path_h.append(points_to_path([(x_grid[ 0],y_grid[ j]),(x_grid[-1],y_grid[ j])]))
+    for j in range(2,2*lines,2):	
+        mountain_path_h.append(points_to_path([ (x_grid[-1],y_grid[ j]),
+                                                (x_grid[ 0],y_grid[ j])],inverse = j % 4 == 0))
     mountain_path_v = []
     # for x in x_grid[1:-1:1]:
     for i in range(1,2*columns):
-        if i % 2 == 0:
-            mountain_path_v.append(points_to_path([(x_grid[ i],y_grid[-1]),(x_grid[ i],y_grid[ 0])]))
-        else:
-            mountain_path_v.append(points_to_path([(x_grid[ i],y_grid[ 0]),(x_grid[ i],y_grid[-1])]))
+        mountain_path_v.append(points_to_path([ (x_grid[ i],y_grid[-1]),
+                                                (x_grid[ i],y_grid[ 0])],inverse = i % 2 == 0))
     mountains = [mountain_path_h,mountain_path_v]
     
     # create a list for valley creases
@@ -91,18 +87,10 @@ def create_magic_ball(lines,columns,length):
         valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
 
     # create a list for enclosure strokes
-    enclosures = []
-    enclosures.append(points_to_path([  (x_grid[ 0],y_grid[ 0]),    # top
-                                        (x_grid[-1],y_grid[ 0])]))
-                                        
-    enclosures.append(points_to_path([  (x_grid[-1],y_grid[ 0]),   # right
-                                        (x_grid[-1],y_grid[-1])]))
-                                        
-    enclosures.append(points_to_path([  (x_grid[-1],y_grid[-1]),   # bottom
-                                        (x_grid[ 0],y_grid[-1])]))
-                                        
-    enclosures.append(points_to_path([  (x_grid[ 0],y_grid[-1]),    # left
-                                        (x_grid[ 0],y_grid[ 0])]))
+    enclosures = points_to_enclosure([(x_grid[ 0],y_grid[ 0]), # top left
+                                      (x_grid[-1],y_grid[ 0]), # top right
+                                      (x_grid[-1],y_grid[-1]), # bottom right
+                                      (x_grid[ 0],y_grid[-1])])# bottom left
 	
     return points,mountains,valleys,enclosures
 
@@ -140,18 +128,13 @@ def create_kresling(lines,n,R,angle_ratio):
     # create a list for the horizontal creases and another for the vertical creases
     mountain_path_h = []
     for i in range(1,lines):
-        if i % 2 == 0:  # alternate strokes to minimize laser cutter path
-            mountain_path_h.append(points_to_path([(x_grid[i][0],y_grid[i]),(x_grid[i][-1],y_grid[i])]))
-        else:
-            mountain_path_h.append(points_to_path([(x_grid[i][-1],y_grid[i]),(x_grid[i][0],y_grid[i])]))
+        mountain_path_h.append(points_to_path([ (x_grid[i][ 0],y_grid[ i]),
+                                                (x_grid[i][-1],y_grid[ i])],inverse = i % 2 == 0))
 
     mountain_path_v = []
-    for i in range(1,n):	
-        if i % 2 == 0:	# alternate strokes to minimize laser cutter path
-            mountain_path_v.append(points_to_path([ (x_grid[ 0][i],y_grid[ 0]),(x_grid[-1][i],y_grid[-1])]))
-        else:
-            mountain_path_v.append(points_to_path([ (x_grid[-1][i],y_grid[-1]),(x_grid[ 0][i],y_grid[ 0])]))
-
+    for i in range(1,n):
+        mountain_path_h.append(points_to_path([ (x_grid[ 0][i],y_grid[ 0]),
+                                                (x_grid[-1][i],y_grid[-1])],inverse = i % 2 == 0))
     mountains = [mountain_path_h,mountain_path_v]
     
     # create a list for valley creases
@@ -159,40 +142,37 @@ def create_kresling(lines,n,R,angle_ratio):
     for i in range(1,n+lines):
         diff_x = max(i - (len(x_grid[0])-1),0)  # account for limits of grid
         diff_y = max(i - (len(x_grid)-1),0)     # in both directions
-
-        if i % 2 == 0:	# alternate strokes to minimize laser cutter path
-            valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
-                                            (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
-        else:
-            valleys.append(points_to_path([ (x_grid[  diff_x][i-diff_x],y_grid[  diff_x]),
-                                            (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y])]))
+        valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
+                                        (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])],inverse = i % 2 == 0))
 
 
     # create a list for enclosure strokes
-    enclosures = []
-    enclosures.append(points_to_path([  (x_grid[ 0][ 0],y_grid[ 0]),    # top
-                                        (x_grid[ 0][-1],y_grid[ 0])]))
-
-    enclosures.append(points_to_path([  (x_grid[ 0][-1],y_grid[ 0]),    # right
-                                        (x_grid[-1][-1],y_grid[-1])]))
-
-    enclosures.append(points_to_path([  (x_grid[-1][-1],y_grid[-1]),    # bottom
-                                        (x_grid[-1][ 0],y_grid[-1])]))
-
-    enclosures.append(points_to_path([  (x_grid[-1][ 0],y_grid[-1]),    # left
-                                        (x_grid[ 0][ 0],y_grid[ 0])]))
-
-                                        
+    enclosures = points_to_enclosure([(x_grid[ 0][ 0],y_grid[ 0]), # top left
+                                      (x_grid[ 0][-1],y_grid[ 0]), # top right
+                                      (x_grid[-1][-1],y_grid[-1]), # bottom right
+                                      (x_grid[-1][ 0],y_grid[-1])])# bottom left                                 
 	
     return points,mountains,valleys,enclosures
 
-def points_to_path(points,closed=False):
+def points_to_path(points,closed=False,inverse=False):
     path = ''
+    if(inverse):
+        points = points[::-1]
     for i in range(len(points)-1):
         path = path+'M{},{}L{},{}'.format(points[i][0],points[i][1],points[i+1][0],points[i+1][1])
     if closed:
         path = path+'M{},{}L{},{}z'.format(points[-1][0],points[-1][1],points[0][0],points[0][1])
     return path
+
+def points_to_enclosure(points):
+    enclosures = []
+    for i in range(len(points)):
+        j = (i+1)%len(points)
+        enclosures.append(points_to_path([  (points[ i][ 0],points[ i][1]),
+                                            (points[ j][ 0],points[ j][1])]))
+    return enclosures
+
+
 
 def paths_to_group(paths,group,style):
     for subpaths in paths:
