@@ -107,15 +107,15 @@ def create_magic_ball(lines,columns,length):
     return points,mountains,valleys,enclosures
 
 def create_kresling(lines,n,R,angle_ratio):
-    theta = (math.pi/2)*(1 - 2/n)
-    l = 2*R*math.cos(theta*(1-angle_ratio))
-    a = 2*R*math.sin(math.pi/n)
+    theta = (math.pi/2.)*(1 - 2./n)
+    l = 2.*R*math.cos(theta*(1.-angle_ratio))
+    a = 2.*R*math.sin(math.pi/n)
     b = math.sqrt(a*a + l*l - 2*a*l*math.cos(angle_ratio*theta))
 
-    phi = math.acos((l*l + b*b - a*a)/(2*l*b))
+    phi = abs(math.acos((l*l + b*b - a*a)/(2*l*b)))
     gamma = math.pi/2 - angle_ratio*theta - phi
     dy = b*math.cos(gamma)
-    dx = b*abs(math.sin(gamma))
+    dx = b*math.sin(gamma)
 
     # inkex.debug('a = {}'.format(a))
     # inkex.debug('b = {}'.format(b))
