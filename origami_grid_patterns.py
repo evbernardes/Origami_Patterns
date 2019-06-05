@@ -141,17 +141,16 @@ def create_kresling(lines,n,R,angle_ratio):
     #     points.append([(x,y) for x in zip(*x_grid)[1]])
     
     # create a list for the horizontal creases and another for the vertical creases
-    # alternate strokes to minimize laser cutter path
     mountain_path_h = []
     for i in range(1,lines):
-        if i % 2 == 0:	
+        if i % 2 == 0:  # alternate strokes to minimize laser cutter path
             mountain_path_h.append(points_to_path([(x_grid[i][0],y_grid[i]),(x_grid[i][-1],y_grid[i])]))
         else:
             mountain_path_h.append(points_to_path([(x_grid[i][-1],y_grid[i]),(x_grid[i][0],y_grid[i])]))
 
     mountain_path_v = []
     for i in range(1,n):	
-        if i % 2 == 0:	
+        if i % 2 == 0:	# alternate strokes to minimize laser cutter path
             mountain_path_v.append(points_to_path([ (x_grid[ 0][i],y_grid[ 0]),(x_grid[-1][i],y_grid[-1])]))
         else:
             mountain_path_v.append(points_to_path([ (x_grid[-1][i],y_grid[-1]),(x_grid[ 0][i],y_grid[ 0])]))
@@ -164,8 +163,13 @@ def create_kresling(lines,n,R,angle_ratio):
         diff_x = max(i - (len(x_grid[0])-1),0)  # account for limits of grid
         diff_y = max(i - (len(x_grid)-1),0)     # in both directions
 
-        valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
-                                        (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
+        if i % 2 == 0:	# alternate strokes to minimize laser cutter path
+            valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
+                                            (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])]))
+        else:
+            valleys.append(points_to_path([ (x_grid[  diff_x][i-diff_x],y_grid[  diff_x]),
+                                            (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y])]))
+
 
     # create a list for enclosure strokes
     enclosures = []
@@ -174,7 +178,7 @@ def create_kresling(lines,n,R,angle_ratio):
 
     enclosures.append(points_to_path([  (x_grid[ 0][-1],y_grid[ 0]),    # right
                                         (x_grid[-1][-1],y_grid[-1])]))
-    
+
     enclosures.append(points_to_path([  (x_grid[-1][-1],y_grid[-1]),    # bottom
                                         (x_grid[-1][ 0],y_grid[-1])]))
 
