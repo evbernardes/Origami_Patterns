@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Example of extensions template for inkscape
+Origami Grid Patterns plugin
+
+Inkscape extension that creates origami tesselation patterns, create for the Origabot project
 
 '''
 
@@ -10,9 +12,6 @@ import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
 import math
 # many other useful ones in extensions folder. E.g. simplepath, cubicsuperpath, ...
-
-
-from math import cos, sin, radians
 
 __version__ = '0.2'
 
