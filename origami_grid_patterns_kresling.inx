@@ -16,8 +16,8 @@
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of cells">3</param>
 			<param name="columns" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param>
-			<param name="length" type="float" max="10000"  _gui-text="Radius of tower (mm)">10.0</param>
-			<param name="ratio" type="float" min="0.5" max="1" appearance="full" _gui-text="Angle Ratio">1.0</param>
+			<param name="length" type="float" max="10000"  precision="3" _gui-text="Radius of tower (mm)">10.0</param>
+			<param name="ratio" type="float" min="0.5" max="1" precision="3" appearance="full" _gui-text="Angle Ratio">1.0</param>
 			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.</_param>
 			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
