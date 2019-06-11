@@ -370,12 +370,18 @@ class OrigamiGridPatterns(inkex.Effect):
             points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
         elif(self.options.pattern == 'kresling'):
             points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
-        elif(self.options.pattern == 'kresling_radial_ratio'):
+        elif(self.options.pattern == 'kresling_radial_ratio' or self.options.pattern == 'kresling_radial_ratio_min_polygon'):
+
             radial_ratio = self.options.ratio
-            max_radial_ratio = math.sin((math.pi/4)*(1. - 2./columns))
-            if (radial_ratio > max_radial_ratio):
-                inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
-                radial_ratio = max_radial_ratio
+
+            if(self.options.pattern == 'kresling_radial_ratio_min_polygon'):
+                columns = int(math.ceil(2. / (1.  - (4./math.pi)*math.asin(radial_ratio))))
+                # inkex.debug(columns)
+            else:
+                max_radial_ratio = math.sin((math.pi/4)*(1. - 2./columns))
+                if (radial_ratio > max_radial_ratio):
+                    inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
+                    radial_ratio = max_radial_ratio
             angular_ratio = 1 - 2*columns*math.asin(radial_ratio)/((columns-2)*math.pi)
             # print(angular_ratio)
             points,mountains,valleys,enclosures = create_kresling(lines,columns,length,angular_ratio)

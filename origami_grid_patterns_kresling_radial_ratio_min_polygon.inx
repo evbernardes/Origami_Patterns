@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+	<_name>Kresling(cells, radial ratio) with minimal number of polygon sides</_name>
+	<id>org.inkscape.Origami_grid_patterns.kresling_radial_ratio_min_polygon</id>
+	<dependency type="executable" location="extensions">origami_grid_patterns.py</dependency>
+	<dependency type="executable" location="extensions">simplestyle.py</dependency>
+
+	<!-- start notebook -->
+	<param name='active-tab' type="notebook">
+		<!-- one per page(tab) - unique names. Can discover which page in program-->
+		<page name="title" _gui-text="Options">
+			<param name="pattern" type="optiongroup" _gui-text="Type of Kresling tower" >
+				<!-- underscores indicate translatability -->
+				<_option value="kresling_radial_ratio_min_polygon">Regular Kresling Tower</_option>
+			</param>
+			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
+			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of cells">3</param>
+			<!-- <param name="columns" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param> -->
+			<param name="length" type="float" max="10000"  precision="3" _gui-text="Radius of tower (mm)">10.0</param>
+			<param name="ratio" type="float" min="0" max="0.70" precision="3" appearance="full" _gui-text="Radial Ratio">0.2</param>
+			<_param name="help"   type="description" xml:space="preserve">Ratio between internal radius and external radius. &#xA; Translates to an angle ratio parameter: &#xA; For angle ratio = 1, radial ratio = 0. &#xA; For angle ratio = 0.5, radial ratio = sin[(pi/4)*(1 - 2/n)], where n is the number of sides of the polygon. &#xA; Max value for some values of n: &#xA;n = 3, ratio = 0.258819045103&#xA;n = 4, ratio = 0.382683432365&#xA;n = 5, ratio = 0.45399049974&#xA;n = 6, ratio = 0.5&#xA;n = 7, ratio = 0.532032076515&#xA;n = 8, ratio = 0.55557023302&#xA;n = 9, ratio = 0.573576436351&#xA; It approaches 1/sqrt(2) for a really big number (and the polygon approaches a circle). If a value bigger than the accepted value is given, the maximum accepted value will be taken as the chosen value.</_param>
+			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
+				<option value="mm">mm</option>
+				<option value="cm">cm</option>
+				<option value="in">in</option>
+				<option value="pt">pt</option>
+				<option value="px">px</option></param> -->
+			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param>-->
+		</page>
+		<!-- next tab -->
+		<page name="valleys" _gui-text="Valley creases">
+			<param name="valley_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="valley_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">10</param>
+			<param name="valley_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of valley strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the valley creases</param>
+			<param name="valley_stroke_color" type="color" gui-text="Valley creases color: ">65535</param>
+		</page>
+		<page name="mountains" _gui-text="Mountain creases">
+			<param name="mountain_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="mountain_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">6</param>
+			<param name="mountain_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of mountain strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the mountain creases</param>
+			<param name="mountain_stroke_color" type="color" gui-text="Mountain creases color: ">4278190335</param>
+		</page>
+		<page name="enclosure" _gui-text="Enclosure">
+			<param name="enclosure_dashes_bool" type="boolean" _gui-text="Dashed strokes?">false</param>
+			<param name="enclosure_dashes_number" type="int"  min="1" max="100" appearance="full" _gui-text="Dashes per length unit">1</param>
+			<param name="enclosure_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of mountain strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the enclosure</param>
+			<param name="enclosure_stroke_color" type="color" gui-text="Mountain creases color: ">255</param>
+		</page>
+	</param>
+	<!-- classify which menu it appears under - can be new name -->
+	<effect>
+	<object-type>all</object-type>
+		<effects-menu>
+			<submenu _name="Origami grid patterns">
+				<submenu _name="Kresling tower" />
+			</submenu>
+			
+		</effects-menu>
+	</effect>
+	<!-- py file again -->
+	<script>
+		<command reldir="extensions" interpreter="python">origami_grid_patterns.py</command>
+	</script>
+</inkscape-extension>
+
+		
+        
+        
