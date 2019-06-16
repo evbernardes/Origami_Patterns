@@ -18,7 +18,7 @@ __version__ = '0.2'
 inkex.localize()
 
 ### Your helper functions go here
-def create_magic_ball(lines,columns,length):
+def create_waterbomb(lines,columns,length):
     
     # create grid
     x_grid = [length*i/2. for i in range(0,2*columns + 1)]  # each element is [i,x(i)]
@@ -192,7 +192,7 @@ class OrigamiGridPatterns(inkex.Effect):
         # Define your list of parameters defined in the .inx file
         self.OptionParser.add_option("-p", "--pattern",
                                      action="store", type="string",
-                                     dest="pattern", default="magic_ball",
+                                     dest="pattern", default="waterbomb",
                                      help="Origami pattern")      
         
         self.OptionParser.add_option("-l", "--lines",
@@ -366,8 +366,8 @@ class OrigamiGridPatterns(inkex.Effect):
         topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs )
         
         # get paths for selected origami pattern
-        if(self.options.pattern == 'magic_ball'):
-            points,mountains,valleys,enclosures = create_magic_ball(lines,columns,length)
+        if(self.options.pattern == 'waterbomb'):
+            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length)
         elif(self.options.pattern == 'kresling'):
             points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
         elif(self.options.pattern == 'kresling_radial_ratio' or self.options.pattern == 'kresling_radial_ratio_min_polygon'):

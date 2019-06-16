@@ -22,7 +22,7 @@ The extension can be found on `Extensions > Origami grid patterns`
 
 ## Output:
 Creates the pattern. 
-To simplify editing, ungrouping it you get three distinct groups of objects: the mountain creases, the valley creases and enclosure. These groups can also be divided into smaller groups. Magic ball example:
+To simplify editing, ungrouping it you get three distinct groups of objects: the mountain creases, the valley creases and enclosure. These groups can also be divided into smaller groups. Waterbomb example:
 
 ```
 magic-ball
@@ -50,7 +50,7 @@ magic-ball
 ```
 
 ## Patterns implemented until now:
-- Magic ball
+- Waterbomb tesselation
 - Kresling tower
 
 ## Todo:
