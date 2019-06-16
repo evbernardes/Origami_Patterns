@@ -10,7 +10,6 @@ Inkscape extension that creates origami tesselation patterns, create for the Ori
 import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
-import math
 from Origami_Grid_Patterns.helpers import *
 from Origami_Grid_Patterns.create_methods import *
 
