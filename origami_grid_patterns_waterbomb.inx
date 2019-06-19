@@ -12,6 +12,7 @@
 			<param name="pattern" type="optiongroup" _gui-text="Type of magic ball" >
 				<!-- underscores indicate translatability -->
 				<_option value="waterbomb">Regular Waterbomb</_option>
+				<_option value="waterbomb_phase_shift">Regular Waterbomb + phase shift</_option>
 			</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>

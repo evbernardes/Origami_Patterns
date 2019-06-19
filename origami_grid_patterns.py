@@ -210,6 +210,8 @@ class OrigamiGridPatterns(inkex.Effect):
         # get paths for selected origami pattern
         if(self.options.pattern == 'waterbomb'):
             points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length)
+        elif(self.options.pattern == 'waterbomb_phase_shift'):
+            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=True)
         elif(self.options.pattern == 'kresling'):
             points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
         elif(self.options.pattern == 'kresling_radial_ratio' or self.options.pattern == 'kresling_radial_ratio_min_polygon'):

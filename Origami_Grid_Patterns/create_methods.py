@@ -7,7 +7,7 @@ Helper functions
 from helpers import *
 import math
 
-def create_waterbomb(lines,columns,length):
+def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = False):
     
     # create grid
     x_grid = [length*i/2. for i in range(0,2*columns + 1)]  # each element is [i,x(i)]
@@ -34,7 +34,7 @@ def create_waterbomb(lines,columns,length):
     valleys = []
     for j in range(1,2*lines,2):
 
-        if ((j + 1)/2)%2 == 0:
+        if ((j + int(phase_shift))/2)%2 == 0:
             top_points = [(x_grid[0],y_grid[j-1])]
             for i in range(1,2*columns+1,2):  # even lines (X's), upper half
                 if ((i+2)/2) % 2 == 1:
