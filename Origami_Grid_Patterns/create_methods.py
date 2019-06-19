@@ -34,41 +34,28 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
     valleys = []
     for j in range(1,2*lines,2):
 
-        if ((j + int(phase_shift))/2)%2 == 0: # odd lines
+        line_parity = int(((j + int(phase_shift))/2)%2 == 0)
 
-            top_points = [(x_grid[0],y_grid[j-1])]
-            for i in range(1,2*columns+1):  # upper half
-                if i % 2 == 1:
-                    top_points.append((x_grid[i],y_grid[  j]))
-                else:
-                    top_points.append((x_grid[i],y_grid[j-1]))
+        # for each line, create one valley pattern with the "pointy" side
+        # up and one with the "pointy" side down. Distribute one after the
+        # other according to phase
 
+        pointy_up = [(x_grid[0],y_grid[j-line_parity])]
+        for i in range(1,2*columns+1):
+            if i % 2 == 1:
+                pointy_up.append((x_grid[i],y_grid[j + 1 - line_parity]))
+            else:
+                pointy_up.append((x_grid[i],y_grid[j     - line_parity]))
 
-            bottom_points = [(x_grid[-1],y_grid[j+1])]
-            for i in range(2*columns,0,-1): # bottom half
-                if i % 2 == 1:
-                    bottom_points.append((x_grid[i],y_grid[  j]))
-                else:
-                    bottom_points.append((x_grid[i],y_grid[j+1]))
-            bottom_points.append((x_grid[0],y_grid[j+1]))
+        pointy_down = [(x_grid[-1],y_grid[j+line_parity])]
+        for i in range(2*columns,0,-1):
+            if i % 2 == 1:
+                pointy_down.append((x_grid[i],y_grid[j-1+line_parity]))
+            else:
+                pointy_down.append((x_grid[i],y_grid[j+line_parity]))
+        pointy_down.append((x_grid[0],y_grid[j+line_parity]))
 
-        else:                                   # even lines
-            top_points = [(x_grid[0],y_grid[j])]
-            for i in range(1,2*columns+1):  # upper half
-                if i % 2 == 0:
-                    top_points.append((x_grid[i],y_grid[  j]))
-                else:
-                    top_points.append((x_grid[i],y_grid[j-1]))
-
-            bottom_points = []    
-            for i in range(2*columns,0,-1): # bottom half
-                if i % 2 == 0:
-                    bottom_points.append((x_grid[i],y_grid[  j]))
-                else:
-                    bottom_points.append((x_grid[i],y_grid[j+1]))
-            bottom_points.append((x_grid[0],y_grid[j]))
-
-        valleys.append([points_to_path(top_points),points_to_path(bottom_points)])
+        valleys.append([points_to_path(pointy_up),points_to_path(pointy_down)])
 
     # create a list for enclosure strokes
     enclosures = points_to_enclosure([(x_grid[ 0],y_grid[ 0]), # top left
