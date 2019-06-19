@@ -34,38 +34,34 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
     valleys = []
     for j in range(1,2*lines,2):
 
-        if ((j + int(phase_shift))/2)%2 == 0:
-            top_points = [(x_grid[0],y_grid[j-1])]
-            for i in range(1,2*columns+1,2):  # even lines (X's), upper half
-                if ((i+2)/2) % 2 == 1:
-                    top_points.append((x_grid[  i],y_grid[  j]))
-                    top_points.append((x_grid[i+1],y_grid[j+1]))
-                else:
-                    top_points.append((x_grid[  i],y_grid[  j]))
-                    top_points.append((x_grid[i+1],y_grid[j-1]))
+        if ((j + int(phase_shift))/2)%2 == 0: # odd lines
 
-            if ((len(x_grid)+2)/2) % 2 == 0:
-                bottom_points = [(x_grid[-1],y_grid[j-1])]
-            else:
-                bottom_points = [(x_grid[-1],y_grid[j+1])]
-            for i in range(len(x_grid)-2,0,-2):  # even lines (X's), bottom half
-                if ((i+1)/2) % 2 == 1:
-                    bottom_points.append((x_grid[  i],y_grid[  j]))
-                    bottom_points.append((x_grid[i-1],y_grid[j+1]))
+            top_points = [(x_grid[0],y_grid[j-1])]
+            for i in range(1,2*columns+1):  # upper half
+                if i % 2 == 1:
+                    top_points.append((x_grid[i],y_grid[  j]))
                 else:
-                    bottom_points.append((x_grid[  i],y_grid[  j]))
-                    bottom_points.append((x_grid[i-1],y_grid[j-1]))
-            
-        else:
+                    top_points.append((x_grid[i],y_grid[j-1]))
+
+
+            bottom_points = [(x_grid[-1],y_grid[j+1])]
+            for i in range(2*columns,0,-1): # bottom half
+                if i % 2 == 1:
+                    bottom_points.append((x_grid[i],y_grid[  j]))
+                else:
+                    bottom_points.append((x_grid[i],y_grid[j+1]))
+            bottom_points.append((x_grid[0],y_grid[j+1]))
+
+        else:                                   # even lines
             top_points = [(x_grid[0],y_grid[j])]
-            for i in range(1,2*columns+1):  # odd lines (losanges), upper half
+            for i in range(1,2*columns+1):  # upper half
                 if i % 2 == 0:
                     top_points.append((x_grid[i],y_grid[  j]))
                 else:
                     top_points.append((x_grid[i],y_grid[j-1]))
 
             bottom_points = []    
-            for i in range(2*columns,0,-1): # odd lines (losanges), bottom half
+            for i in range(2*columns,0,-1): # bottom half
                 if i % 2 == 0:
                     bottom_points.append((x_grid[i],y_grid[  j]))
                 else:
