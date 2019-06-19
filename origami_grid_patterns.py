@@ -213,7 +213,7 @@ class OrigamiGridPatterns(inkex.Effect):
         elif(self.options.pattern == 'waterbomb_phase_shift'):
             points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=True)
         elif(self.options.pattern == 'magic_ball_custom'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,magic_ball=True,phase_shift=False)
+            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,magic_ball=True)
         elif(self.options.pattern == 'magic_ball_custom_phase_shift'):
             points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,magic_ball=True,phase_shift=True)
         elif(self.options.pattern == 'kresling'):

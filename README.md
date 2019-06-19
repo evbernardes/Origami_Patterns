@@ -50,7 +50,7 @@ magic-ball
 ```
 
 ## Patterns implemented until now:
-- Waterbomb tesselation
+- Waterbomb tesselation (and Magic Ball)
 - Kresling tower
 
 ## Todo:
