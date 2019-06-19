@@ -58,7 +58,7 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
         # bottom half of last line 
         if magic_ball and j == 1:
             if line_parity == 1:
-                pointy_down = [(x_grid[-1],y_grid[j+line_parity])]
+                pointy_down = [(x_grid[-1],y_grid[j-1+line_parity])]
                 for i in range(2*columns,-1,-1):
                     if i % 2 == 1:
                         pointy_down.append((x_grid[i],y_grid[j-2+line_parity]))
@@ -81,7 +81,7 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
                     else:
                         pointy_up.append((x_grid[i],y_grid[j + 1 - line_parity]))
             if line_parity == 0:
-                pointy_down = [(x_grid[-1],y_grid[j-1+line_parity])]
+                pointy_down = [(x_grid[-1],y_grid[j+1+line_parity])]
                 for i in range(2*columns,-1,-1):
                     if i % 2 == 1:
                         pointy_down.append((x_grid[i],y_grid[j  +line_parity]))
