@@ -34,7 +34,7 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
     valleys = []
     for j in range(1,2*lines,2):
 
-        line_parity = int(((j + int(phase_shift))/2)%2 == 0)
+        line_parity = ((j + int(phase_shift))/2)%2
 
         # for each line, create one valley pattern with the "pointy" side
         # up and one with the "pointy" side down. Distribute one after the
