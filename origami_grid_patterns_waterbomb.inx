@@ -13,7 +13,8 @@
 				<!-- underscores indicate translatability -->
 				<_option value="waterbomb">Waterbomb tesselation</_option>
 				<_option value="waterbomb_phase_shift">Waterbomb tesselation + phase shift</_option>
-				<!-- <_option value="magic_ball_custom">Custom Magic ball</_option> -->
+				<_option value="magic_ball_custom">Magic ball</_option>
+				<_option value="magic_ball_custom_phase_shift">Magic ball + phase shift</_option>
 			</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>

@@ -40,20 +40,53 @@ def create_waterbomb(lines,columns,length,phase_shift = False, magic_ball = Fals
         # up and one with the "pointy" side down. Distribute one after the
         # other according to phase
 
-        pointy_up = [(x_grid[0],y_grid[j-line_parity])]
+        pointy_down = [(x_grid[0],y_grid[j-line_parity])]
         for i in range(1,2*columns+1):
             if i % 2 == 1:
-                pointy_up.append((x_grid[i],y_grid[j + 1 - line_parity]))
+                pointy_down.append((x_grid[i],y_grid[j + 1 - line_parity]))
             else:
-                pointy_up.append((x_grid[i],y_grid[j     - line_parity]))
+                pointy_down.append((x_grid[i],y_grid[j     - line_parity]))
 
-        pointy_down = [(x_grid[-1],y_grid[j+line_parity])]
-        for i in range(2*columns,0,-1):
+        pointy_up = [(x_grid[-1],y_grid[j+line_parity])]
+        for i in range(2*columns,-1,-1):
             if i % 2 == 1:
-                pointy_down.append((x_grid[i],y_grid[j-1+line_parity]))
+                pointy_up.append((x_grid[i],y_grid[j-1+line_parity]))
             else:
-                pointy_down.append((x_grid[i],y_grid[j+line_parity]))
-        pointy_down.append((x_grid[0],y_grid[j+line_parity]))
+                pointy_up.append((x_grid[i],y_grid[j+line_parity]))
+
+        # if Magic Ball, reflect upper half of first line and
+        # bottom half of last line 
+        if magic_ball and j == 1:
+            if line_parity == 1:
+                pointy_down = [(x_grid[-1],y_grid[j+line_parity])]
+                for i in range(2*columns,-1,-1):
+                    if i % 2 == 1:
+                        pointy_down.append((x_grid[i],y_grid[j-2+line_parity]))
+                    else:
+                        pointy_down.append((x_grid[i],y_grid[j-1+line_parity]))
+            else:
+                pointy_up = [(x_grid[0],y_grid[j-1-line_parity])]
+                for i in range(1,2*columns+1):
+                    if i % 2 == 1:
+                        pointy_up.append((x_grid[i],y_grid[j + 0 - line_parity]))
+                    else:
+                        pointy_up.append((x_grid[i],y_grid[j - 1 - line_parity]))
+
+        elif magic_ball and j == 2*lines-1:
+            if line_parity == 1:
+                pointy_up = [(x_grid[0],y_grid[j+1-line_parity])]
+                for i in range(1,2*columns+1):
+                    if i % 2 == 1:
+                        pointy_up.append((x_grid[i],y_grid[j + 2 - line_parity]))
+                    else:
+                        pointy_up.append((x_grid[i],y_grid[j + 1 - line_parity]))
+            if line_parity == 0:
+                pointy_down = [(x_grid[-1],y_grid[j-1+line_parity])]
+                for i in range(2*columns,-1,-1):
+                    if i % 2 == 1:
+                        pointy_down.append((x_grid[i],y_grid[j  +line_parity]))
+                    else:
+                        pointy_down.append((x_grid[i],y_grid[j+1+line_parity]))
 
         valleys.append([points_to_path(pointy_up),points_to_path(pointy_down)])
 
