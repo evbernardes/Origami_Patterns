@@ -36,17 +36,15 @@ magic-ball
 │   └── vertical lines
 └── valleys
     ├── line 1
-    │   ├── bottom
-    │   └── top
+    │   ├── top
+    │   └── bottom
     ├── line 2
-    │   ├── bottom
-    │   └── top
-    ├── line 3
-    │   ├── bottom
-    │   └── top
-    └── line ...
-        ├── bottom
-        └── top
+    │   ├── top
+    │   └── bottom
+    ├── ...
+    └── line N
+    │   ├── top
+    │   └── bottom
 ```
 
 ## Patterns implemented until now:

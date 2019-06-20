@@ -12,10 +12,9 @@
 			<param name="pattern" type="optiongroup" _gui-text="Type of magic ball" >
 				<!-- underscores indicate translatability -->
 				<_option value="waterbomb">Waterbomb tessellation</_option>
-				<_option value="waterbomb_phase_shift">Waterbomb tessellation + phase shift</_option>
-				<_option value="magic_ball_custom">Magic ball</_option>
-				<_option value="magic_ball_custom_phase_shift">Magic ball + phase shift</_option>
+				<_option value="magic_ball">Magic ball</_option>
 			</param>
+			<param name="bool1" type="boolean" _gui-text="Phase shift">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>
 			<param name="columns" type="int" min="1" max="100" _gui-text="Number of columns">16</param>
@@ -28,7 +27,7 @@
 				<option value="in">in</option>
 				<option value="pt">pt</option>
 				<option value="px">px</option></param> -->
-			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param>-->
+			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param> -->
 		</page>
 		<!-- next tab -->
 		<page name="valleys" _gui-text="Valley creases">

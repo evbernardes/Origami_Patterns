@@ -58,6 +58,12 @@ class OrigamiGridPatterns(inkex.Effect):
                                      dest="length", default=10.0,
                                      help="Length of grid square")
 
+        
+        self.OptionParser.add_option('', '--bool1', action = 'store',
+                                     type = 'inkbool', dest = 'bool1',
+                                     default = True,
+                                     help = 'Bool 1.')
+
         self.OptionParser.add_option("-u", "--units",
                                      action="store", type="string",
                                      dest="units", default='mm',
@@ -209,13 +215,9 @@ class OrigamiGridPatterns(inkex.Effect):
         
         # get paths for selected origami pattern
         if(self.options.pattern == 'waterbomb'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length)
-        elif(self.options.pattern == 'waterbomb_phase_shift'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=True)
-        elif(self.options.pattern == 'magic_ball_custom'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,magic_ball=True)
-        elif(self.options.pattern == 'magic_ball_custom_phase_shift'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,magic_ball=True,phase_shift=True)
+            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=self.options.bool1)
+        elif(self.options.pattern == 'magic_ball'):
+            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=True)
         elif(self.options.pattern == 'kresling'):
             points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
         elif(self.options.pattern == 'kresling_radial_ratio' or self.options.pattern == 'kresling_radial_ratio_min_polygon'):
