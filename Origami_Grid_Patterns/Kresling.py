@@ -62,7 +62,7 @@ def create_kresling(lines,n,R,angle_ratio):
 
 def create_kresling_radial(lines,n,R,radial_ratio,min_polygon = False):
     if min_polygon == True:
-        n = int(math.ceil(2. / (1. - (4./math.pi)*math.asin(radial_ratio))))
+        n = max(3,int(math.ceil(2. / (1. - (4./math.pi)*math.asin(radial_ratio)))))
     max_radial_ratio = math.sin((math.pi/4)*(1. - 2./n))
     if (radial_ratio > max_radial_ratio):
         # inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
