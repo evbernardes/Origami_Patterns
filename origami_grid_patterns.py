@@ -11,7 +11,8 @@ import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
 from Origami_Grid_Patterns.helpers import *
-from Origami_Grid_Patterns.create_methods import *
+import Origami_Grid_Patterns.Waterbomb as Waterbomb
+import Origami_Grid_Patterns.Kresling as Kresling
 
 __version__ = '0.2'
 
@@ -215,26 +216,13 @@ class OrigamiGridPatterns(inkex.Effect):
         
         # get paths for selected origami pattern
         if(self.options.pattern == 'waterbomb'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=self.options.bool1)
+            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1)
         elif(self.options.pattern == 'magic_ball'):
-            points,mountains,valleys,enclosures = create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=True)
+            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=True)
         elif(self.options.pattern == 'kresling'):
-            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,self.options.ratio)
-        elif(self.options.pattern == 'kresling_radial_ratio' or self.options.pattern == 'kresling_radial_ratio_min_polygon'):
-
-            radial_ratio = self.options.ratio
-
-            if(self.options.pattern == 'kresling_radial_ratio_min_polygon'):
-                columns = int(math.ceil(2. / (1.  - (4./math.pi)*math.asin(radial_ratio))))
-                # inkex.debug(columns)
-            else:
-                max_radial_ratio = math.sin((math.pi/4)*(1. - 2./columns))
-                if (radial_ratio > max_radial_ratio):
-                    inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
-                    radial_ratio = max_radial_ratio
-            angular_ratio = 1 - 2*columns*math.asin(radial_ratio)/((columns-2)*math.pi)
-            # print(angular_ratio)
-            points,mountains,valleys,enclosures = create_kresling(lines,columns,length,angular_ratio)
+            points,mountains,valleys,enclosures = Kresling.create_kresling(lines,columns,length,self.options.ratio)
+        elif(self.options.pattern == 'kresling_radial'):
+            points,mountains,valleys,enclosures = Kresling.create_kresling_radial(lines,columns,length,self.options.ratio,min_polygon=self.options.bool1)
         
         # Create mountain group and add them to top group
         mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
