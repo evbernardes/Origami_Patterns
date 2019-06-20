@@ -215,10 +215,8 @@ class OrigamiGridPatterns(inkex.Effect):
         topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs )
         
         # get paths for selected origami pattern
-        if(self.options.pattern == 'waterbomb'):
-            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1)
-        elif(self.options.pattern == 'magic_ball'):
-            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=True)
+        if(self.options.pattern == 'waterbomb' or self.options.pattern == 'magic_ball'):
+            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=self.options.pattern == 'magic_ball')
         elif(self.options.pattern == 'kresling'):
             points,mountains,valleys,enclosures = Kresling.create_kresling(lines,columns,length,self.options.ratio)
         elif(self.options.pattern == 'kresling_radial'):

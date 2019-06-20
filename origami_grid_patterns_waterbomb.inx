@@ -14,7 +14,7 @@
 				<_option value="waterbomb">Waterbomb tessellation</_option>
 				<_option value="magic_ball">Magic ball</_option>
 			</param>
-			<param name="bool1" type="boolean" _gui-text="Phase shift">false</param>
+			<param name="bool1" type="boolean" _gui-text="Shift phase?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>
 			<param name="columns" type="int" min="1" max="100" _gui-text="Number of columns">16</param>
