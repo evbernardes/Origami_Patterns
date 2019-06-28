@@ -4,7 +4,7 @@
 Helper functions
 
 '''
-from helpers import *
+import helpers as hp
 import math
 
 def create_kresling(lines,n,R,angle_ratio):
@@ -35,12 +35,12 @@ def create_kresling(lines,n,R,angle_ratio):
     # create a list for the horizontal creases and another for the vertical creases
     mountain_path_h = []
     for i in range(1,lines):
-        mountain_path_h.append(points_to_path([ (x_grid[i][ 0],y_grid[ i]),
+        mountain_path_h.append(hp.points_to_path([ (x_grid[i][ 0],y_grid[ i]),
                                                 (x_grid[i][-1],y_grid[ i])],inverse = i % 2 == 0))
 
     mountain_path_v = []
     for i in range(1,n):
-        mountain_path_h.append(points_to_path([ (x_grid[ 0][i],y_grid[ 0]),
+        mountain_path_h.append(hp.points_to_path([ (x_grid[ 0][i],y_grid[ 0]),
                                                 (x_grid[-1][i],y_grid[-1])],inverse = i % 2 == 0))
     mountains = [mountain_path_h,mountain_path_v]
     
@@ -49,12 +49,12 @@ def create_kresling(lines,n,R,angle_ratio):
     for i in range(1,n+lines):
         diff_x = max(i - (len(x_grid[0])-1),0)  # account for limits of grid
         diff_y = max(i - (len(x_grid)-1),0)     # in both directions
-        valleys.append(points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
+        valleys.append(hp.points_to_path([ (x_grid[i-diff_y][  diff_y],y_grid[i-diff_y]),
                                         (x_grid[  diff_x][i-diff_x],y_grid[  diff_x])],inverse = i % 2 == 0))
 
 
     # create a list for enclosure strokes
-    enclosures = points_to_enclosure([(x_grid[ 0][ 0],y_grid[ 0]), # top left
+    enclosures = hp.points_to_enclosure([(x_grid[ 0][ 0],y_grid[ 0]), # top left
                                       (x_grid[ 0][-1],y_grid[ 0]), # top right
                                       (x_grid[-1][-1],y_grid[-1]), # bottom right
                                       (x_grid[-1][ 0],y_grid[-1])])# bottom left                                 

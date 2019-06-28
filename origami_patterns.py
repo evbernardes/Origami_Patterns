@@ -10,7 +10,7 @@ Inkscape extension that creates origami tesselation patterns, create for the Ori
 import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
-from Origami_Patterns.helpers import *
+import Origami_Patterns.helpers as hp
 import Origami_Patterns.Waterbomb as Waterbomb
 import Origami_Patterns.Kresling as Kresling
 
@@ -229,7 +229,7 @@ class OrigamiPatterns(inkex.Effect):
         if(self.options.mountain_dashes_bool): 
             mountain_style['stroke-dasharray'] = (length/2)/self.options.mountain_dashes_number
         mountain_group = inkex.etree.SubElement(topgroup, 'g')
-        paths_to_group(mountains,mountain_group,mountain_style)
+        hp.paths_to_group(mountains,mountain_group,mountain_style)
         
         # Create valley group and add them to top group
         valley_style = {    'stroke': self.getColorString(self.options.valley_stroke_color), 
@@ -238,7 +238,7 @@ class OrigamiPatterns(inkex.Effect):
         if(self.options.valley_dashes_bool): 
             valley_style['stroke-dasharray'] = (length/2)/self.options.valley_dashes_number
         valley_group = inkex.etree.SubElement(topgroup, 'g')
-        paths_to_group(valleys,valley_group,valley_style)
+        hp.paths_to_group(valleys,valley_group,valley_style)
         
         # Create enclosure group and add them to top group
         enclosure_style = { 'stroke': self.getColorString(self.options.enclosure_stroke_color), 
@@ -247,7 +247,7 @@ class OrigamiPatterns(inkex.Effect):
         if(self.options.enclosure_dashes_bool): 
             enclosure_style['stroke-dasharray'] = (length/2)/self.options.enclosure_dashes_number
         enclosure_group = inkex.etree.SubElement(topgroup, 'g')
-        paths_to_group(enclosures,enclosure_group,enclosure_style)
+        hp.paths_to_group(enclosures,enclosure_group,enclosure_style)
         
         
 if __name__ == '__main__':
