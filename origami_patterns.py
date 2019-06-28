@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Origami Grid Patterns plugin
+Origami Patterns plugin
 
 Inkscape extension that creates origami tesselation patterns, create for the Origabot project
 
@@ -10,15 +10,15 @@ Inkscape extension that creates origami tesselation patterns, create for the Ori
 import inkex       # Required
 import simplestyle # will be needed here for styles support
 import os          # here for alternative debug method only - so not usually required
-from Origami_Grid_Patterns.helpers import *
-import Origami_Grid_Patterns.Waterbomb as Waterbomb
-import Origami_Grid_Patterns.Kresling as Kresling
+from Origami_Patterns.helpers import *
+import Origami_Patterns.Waterbomb as Waterbomb
+import Origami_Patterns.Kresling as Kresling
 
 __version__ = '0.2'
 
 inkex.localize()
 
-class OrigamiGridPatterns(inkex.Effect): 
+class OrigamiPatterns(inkex.Effect): 
     
     def __init__(self):
         " define how the options are mapped from the inx file "
@@ -251,7 +251,7 @@ class OrigamiGridPatterns(inkex.Effect):
         
         
 if __name__ == '__main__':
-    e = OrigamiGridPatterns()
+    e = OrigamiPatterns()
     e.affect()
 
 # Notes

@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-	<_name>Waterbomb(n of lines, n of columns, cell length)</_name>
-	<id>org.inkscape.Origami_grid_patterns.magic_ball</id>
-	<dependency type="executable" location="extensions">origami_grid_patterns.py</dependency>
+	<_name>Kresling(cells, n of sides, angle ratio)</_name>
+	<id>org.inkscape.Origami_patterns.kresling</id>
+	<dependency type="executable" location="extensions">origami_patterns.py</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
 
 	<!-- start notebook -->
 	<param name='active-tab' type="notebook">
 		<!-- one per page(tab) - unique names. Can discover which page in program-->
 		<page name="title" _gui-text="Options">
-			<param name="pattern" type="optiongroup" _gui-text="Type of magic ball" >
+			<param name="pattern" type="optiongroup" _gui-text="Type of Kresling tower" >
 				<!-- underscores indicate translatability -->
-				<_option value="waterbomb">Waterbomb tessellation</_option>
-				<_option value="magic_ball">Magic ball</_option>
+				<_option value="kresling">Regular Kresling Tower</_option>
 			</param>
-			<param name="bool1" type="boolean" _gui-text="Shift phase?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
-			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of lines">8</param>
-			<param name="columns" type="int" min="1" max="100" _gui-text="Number of columns">16</param>
-			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
-			<param name="length" type="float" max="10000" precision="3" _gui-text="Length of grid square (mm)">10.0</param>
-			<_param name="help"   type="description" xml:space="preserve">"Waterbomb tessellation" creates a simple tessellation pattern repeating the Waterbomb base, with a half-step phase shift between each line.&#xA;The Magic ball is a different design that inverts both the upper half of the first line and the bottom half of the last line.</_param>
+			<param name="lines" type="int"  min="1" max="100" _gui-text="Number of cells">3</param>
+			<param name="columns" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param>
+			<param name="length" type="float" max="10000"  precision="3" _gui-text="Radius of tower (mm)">10.0</param>
+			<param name="ratio" type="float" min="0.5" max="1" precision="3" appearance="full" _gui-text="Angle Ratio">1.0</param>
+			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.</_param>
 			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
 				<option value="cm">cm</option>
 				<option value="in">in</option>
 				<option value="pt">pt</option>
 				<option value="px">px</option></param> -->
-			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param> -->
+			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param>-->
 		</page>
 		<!-- next tab -->
 		<page name="valleys" _gui-text="Valley creases">
@@ -56,13 +54,13 @@
 	<effect>
 	<object-type>all</object-type>
 		<effects-menu>
-            <submenu _name="Origami grid patterns">
-				<submenu _name="Waterbomb" />
+			<submenu _name="Origami Patterns">
+				<submenu _name="Kresling tower" />
 			</submenu>
 		</effects-menu>
 	</effect>
 	<!-- py file again -->
 	<script>
-		<command reldir="extensions" interpreter="python">origami_grid_patterns.py</command>
+		<command reldir="extensions" interpreter="python">origami_patterns.py</command>
 	</script>
 </inkscape-extension>
