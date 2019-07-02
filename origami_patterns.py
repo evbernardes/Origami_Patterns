@@ -214,41 +214,38 @@ class OrigamiPatterns(inkex.Effect):
         # add the group to the document's current layer
         topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs )
         
-        # get paths for selected origami pattern
+        # # get paths for selected origami pattern
         if(self.options.pattern == 'waterbomb' or self.options.pattern == 'magic_ball'):
-            points,mountains,valleys,enclosures = Waterbomb.create_waterbomb(lines,columns,length,phase_shift=self.options.bool1,magic_ball=self.options.pattern == 'magic_ball')
+            pattern = Waterbomb.Waterbomb(lines,columns,length,phase_shift=self.options.bool1,waterbomb_type = self.options.pattern)
         elif(self.options.pattern == 'kresling'):
-            points,mountains,valleys,enclosures = Kresling.create_kresling(lines,columns,length,self.options.ratio)
+            pattern = Kresling.Kresling(lines,columns,length,self.options.ratio)
         elif(self.options.pattern == 'kresling_radial'):
-            points,mountains,valleys,enclosures = Kresling.create_kresling_radial(lines,columns,length,self.options.ratio,min_polygon=self.options.bool1)
-        
-        # Create mountain group and add them to top group
+            pattern = Kresling.Kresling_radial(lines,columns,length,self.options.ratio,min_polygon=self.options.bool1)
+
+        # Create styles dictionary
         mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
                             'fill': 'none',  
                             'stroke-width': self.options.mountain_stroke_width}
         if(self.options.mountain_dashes_bool): 
             mountain_style['stroke-dasharray'] = (length/2)/self.options.mountain_dashes_number
-        mountain_group = inkex.etree.SubElement(topgroup, 'g')
-        hp.paths_to_group(mountains,mountain_group,mountain_style)
         
-        # Create valley group and add them to top group
         valley_style = {    'stroke': self.getColorString(self.options.valley_stroke_color), 
                             'fill': 'none',  
                             'stroke-width': self.options.valley_stroke_width}
         if(self.options.valley_dashes_bool): 
             valley_style['stroke-dasharray'] = (length/2)/self.options.valley_dashes_number
-        valley_group = inkex.etree.SubElement(topgroup, 'g')
-        hp.paths_to_group(valleys,valley_group,valley_style)
         
-        # Create enclosure group and add them to top group
         enclosure_style = { 'stroke': self.getColorString(self.options.enclosure_stroke_color), 
                             'fill': 'none',  
                             'stroke-width': self.options.enclosure_stroke_width}
         if(self.options.enclosure_dashes_bool): 
             enclosure_style['stroke-dasharray'] = (length/2)/self.options.enclosure_dashes_number
-        enclosure_group = inkex.etree.SubElement(topgroup, 'g')
-        hp.paths_to_group(enclosures,enclosure_group,enclosure_style)
-        
+
+        styles_dict = {'m' : mountain_style,
+                       'v' : valley_style,
+                       'e' : enclosure_style}
+
+        pattern.draw_path_tree(topgroup,styles_dict)
         
 if __name__ == '__main__':
     e = OrigamiPatterns()
