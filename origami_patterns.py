@@ -224,8 +224,6 @@ class OrigamiPatterns(inkex.Effect):
             self.pattern = Kresling.Kresling_radial(self.options.lines,self.options.columns,self.options.length,self.options.ratio,min_polygon=self.options.bool1)
 
 
-
-
 ### -------------------------------------------------------------------
 ### This is your main function and is called when the extension is run.
     

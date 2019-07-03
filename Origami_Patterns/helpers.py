@@ -29,8 +29,19 @@ class Pattern:
     def draw_path_tree(self,group,styles_dict):
         Pattern.draw_path_recursively(self.path_tree,group,styles_dict)
 
+    '''
+    must define a method creating all the lines as Path objects and save them on a member list called 
+    path_tree
+    '''
     @abstractmethod
     def generate_pattern(self):
+        pass
+
+    '''
+    must define an __init__ method calling for instantiation that calls generate_pattern
+    '''
+    @abstractmethod
+    def __init__(self):
         pass
 
 

@@ -6,6 +6,7 @@ Helper functions
 '''
 import helpers as hp
 import math
+import inkex
 
 class Kresling(hp.Pattern):
     def generate_pattern(self):
@@ -87,6 +88,7 @@ class Kresling_radial(Kresling):
 
         max_radial_ratio = math.sin((math.pi/4)*(1. - 2./self.sides))
         if (radial_ratio > max_radial_ratio):
+            inkex.errormsg(_("For polygon of {} sides, the maximal radial ratio is = {}\nLower ratio, increase number of sides or select \"Minimize polygon sides\" option.".format(self.sides,max_radial_ratio)))
             # inkex.debug('Radial ratio of value {} chosen, but the max value of {} was used instead.'.format(radial_ratio,max_radial_ratio))
             radial_ratio = max_radial_ratio
         self.angle_ratio = 1 - 2*self.sides*math.asin(radial_ratio)/((self.sides-2)*math.pi)
