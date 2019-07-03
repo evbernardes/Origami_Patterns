@@ -6,6 +6,7 @@ Helper functions
 '''
 import inkex       # Required
 import simplestyle # will be needed here for styles support
+from abc import abstractmethod
 
 '''
 Pattern Mother Class
@@ -14,19 +15,26 @@ Only here so patterns can be inherited classes of it
 
 '''
 class Pattern:
-    def draw_path_tree(self,group,styles_dict):
-        create_path_recursively(self.path_tree,group,styles_dict)
-
-
-def create_path_recursively(path_tree,group,styles_dict):
+    @staticmethod
+    def draw_path_recursively(path_tree,group,styles_dict):
         for subpath in path_tree:
             if type(subpath) == list:
                 subgroup = inkex.etree.SubElement(group, 'g')
-                create_path_recursively(subpath,subgroup,styles_dict)
+                Pattern.draw_path_recursively(subpath,subgroup,styles_dict)
             else:
                 # inkex.debug("{},{}".format(subpath.style,subpath.path))
                 attribs = { 'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': subpath.path}
                 inkex.etree.SubElement(group, inkex.addNS('path','svg'), attribs )
+
+    def draw_path_tree(self,group,styles_dict):
+        Pattern.draw_path_recursively(self.path_tree,group,styles_dict)
+
+    @abstractmethod
+    def generate_pattern(self):
+        pass
+
+
+
 
 '''
 Path Class
@@ -35,6 +43,15 @@ Defines a path and what it is supposed to be (mountain, valley, enclosure)
 
 '''
 class Path:
+    @classmethod
+    def generate_separated_paths(cls,points,style,closed=False):
+        paths = []
+        for i in range(len(points) - 1 + int(closed)):
+            j = (i+1)%len(points)
+            paths.append(cls([(points[ i][ 0],points[ i][1]),
+                            (points[ j][ 0],points[ j][1])],style))
+        return paths
+
     def generate_path(self):
         self.path = ''
         if(self.inverse):
@@ -54,12 +71,5 @@ class Path:
         self.inverse = inverse
         self.generate_path()
 
-def generate_separated_paths(points,style,closed=False):
-    paths = []
-    for i in range(len(points) - 1 + int(closed)):
-        j = (i+1)%len(points)
-        paths.append(Path([(points[ i][ 0],points[ i][1]),
-                           (points[ j][ 0],points[ j][1])],style))
-    return paths
 
 

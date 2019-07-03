@@ -58,11 +58,12 @@ class Kresling(hp.Pattern):
                                     'v',inverse = i % 2 == 0))
 
         # create a list for enclosure strokes        
-        enclosures = hp.generate_separated_paths([(x_grid[ 0][ 0],y_grid[ 0]), # top left
-                                                  (x_grid[ 0][-1],y_grid[ 0]), # top right
-                                                  (x_grid[-1][-1],y_grid[-1]), # bottom right
-                                                  (x_grid[-1][ 0],y_grid[-1])],# bottom left
-                                                  'e',closed=True) 
+        enclosures = hp.Path.generate_separated_paths(
+            [   (x_grid[ 0][ 0],y_grid[ 0]), # top left
+                (x_grid[ 0][-1],y_grid[ 0]), # top right
+                (x_grid[-1][-1],y_grid[-1]), # bottom right
+                (x_grid[-1][ 0],y_grid[-1])],# bottom left
+            'e',closed=True) 
         
         self.path_tree = [mountains,valleys,enclosures]
     

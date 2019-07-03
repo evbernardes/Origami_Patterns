@@ -97,11 +97,12 @@ class Waterbomb(hp.Pattern):
                             hp.Path(pointy_down,style = 'v')])
 
         # create a list for enclosure strokes
-        enclosures = hp.generate_separated_paths([(x_grid[ 0],y_grid[ 0]), # top left
-                                                  (x_grid[-1],y_grid[ 0]), # top right
-                                                  (x_grid[-1],y_grid[-1]), # bottom right
-                                                  (x_grid[ 0],y_grid[-1])],# bottom left
-                                                  'e',closed=True)
+        enclosures = hp.Path.generate_separated_paths(
+            [   (x_grid[ 0],y_grid[ 0]), # top left
+                (x_grid[-1],y_grid[ 0]), # top right
+                (x_grid[-1],y_grid[-1]), # bottom right
+                (x_grid[ 0],y_grid[-1])],# bottom left
+            'e',closed=True)
         
         self.path_tree = [mountains,valleys,enclosures]
     

@@ -182,28 +182,61 @@ class OrigamiPatterns(inkex.Effect):
         unit_factor = self.getUnittouu(str(1.0) + self.options.units)
         return unit_factor
 
+    def create_styles_dict(self):
+        """ Create styles dictionary.
+            - 
+        """
+        
+        # define colour and stroke widt
+        mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.mountain_stroke_width}
+        valley_style = {    'stroke': self.getColorString(self.options.valley_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.valley_stroke_width}
+        enclosure_style = { 'stroke': self.getColorString(self.options.enclosure_stroke_color), 
+                            'fill': 'none',  
+                            'stroke-width': self.options.enclosure_stroke_width}
+
+        # check if dashed option selected
+        if(self.options.mountain_dashes_bool): 
+            mountain_style['stroke-dasharray'] = (self.options.length/2)/self.options.mountain_dashes_number
+        if(self.options.valley_dashes_bool): 
+            valley_style['stroke-dasharray'] = (self.options.length/2)/self.options.valley_dashes_number
+        if(self.options.enclosure_dashes_bool): 
+            enclosure_style['stroke-dasharray'] = (self.options.length/2)/self.options.enclosure_dashes_number
+
+        self.styles_dict = {'m' : mountain_style,
+                            'v' : valley_style,
+                            'e' : enclosure_style}
+
+    """ Select pattern and create.
+            - 
+        """
+    def create_pattern(self):
+        # basic_options = [self.options.lines,self.options.columns,self.options.length]
+        
+        if(self.options.pattern == 'waterbomb' or self.options.pattern == 'magic_ball'):
+            self.pattern = Waterbomb.Waterbomb(self.options.lines,self.options.columns,self.options.length,phase_shift=self.options.bool1,waterbomb_type = self.options.pattern)
+        elif(self.options.pattern == 'kresling'):
+            self.pattern = Kresling.Kresling(self.options.lines,self.options.columns,self.options.lengths,self.options.ratio)
+        elif(self.options.pattern == 'kresling_radial'):
+            self.pattern = Kresling.Kresling_radial(self.options.lines,self.options.columns,self.options.length,self.options.ratio,min_polygon=self.options.bool1)
+
+
 
 
 ### -------------------------------------------------------------------
 ### This is your main function and is called when the extension is run.
     
     def effect(self):
-        """ Calculate Gear factors from inputs.
-            - Make list of radii, angles, and centers for each tooth and 
-              iterate through them
-            - Turn on other visual features e.g. cross, rack, annotations, etc
-        """
-        # gather incoming params and convert
-        lines = self.options.lines
-        columns = self.options.columns
-        length = self.options.length
         # ~ accuracy = self.options.accuracy
         # ~ unit_factor = self.calc_unit_factor()
         # what page are we on
-        page_id = self.options.active_tab # sometimes wrong the very first time
+        # page_id = self.options.active_tab # sometimes wrong the very first time
         
         # This finds center of current view in inkscape
-        t = 'translate(%s,%s)' % (self.view_center[0], self.view_center[1] )
+        # t = 'translate(%s,%s)' % (self.view_center[0], self.view_center[1] )
         t = 'translate(%s,%s)' % (0, 0 )
         g_attribs = { inkex.addNS('label','inkscape'): '{} Origami pattern'.format(self.options.pattern),
                     #   inkex.addNS('transform-center-x','inkscape'): str(-bbox_center[0]),
@@ -214,38 +247,13 @@ class OrigamiPatterns(inkex.Effect):
         # add the group to the document's current layer
         topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs )
         
-        # # get paths for selected origami pattern
-        if(self.options.pattern == 'waterbomb' or self.options.pattern == 'magic_ball'):
-            pattern = Waterbomb.Waterbomb(lines,columns,length,phase_shift=self.options.bool1,waterbomb_type = self.options.pattern)
-        elif(self.options.pattern == 'kresling'):
-            pattern = Kresling.Kresling(lines,columns,length,self.options.ratio)
-        elif(self.options.pattern == 'kresling_radial'):
-            pattern = Kresling.Kresling_radial(lines,columns,length,self.options.ratio,min_polygon=self.options.bool1)
+        # get paths for selected origami pattern
+        self.create_pattern()
 
-        # Create styles dictionary
-        mountain_style = {  'stroke': self.getColorString(self.options.mountain_stroke_color), 
-                            'fill': 'none',  
-                            'stroke-width': self.options.mountain_stroke_width}
-        if(self.options.mountain_dashes_bool): 
-            mountain_style['stroke-dasharray'] = (length/2)/self.options.mountain_dashes_number
-        
-        valley_style = {    'stroke': self.getColorString(self.options.valley_stroke_color), 
-                            'fill': 'none',  
-                            'stroke-width': self.options.valley_stroke_width}
-        if(self.options.valley_dashes_bool): 
-            valley_style['stroke-dasharray'] = (length/2)/self.options.valley_dashes_number
-        
-        enclosure_style = { 'stroke': self.getColorString(self.options.enclosure_stroke_color), 
-                            'fill': 'none',  
-                            'stroke-width': self.options.enclosure_stroke_width}
-        if(self.options.enclosure_dashes_bool): 
-            enclosure_style['stroke-dasharray'] = (length/2)/self.options.enclosure_dashes_number
+        # construct dictionary containing styles
+        self.create_styles_dict()
 
-        styles_dict = {'m' : mountain_style,
-                       'v' : valley_style,
-                       'e' : enclosure_style}
-
-        pattern.draw_path_tree(topgroup,styles_dict)
+        self.pattern.draw_path_tree(topgroup,self.styles_dict)
         
 if __name__ == '__main__':
     e = OrigamiPatterns()
