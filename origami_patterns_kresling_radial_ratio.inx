@@ -65,7 +65,7 @@
 	</effect>
 	<!-- py file again -->
 	<script>
-		<command reldir="extensions" interpreter="python">Origami_Patterns/Kresling_radial.py</command>
+		<command reldir="extensions" interpreter="python">OrigamiPatterns/Kresling_radial.py</command>
 	</script>
 </inkscape-extension>
 

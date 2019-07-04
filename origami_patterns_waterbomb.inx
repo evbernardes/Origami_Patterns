@@ -2,7 +2,7 @@
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
 	<_name>Waterbomb(n of lines, n of columns, cell length)</_name>
 	<id>org.inkscape.Origami_patterns.magic_ball</id>
-	<dependency type="executable" location="extensions">Origami_Patterns</dependency>
+	<dependency type="executable" location="extensions">OrigamiPatterns</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
 
 	<!-- start notebook -->
