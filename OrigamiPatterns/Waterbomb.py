@@ -41,6 +41,14 @@ class Waterbomb(Pattern):
     def generate_path_tree(self):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
+        # TODO: refactor code using:
+        # a = np.array([bool((i%2+i)/2 %2) for i in range(2*lines)])
+        # if phase_shift:
+        #     a.invert()
+        # if magic_ball:
+        #     a[0] = ~a[0]
+        #     a[-1] = ~a[-1]
+
         # create grid
         x_grid = [self.options.length*i/2. for i in range(0, 2*self.options.columns + 1)]  # each element is [i,x(i)]
         y_grid = [self.options.length*i/2. for i in range(0, 2*self.options.lines + 1)]    # each element is [i,y(i)]

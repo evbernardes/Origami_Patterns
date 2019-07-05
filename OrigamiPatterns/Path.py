@@ -41,7 +41,9 @@ class Path:
         """
         self.points = points
         self.style = style
-        self._generate_path(closed, inverse)
+        self.closed = closed
+        self.inverse = inverse
+        self._generate_path()
 
     @classmethod
     def generate_separated_paths(cls, points, style, closed=False):
@@ -59,15 +61,25 @@ class Path:
                              style))
         return paths
 
-    def _generate_path(self, closed, inverse):
+    def __add__(self, offset):
+        """ Add offset to each point and return a new Path
+        """
+        newpoints = []
+        for point in self.points:
+            newpoints.append((point[0]+offset[0]),
+                             (point[1]+offset[1]))
+
+        return Path(newpoints,self.style,self.closed,self.inverse)
+
+    def _generate_path(self):
         """ Generate svg compliant string defining stroke, called by the constructor
         """
         self.path = ''
-        if inverse:
+        if self.inverse:
             points = self.points[::-1]
         else:
             points = self.points
         for i in range(len(points)-1):
             self.path = self.path+'M{},{}L{},{}'.format(points[i][0], points[i][1], points[i+1][0], points[i+1][1])
-        if closed:
+        if self.closed:
             self.path = self.path+'M{},{}L{},{}z'.format(points[-1][0], points[-1][1], points[0][0], points[0][1])
