@@ -46,6 +46,61 @@ class Path:
         self._generate_path()
 
     @classmethod
+    def generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False):
+        """ Generate list of Path instances, in which each Path is a stroke defining
+        a horizontal grid dividing the space xlims * ylims nb_of_divisions times.
+
+        All lines are alternated, to minimize Laser Cutter unnecessary movements
+
+        Parameters
+        ---------
+        xlims: tuple
+            Defines x_min and x_max for space that must be divided.
+        ylims: tuple
+            Defines y_min and y_max for space that must be divided.
+        nb_of_divisions: int
+            Defines how many times it should be divided.
+        style: str
+            Single character defining style of stroke.
+        include_edge: bool 
+            Defines if edge should be drawn or not.
+
+        Returns
+        ---------
+        paths: list of Path instances
+        """
+        rect_len = (ylims[1] - ylims[0])/nb_of_divisions
+        hgrid = []
+        for i in range(1 - include_edge, nb_of_divisions + include_edge):
+            hgrid.append(Path([(xlims[0], ylims[0]+i*rect_len),
+                               (xlims[1], ylims[0]+i*rect_len)],
+                              style=style, inverse=i % 2 == 0))
+        return hgrid
+
+    @classmethod
+    def generate_vgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False):
+        """ Generate list of Path instances, in which each Path is a stroke defining
+        a vertical grid dividing the space xlims * ylims nb_of_divisions times.
+
+        All lines are alternated, to minimize Laser Cutter unnecessary movements
+
+        Parameters
+        ---------
+        -> refer to generate_hgrid
+
+        Returns
+        ---------
+        paths: list of Path instances
+        """
+        rect_len = (xlims[1] - xlims[0])/nb_of_divisions
+        vgrid = []
+        for i in range(1 - include_edge, nb_of_divisions + include_edge):
+            vgrid.append(Path([(xlims[0]+i*rect_len, ylims[0]),
+                               (xlims[0]+i*rect_len, ylims[1])],
+                              style=style, inverse=i % 2 == 0))
+        return vgrid
+
+    @classmethod
     def generate_separated_paths(cls, points, style, closed=False):
         """ Generate list of Path instances, in which each Path is the stroke
         between each two point tuples, in case each stroke must be handled separately.
@@ -57,22 +112,27 @@ class Path:
         paths = []
         for i in range(len(points) - 1 + int(closed)):
             j = (i+1)%len(points)
-            paths.append(cls([points[i],points[j]],
+            paths.append(cls([points[i], points[j]],
                              style))
         return paths
 
     def __add__(self, offset):
-        """ Add offset to each point and return a new Path
+        """ " + " operator overload.
+        Adding a tuple to a Path returns a new path with all points having an offset
+        defined by the tuple
         """
-        newpoints = []
+        if type(offset) != tuple:
+            inkex.errormsg(_("Paths can only be added by tuples"))
+            raise TypeError("Paths can only be added by tuples")
+        points_new = []
         for point in self.points:
-            newpoints.append((point[0]+offset[0]),
-                             (point[1]+offset[1]))
+            points_new.append([(point[0]+offset[0]),
+                              (point[1]+offset[1])])
 
-        return Path(newpoints,self.style,self.closed,self.inverse)
+        return Path(points_new, self.style, self.closed, self.inverse)
 
     def _generate_path(self):
-        """ Generate svg compliant string defining stroke, called by the constructor
+        """ Generate svg line string defining stroke, called by the constructor
         """
         self.path = ''
         if self.inverse:
