@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import math
+import numpy as np
 
 from Path import Path
 from Pattern import Pattern
@@ -41,20 +42,14 @@ class Waterbomb(Pattern):
     def generate_path_tree(self):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
-        # TODO: refactor code using:
-        # a = np.array([bool((i%2+i)/2 %2) for i in range(2*lines)])
-        # if phase_shift:
-        #     a.invert()
-        # if magic_ball:
-        #     a[0] = ~a[0]
-        #     a[-1] = ~a[-1]
-
         length = self.options.length
-        columns = self.options.columns
+        cols = self.options.columns
         lines = self.options.lines
+        phase_shift = self.options.phase_shift
+        pattern = self.options.pattern
         
         # create grid
-        x_grid = [length*i/2. for i in range(0, 2*columns + 1)]  # each element is [i,x(i)]
+        x_grid = [length*i/2. for i in range(0, 2*cols + 1)]  # each element is [i,x(i)]
         y_grid = [length*i/2. for i in range(0, 2*lines + 1)]    # each element is [i,y(i)]
 
         # create points
@@ -64,73 +59,41 @@ class Waterbomb(Pattern):
         
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
-        mountains = [Path.generate_hgrid([0, length*columns], [0, length*lines], lines, 'm'),
-                     Path.generate_vgrid([0, length*columns], [0, length*lines], 2*columns, 'm')]
-        
-        # create a list for valley creases
+        mountains = [Path.generate_hgrid([0, length*cols], [0, length*lines],  lines, 'm'),
+                     Path.generate_vgrid([0, length*cols], [0, length*lines], 2*cols, 'm')]
+
+        # create generic valley Path lines
+        points = []
+        for i in range(2 * cols + 1):
+            points.append((i * length / 2, (1 - i % 2) * length / 2))
+        Path_type_1 = Path(points, 'v')     # lines with "pointy parts" up
+
+        points = []
+        for i in range(2*cols + 1):
+            points.append((i*length/2, (i % 2)*length/2))
+        Path_type_2 = Path(points, 'v')    # lines with "pointy parts" down
+
+        # define which lines must be of which type, according to parity and options
+        senses = np.array([bool((i % 2+i)/2 % 2) for i in range(2*lines)])
+        if phase_shift:
+            senses = np.invert(senses)
+        if pattern == "magic_ball":
+            senses[0] = ~senses[0]
+            senses[-1] = ~senses[-1]
+
         valleys = []
-        for j in range(1, 2*lines,2):
-
-            line_parity = ((j + 1 - int(self.options.phase_shift))/2) % 2
-
-            # for each line, create one valley pattern with the "pointy" side
-            # up and one with the "pointy" side down. Distribute one after the
-            # other according to phase
-
-            pointy_down = [(x_grid[0], y_grid[j-line_parity])]
-            for i in range(1, 2*columns+1):
-                if i % 2 == 1:
-                    pointy_down.append((x_grid[i], y_grid[j + 1 - line_parity]))
-                else:
-                    pointy_down.append((x_grid[i], y_grid[j     - line_parity]))
-
-            pointy_up = [(x_grid[-1], y_grid[j+line_parity])]
-            for i in range(2*columns, -1, -1):
-                if i % 2 == 1:
-                    pointy_up.append((x_grid[i], y_grid[j-1+line_parity]))
-                else:
-                    pointy_up.append((x_grid[i], y_grid[j+line_parity]))
-
-            # if Magic Ball, mirror upper half of first line and bottom half of last line
-            if self.options.pattern == 'magic_ball':
-                if line_parity == 1 and j == 1:                 # if first line starts with pointy side down...
-                    pointy_down = [(x_grid[-1], y_grid[j-1+line_parity])]
-                    for i in range(2*columns, -1, -1):
-                        if i % 2 == 1:
-                            pointy_down.append((x_grid[i], y_grid[j-2+line_parity]))
-                        else:
-                            pointy_down.append((x_grid[i], y_grid[j-1+line_parity]))
-                elif line_parity == 0 and j == 1:               # if first line starts with pointy side up...
-                    pointy_up = [(x_grid[0], y_grid[j-1-line_parity])]
-                    for i in range(1, 2*columns+1):
-                        if i % 2 == 1:
-                            pointy_up.append((x_grid[i], y_grid[j+0-line_parity]))
-                        else:
-                            pointy_up.append((x_grid[i], y_grid[j-1-line_parity]))
-                elif line_parity == 1 and j == 2*lines-1:    # if last line starts with pointy side up...
-                    pointy_up = [(x_grid[0], y_grid[j+1-line_parity])]
-                    for i in range(1, 2*columns+1):
-                        if i % 2 == 1:
-                            pointy_up.append((x_grid[i], y_grid[j+2-line_parity]))
-                        else:
-                            pointy_up.append((x_grid[i], y_grid[j+1-line_parity]))
-                elif line_parity == 0 and j == 2*lines-1:    # if last line starts with pointy side down...
-                    pointy_down = [(x_grid[-1], y_grid[j+1+line_parity])]
-                    for i in range(2*columns, -1, -1):
-                        if i % 2 == 1:
-                            pointy_down.append((x_grid[i], y_grid[j  +line_parity]))
-                        else:
-                            pointy_down.append((x_grid[i], y_grid[j+1+line_parity]))
-
-            valleys.append([Path(pointy_up, style='v'),
-                            Path(pointy_down, style='v')])
+        for i in range(2*lines):
+            if senses[i]:
+                valleys.append(Path_type_1 + (0, i * length / 2))
+            else:
+                valleys.append(Path_type_2 + (0, i * length / 2))
 
         # create a list for edge strokes
         edges = Path.generate_separated_paths(
-            [   (x_grid[ 0], y_grid[ 0]),   # top left
-                (x_grid[-1], y_grid[ 0]),   # top right
-                (x_grid[-1], y_grid[-1]),   # bottom right
-                (x_grid[ 0], y_grid[-1])],  # bottom left
+            [(x_grid[ 0], y_grid[ 0]),   # top left
+             (x_grid[-1], y_grid[ 0]),   # top right
+             (x_grid[-1], y_grid[-1]),   # bottom right
+             (x_grid[ 0], y_grid[-1])],  # bottom left
             'e', closed=True)
         
         self.path_tree = [mountains, valleys, edges]
