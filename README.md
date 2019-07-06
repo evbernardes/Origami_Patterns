@@ -51,6 +51,9 @@ waterbomb
 - Waterbomb tesselation (and Magic Ball)
 - Kresling tower
 
+## For creation of new patterns:
+- See `origami_patterns_template.inx` and `OrigamiPatterns/Template.py` for an example!
+
 ## Todo:
 - Add more patterns if necessary
 - Add option to draw points

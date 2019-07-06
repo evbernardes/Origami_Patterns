@@ -43,11 +43,11 @@ class Kresling(Pattern):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
         theta = (math.pi/2.)*(1 - 2./self.options.sides)
-        l = 2.*self.options.radius*math.cos(theta*(1.-self.options.angle_ratio))
+        length = 2.*self.options.radius*math.cos(theta*(1.-self.options.angle_ratio))
         a = 2.*self.options.radius*math.sin(math.pi/self.options.sides)
-        b = math.sqrt(a*a + l*l - 2*a*l*math.cos(self.options.angle_ratio*theta))
+        b = math.sqrt(a*a + length*length - 2*a*length*math.cos(self.options.angle_ratio*theta))
 
-        phi = abs(math.acos((l*l + b*b - a*a)/(2*l*b)))
+        phi = abs(math.acos((length*length + b*b - a*a)/(2*length*b)))
         gamma = math.pi/2 - self.options.angle_ratio*theta - phi
         dy = b*math.cos(gamma)
         dx = b*math.sin(gamma)
@@ -67,9 +67,9 @@ class Kresling(Pattern):
         # create a list for the horizontal creases and another for the vertical creases
         mountain_path_h = []
         for i in range(1, self.options.lines):
-            mountain_path_h.append(Path([(x_grid[i][ 0],y_grid[ i]),
-                                         (x_grid[i][-1],y_grid[ i])],
-                                        'm', inverse = i % 2 == 0))
+            mountain_path_h.append(Path([(x_grid[i][ 0], y_grid[ i]),
+                                         (x_grid[i][-1], y_grid[ i])],
+                                        'm', inverse=i % 2 == 0))
 
         mountain_path_v = []
         for i in range(1, self.options.sides):

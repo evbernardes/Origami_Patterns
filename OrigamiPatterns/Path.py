@@ -116,18 +116,25 @@ class Path:
                              style))
         return paths
 
-    def __add__(self, offset):
+    def __add__(self, offsets):
         """ " + " operator overload.
         Adding a tuple to a Path returns a new path with all points having an offset
         defined by the tuple
         """
-        if type(offset) != tuple:
-            inkex.errormsg(_("Paths can only be added by tuples"))
+        if type(offsets) == list:
+            if len(offsets) != 1 or len(offsets) != len(self.points):
+                raise TypeError("Paths can only be added by a tuple of a list of n tuples, "
+                                "where n is the same number of points")
+
+        elif type(offsets) != tuple:
             raise TypeError("Paths can only be added by tuples")
+        else:
+            offsets = [offsets] * len(self.points)
+
         points_new = []
-        for point in self.points:
+        for point,offset in zip(self.points, offsets):
             points_new.append([(point[0]+offset[0]),
-                              (point[1]+offset[1])])
+                               (point[1]+offset[1])])
 
         return Path(points_new, self.style, self.closed, self.inverse)
 

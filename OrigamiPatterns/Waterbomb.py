@@ -48,14 +48,14 @@ class Waterbomb(Pattern):
         phase_shift = self.options.phase_shift
         pattern = self.options.pattern
         
-        # create grid
-        x_grid = [length*i/2. for i in range(0, 2*cols + 1)]  # each element is [i,x(i)]
-        y_grid = [length*i/2. for i in range(0, 2*lines + 1)]    # each element is [i,y(i)]
-
-        # create points
-        points = []
-        for y in zip(y_grid):
-            points.append([(x, y) for x in zip(x_grid)])
+        # # create grid
+        # x_grid = [length*i/2. for i in range(0, 2*cols + 1)]  # each element is [i,x(i)]
+        # y_grid = [length*i/2. for i in range(0, 2*lines + 1)]    # each element is [i,y(i)]
+        #
+        # # create points
+        # points = []
+        # for y in zip(y_grid):
+        #     points.append([(x, y) for x in zip(x_grid)])
         
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
@@ -90,10 +90,10 @@ class Waterbomb(Pattern):
 
         # create a list for edge strokes
         edges = Path.generate_separated_paths(
-            [(x_grid[ 0], y_grid[ 0]),   # top left
-             (x_grid[-1], y_grid[ 0]),   # top right
-             (x_grid[-1], y_grid[-1]),   # bottom right
-             (x_grid[ 0], y_grid[-1])],  # bottom left
+            [(0*length*cols, 0*length*lines),   # top left
+             (1*length*cols, 0*length*lines),   # top right
+             (1*length*cols, 1*length*lines),   # bottom right
+             (0*length*cols, 1*length*lines)],  # bottom left
             'e', closed=True)
         
         self.path_tree = [mountains, valleys, edges]
