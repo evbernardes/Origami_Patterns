@@ -43,8 +43,8 @@ waterbomb
     │   └── bottom
     ├── ...
     └── line N
-    │   ├── top
-    │   └── bottom
+        ├── top
+        └── bottom
 ```
 
 ## Patterns implemented until now:
