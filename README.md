@@ -1,5 +1,5 @@
 # Origami Patterns
-Inkscape extension that creates origami tesselation patterns, create for the Origabot project
+Inkscape extension that creates origami tesselation patterns.
 
 ## Installation:
 To install a new extension, download and unpack the archive file. Copy the files into the directory listed at `Edit > Preferences > System: User extensions`
