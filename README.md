@@ -11,7 +11,7 @@ While on Linux, the directory is:
 `/home/$USER/.config/inkscape/extensions/`
 
 ## Accessing the extention:
-The extension can be found on `Extensions > Origami grid patterns`
+The extension can be found on `Extensions > Origami Patterns`
 
 ## Input parameters:
 - Number of lines
