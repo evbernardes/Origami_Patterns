@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
     <!-- Name of effect -->
-	<_name>Template</_name>
+	<_name>Template effect</_name>
     <!-- Name of id -->
 	<id>org.inkscape.Origami_patterns.template</id>
 	<dependency type="executable" location="extensions">OrigamiPatterns</dependency>
@@ -9,11 +9,12 @@
 
 	<!-- start notebook -->
 	<param name='active-tab' type="notebook">
+
 		<!-- Change this first page, fill with desired parameters and help texts-->
 		<page name="title" _gui-text="Options">
 			<param name="pattern" type="optiongroup" _gui-text="Type of template" >
-				<_option value="template1">Template option 1</_option>
-				<_option value="template2">Template option 2</_option>
+				<_option value="template1">Template pattern 1</_option>
+				<_option value="template2">Template pattern 2</_option>
 			</param>
 			<param name="length" type="float" max="10000" precision="3" _gui-text="Length of grid square (mm)">10.0</param>
 			<_param name="help"   type="description" xml:space="preserve">"Waterbomb tessellation" creates a simple tessellation pattern repeating the Waterbomb base, with a half-step phase shift between each line.&#xA;The Magic ball is a different design that inverts both the upper half of the first line and the bottom half of the last line.</_param>
@@ -24,6 +25,7 @@
 				<option value="pt">pt</option>
 				<option value="px">px</option></param> -->
 			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param> -->
+
 		</page>
 		<!-- Leave next pages alone, they define common options for every Pattern -->
 		<page name="mountains" _gui-text="Mountain creases">
@@ -48,17 +50,20 @@
 			<param name="edge_stroke_color" type="color" gui-text="Edge color: ">255</param>
 		</page>
 	</param>
+
 	<!-- classify which menu it appears under - can be new name -->
 	<effect>
 	<object-type>all</object-type>
 		<effects-menu>
             <submenu _name="Origami Patterns">
-				<submenu _name="Template" />
+				<submenu _name="Template submenu" />
 			</submenu>
 		</effects-menu>
 	</effect>
-	<!-- py file -->
+	<!-- Python file for pattern -->
+
 	<script>
 		<command reldir="extensions" interpreter="python">OrigamiPatterns/Template.py</command>
 	</script>
+
 </inkscape-extension>

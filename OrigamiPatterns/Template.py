@@ -1,12 +1,16 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-import math
 import numpy as np
 
 from Path import Path
 from Pattern import Pattern
 
 # Select name of class, inherits from Pattern
+# TODO:
+# 1) Implement __init__ method to get all custom options and then call Pattern's __init__
+# 2) Implement generate_path_tree to define all of the desired strokes
+
+
 class Template(Pattern):
     
     def __init__(self):
@@ -44,12 +48,12 @@ class Template(Pattern):
                      Path(mountain_v_stroke_points, 'm')]
 
         # doing the same for valleys
-        valley_first_stroke_points = [(0     , 0),
-                                      (length, length)]
-        valley_second_stroke_points = [(0     , length),
-                                       (length, 0)]
-        valleys = [Path(valley_first_stroke_points, 'v' if pattern == 'template1' else 'm'),
-                   Path(valley_second_stroke_points, 'v' if pattern == 'template1' else 'm')]
+        valley_1st_stroke_points = [(0     , 0     ),
+                                    (length, length)]
+        valley_2nd_stroke_points = [(0     , length),
+                                    (length, 0     )]
+        valleys = [Path(valley_1st_stroke_points, 'v' if pattern == 'template1' else 'm'),
+                   Path(valley_2nd_stroke_points, 'v' if pattern == 'template1' else 'm')]
 
         # if Path constructor is called with more than two points, a single stroke connecting all of then will be
         # created. Using method generate_separated_paths, you can instead return a list of separated strokes
