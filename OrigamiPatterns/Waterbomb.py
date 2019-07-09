@@ -59,8 +59,14 @@ class Waterbomb(Pattern):
         
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
-        mountains = [Path.generate_hgrid([0, length*cols], [0, length*lines],  lines, 'm'),
-                     Path.generate_vgrid([0, length*cols], [0, length*lines], 2*cols, 'm')]
+        # TODO: better organize this
+        corr = length/2 if pattern == 'magic_ball' else 0
+        grid = [Path.generate_hgrid([0, length*cols],    [0,      length*lines],  lines, 'm'),
+                Path.generate_vgrid([0, length*cols], [corr, length*lines-corr], 2*cols, 'm')]
+        if pattern == 'magic_ball':
+            vgrid_extra = Path.generate_vgrid([0, length*cols], [0, length/2], 2*cols, 'v')
+            grid.append(vgrid_extra)
+            grid.append(Path.list_add(vgrid_extra, (0, (lines-0.5)*length)))
 
         # create generic valley Path lines, one pointing up and other pointing down
         valley_types = [Path([(i * length / 2, (1 - i % 2) * length / 2) for i in range(2 * cols + 1)], 'v'),
@@ -76,7 +82,6 @@ class Waterbomb(Pattern):
         valleys = [valley_types[senses[i]] + (0, i * length / 2) for i in range(2*lines)]
 
         # convert first and last lines to mountains if magic_ball
-        # TODO: small corrections to vertical grid in magic ball option
         if pattern == "magic_ball":
             valleys[0].style = 'm'
             valleys[-1].style = 'm'
@@ -92,7 +97,7 @@ class Waterbomb(Pattern):
              (0*length*cols, 1*length*lines)],  # bottom left
             'e', closed=True)
         
-        self.path_tree = [mountains, valleys, edges]
+        self.path_tree = [grid, valleys, edges]
 
 
 if __name__ == '__main__':
