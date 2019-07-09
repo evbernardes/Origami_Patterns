@@ -64,9 +64,10 @@ class Waterbomb(Pattern):
         grid = [Path.generate_hgrid([0, length*cols],    [0,      length*lines],  lines, 'm'),
                 Path.generate_vgrid([0, length*cols], [corr, length*lines-corr], 2*cols, 'm')]
         if pattern == 'magic_ball':
-            vgrid_extra = Path.generate_vgrid([0, length*cols], [0, length/2], 2*cols, 'v')
-            grid.append(vgrid_extra)
-            grid.append(Path.list_add(vgrid_extra, (0, (lines-0.5)*length)))
+            vgrid_a = Path.generate_vgrid([0, length*cols], [0, length/2], 2*cols, 'v')
+            vgrid_b = Path.list_add(vgrid_a, (0, (lines-0.5)*length))
+            grid[1] = [     [vgrid_a[i], grid[1][i], vgrid_b[i]] if i % 2
+                       else [vgrid_b[i], grid[1][i], vgrid_a[i]] for i in range(len(grid[1]))]
 
         # create generic valley Path lines, one pointing up and other pointing down
         valley_types = [Path([(i * length / 2, (1 - i % 2) * length / 2) for i in range(2 * cols + 1)], 'v'),
