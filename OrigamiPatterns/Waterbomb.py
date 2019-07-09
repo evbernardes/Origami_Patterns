@@ -59,15 +59,14 @@ class Waterbomb(Pattern):
         
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
-        # TODO: better organize this
         corr = length/2 if pattern == 'magic_ball' else 0
         grid = [Path.generate_hgrid([0, length*cols],    [0,      length*lines],  lines, 'm'),
                 Path.generate_vgrid([0, length*cols], [corr, length*lines-corr], 2*cols, 'm')]
         if pattern == 'magic_ball':
             vgrid_a = Path.generate_vgrid([0, length*cols], [0, length/2], 2*cols, 'v')
             vgrid_b = Path.list_add(vgrid_a, (0, (lines-0.5)*length))
-            grid[1] = [     [vgrid_a[i], grid[1][i], vgrid_b[i]] if i % 2
-                       else [vgrid_b[i], grid[1][i], vgrid_a[i]] for i in range(len(grid[1]))]
+            grid[1] = [[vgrid_a[i], grid[1][i], vgrid_b[i]] if i % 2 == 0 else
+                       [vgrid_b[i], grid[1][i], vgrid_a[i]] for i in range(len(grid[1]))]
 
         # create generic valley Path lines, one pointing up and other pointing down
         valley_types = [Path([(i * length / 2, (1 - i % 2) * length / 2) for i in range(2 * cols + 1)], 'v'),
