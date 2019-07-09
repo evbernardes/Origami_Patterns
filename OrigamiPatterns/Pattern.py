@@ -49,7 +49,7 @@ class Pattern(inkex.Effect):
         Must be reimplemented in child classes to parse specialized options
         """
 
-        inkex.Effect.__init__(self) # initialize the super class
+        inkex.Effect.__init__(self)  # initialize the super class
         
         # Two ways to get debug info:
         # OR just use inkex.debug(string) instead...

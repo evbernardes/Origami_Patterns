@@ -23,7 +23,7 @@ class Path:
         svg compliant string defining stoke lines
     """
 
-    def __init__(self, points, style, closed=False, inverse=False):
+    def __init__(self, points, style, closed=False, invert=False):
         """ Constructor
 
         Parameters
@@ -37,23 +37,25 @@ class Path:
             'e' for edge borders
         closed: bool 
             if true, last point will be connected to first point at the end
-        inverse: bool
+        invert: bool
             if true, stroke will start at the last point and go all the way to the first one
         """
         self.points = points
         self.style = style
         self.closed = closed
-        self.inverse = inverse
+
+        if invert:
+            self.points = points[::-1]
+        else:
+            self.points = points
+
         self._generate_path()
 
     def _generate_path(self):
         """ Generate svg line string defining stroke, called by the constructor
         """
         self.path = ''
-        if self.inverse:
-            points = self.points[::-1]
-        else:
-            points = self.points
+        points = self.points
         for i in range(len(points)-1):
             self.path = self.path+'M{},{}L{},{}'.format(points[i][0], points[i][1], points[i+1][0], points[i+1][1])
         if self.closed:
@@ -63,7 +65,7 @@ class Path:
         """ Inverts path
         """
 
-        self.inverse = not self.inverse
+        self.points = self.points[::-1]
         self._generate_path()
 
     @classmethod
@@ -95,7 +97,7 @@ class Path:
         for i in range(1 - include_edge, nb_of_divisions + include_edge):
             hgrid.append(cls([(xlims[0], ylims[0]+i*rect_len),
                               (xlims[1], ylims[0]+i*rect_len)],
-                             style=style, inverse=i % 2 == 0))
+                             style=style, invert=i % 2 == 0))
         return hgrid
 
     @classmethod
@@ -118,7 +120,7 @@ class Path:
         for i in range(1 - include_edge, nb_of_divisions + include_edge):
             vgrid.append(cls([(xlims[0]+i*rect_len, ylims[0]),
                               (xlims[0]+i*rect_len, ylims[1])],
-                             style=style, inverse=i % 2 == 0))
+                             style=style, invert=i % 2 == 0))
         return vgrid
 
     @classmethod
@@ -162,7 +164,7 @@ class Path:
             points_new.append([(point[0]+offset[0]),
                                (point[1]+offset[1])])
 
-        return Path(points_new, self.style, self.closed, self.inverse)
+        return Path(points_new, self.style, self.closed)
 
     @classmethod
     def list_add(cls, paths, offsets):
