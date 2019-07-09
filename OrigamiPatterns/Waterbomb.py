@@ -3,6 +3,8 @@
 import math
 import numpy as np
 
+import inkex
+
 from Path import Path
 from Pattern import Pattern
 

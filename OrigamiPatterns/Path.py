@@ -95,7 +95,7 @@ class Path:
         for i in range(1 - include_edge, nb_of_divisions + include_edge):
             hgrid.append(cls([(xlims[0], ylims[0]+i*rect_len),
                               (xlims[1], ylims[0]+i*rect_len)],
-                             style=style, inverse=i % 2 == 1))
+                             style=style, inverse=i % 2 == 0))
         return hgrid
 
     @classmethod
@@ -118,7 +118,7 @@ class Path:
         for i in range(1 - include_edge, nb_of_divisions + include_edge):
             vgrid.append(cls([(xlims[0]+i*rect_len, ylims[0]),
                               (xlims[0]+i*rect_len, ylims[1])],
-                             style=style, inverse=i % 2 == 1))
+                             style=style, inverse=i % 2 == 0))
         return vgrid
 
     @classmethod
