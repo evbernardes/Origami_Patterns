@@ -59,6 +59,13 @@ class Path:
         if self.closed:
             self.path = self.path+'M{},{}L{},{}z'.format(points[-1][0], points[-1][1], points[0][0], points[0][1])
 
+    def invert(self):
+        """ Inverts path
+        """
+
+        self.inverse = not self.inverse
+        self._generate_path()
+
     @classmethod
     def generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False):
         """ Generate list of Path instances, in which each Path is a stroke defining

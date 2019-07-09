@@ -62,16 +62,9 @@ class Waterbomb(Pattern):
         mountains = [Path.generate_hgrid([0, length*cols], [0, length*lines],  lines, 'm'),
                      Path.generate_vgrid([0, length*cols], [0, length*lines], 2*cols, 'm')]
 
-        # create generic valley Path lines
-        points = []
-        for i in range(2 * cols + 1):
-            points.append((i * length / 2, (1 - i % 2) * length / 2))
-        Path_type_1 = Path(points, 'v')     # lines with "pointy parts" up
-
-        points = []
-        for i in range(2*cols + 1):
-            points.append((i*length/2, (i % 2)*length/2))
-        Path_type_2 = Path(points, 'v')    # lines with "pointy parts" down
+        # create generic valley Path lines, one pointing up and other pointing down
+        valley_types = [Path([(i * length / 2, (1 - i % 2) * length / 2) for i in range(2 * cols + 1)], 'v'),
+                        Path([(    i*length/2,         (i % 2)*length/2) for i in range(2 * cols + 1)], 'v')]
 
         # define which lines must be of which type, according to parity and options
         senses = np.array([bool((i % 2+i)/2 % 2) for i in range(2*lines)])
@@ -80,15 +73,18 @@ class Waterbomb(Pattern):
         if pattern == "magic_ball":
             senses[0] = ~senses[0]
             senses[-1] = ~senses[-1]
+        valleys = [valley_types[senses[i]] + (0, i * length / 2) for i in range(2*lines)]
 
-        valleys = []
-        for i in range(2*lines):
-            if senses[i]:
-                valleys.append(Path_type_1 + (0, i * length / 2))
-            else:
-                valleys.append(Path_type_2 + (0, i * length / 2))
+        # convert first and last lines to mountains if magic_ball
+        # TODO: small corrections to vertical grid in magic ball option
+        if pattern == "magic_ball":
+            valleys[0].style = 'm'
+            valleys[-1].style = 'm'
 
-        # create a list for edge strokes
+        # invert every two lines to minimize laser cutter movements
+        for i in range(1, 2*lines, 2):
+            valleys[i].invert()
+
         edges = Path.generate_separated_paths(
             [(0*length*cols, 0*length*lines),   # top left
              (1*length*cols, 0*length*lines),   # top right
