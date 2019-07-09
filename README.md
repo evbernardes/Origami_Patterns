@@ -10,19 +10,29 @@ On Windows, the default directory is:
 While on Linux, the directory is:
 `/home/$USER/.config/inkscape/extensions/`
 
-## Accessing the extention:
+## Accessing the extension:
 The extension can be found on `Extensions > Origami Patterns`
 
 ## Input parameters:
+### Custom parameters (depends on desired Pattern)
 - Number of lines
 - Number of columns
-- Length of each grid square
-- Colors of mountain creases, valley creases and enclosure
-- Dashed strokes of mountain creases, valley creases and enclosure
+- etc...
+### Common parameters
+- Color for every type of stroke (mountain creases, valley creases and edges)
+- Dashes for every type os stroke
+- Width for every type of stroke
 
 ## Output:
 Creates the pattern. 
-To simplify editing, ungrouping it you get three distinct groups of objects: the mountain creases, the valley creases and enclosure. These groups can also be divided into smaller groups. Waterbomb example:
+To simplify manual editing on Inkscape, the drawn pattern is composed of subgroups of
+of strokes.
+For example, ungrouping the Waterbomb tesselation, you get three distinct groups of objects:
+- the mountain creases
+- the valley creases
+- the edges
+
+These groups can also be divided into smaller groups:
 
 ```
 waterbomb
@@ -31,20 +41,22 @@ waterbomb
 │   ├── left
 │   ├── right
 │   └── top
+│   
 ├── mountains
 │   ├── horizontal lines
 │   └── vertical lines
+│   
 └── valleys
-    ├── line 1
-    │   ├── top
-    │   └── bottom
-    ├── line 2
-    │   ├── top
-    │   └── bottom
+    ├── line 1_a
+    ├── line 1_b
+    │   
+    ├── line 2_a
+    ├── line 2_b
+    │   
     ├── ...
-    └── line N
-        ├── top
-        └── bottom
+    │   
+    ├── line N_a
+    └── line N_b
 ```
 
 ## Patterns implemented until now:
