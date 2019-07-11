@@ -18,7 +18,7 @@
 			<param name="sides" type="int" min="3" max="100" _gui-text="Number of polygon sides">6</param>
 			<param name="radius" type="float" max="10000"  precision="3" _gui-text="Radius of tower (mm)">10.0</param>
 			<param name="angle_ratio" type="float" min="0.5" max="1" precision="3" appearance="full" _gui-text="Angle Ratio">0.5</param>
-			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.</_param>
+			<_param name="help"   type="description" xml:space="preserve">Angle ratio varies between 0.5 and 1. &#xA;&#xA;Higher values of this parameter lead to bigger changes of height and rotation between cells during transformation between open and closed forms.&#xA;&#xA;[Pagano, A., Yan, T., Chien, B., Wissa, A., & Tawfick, S. (2017). A crawling robot driven by multi-stable origami. Smart Materials and Structures, 26(9). https://doi.org/10.1088/1361-665X/aa721e]</_param>
 			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>
 				<option value="cm">cm</option>

@@ -108,6 +108,40 @@ class Pattern(inkex.Effect):
                                      default=True,
                                      help='Dashed strokes?.')
 
+        self.OptionParser.add_option('', '--universal_stroke_color', action='store',
+                                     type='string', dest='universal_stroke_color',
+                                     default=4278255615,  # Magenta
+                                     help='The universal creases color.')
+        self.OptionParser.add_option('', '--universal_stroke_width', action='store',
+                                     type='float', dest='universal_stroke_width',
+                                     default=0.1,
+                                     help='Width of universal strokes.')
+        self.OptionParser.add_option('', '--universal_dashes_number', action='store',
+                                     type='float', dest='universal_dashes_number',
+                                     default=6,
+                                     help='Dashes per length unit.')
+        self.OptionParser.add_option('', '--universal_dashes_bool', action='store',
+                                     type='inkbool', dest='universal_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
+        self.OptionParser.add_option('', '--semicrease_stroke_color', action='store',
+                                     type='string', dest='semicrease_stroke_color',
+                                     default=4294902015,  # Yellow
+                                     help='The semicrease creases color.')
+        self.OptionParser.add_option('', '--semicrease_stroke_width', action='store',
+                                     type='float', dest='semicrease_stroke_width',
+                                     default=0.1,
+                                     help='Width of semicrease strokes.')
+        self.OptionParser.add_option('', '--semicrease_dashes_number', action='store',
+                                     type='float', dest='mountain_dashes_number',
+                                     default=6,
+                                     help='Dashes per length unit.')
+        self.OptionParser.add_option('', '--semicrease_dashes_bool', action='store',
+                                     type='inkbool', dest='semicrease_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
         self.OptionParser.add_option('-e', '--edge_stroke_color', action='store',
                                      type='string', dest='edge_stroke_color',
                                      default=255,  # Black
@@ -204,6 +238,14 @@ class Pattern(inkex.Effect):
                         'fill': 'none',
                         'stroke-width': self.options.valley_stroke_width}
 
+        universal_style = {'stroke': self.getColorString(self.options.universal_stroke_color),
+                        'fill': 'none',
+                        'stroke-width': self.options.universal_stroke_width}
+
+        semicrease_style = {'stroke': self.getColorString(self.options.semicrease_stroke_color),
+                        'fill': 'none',
+                        'stroke-width': self.options.semicrease_stroke_width}
+
         edge_style = {'stroke': self.getColorString(self.options.edge_stroke_color),
                       'fill': 'none',
                       'stroke-width': self.options.edge_stroke_width}
@@ -213,12 +255,18 @@ class Pattern(inkex.Effect):
             mountain_style['stroke-dasharray'] = self.options.mountain_dashes_number
         if self.options.valley_dashes_bool:
             valley_style['stroke-dasharray'] = self.options.valley_dashes_number
+        if self.options.universal_dashes_bool:
+            valley_style['stroke-dasharray'] = self.options.universal_dashes_number
+        if self.options.semicrease_dashes_bool:
+            valley_style['stroke-dasharray'] = self.options.semicrease_dashes_number
         if self.options.edge_dashes_bool:
             edge_style['stroke-dasharray'] = self.options.edge_dashes_number
 
-        self.styles_dict = {'m' : mountain_style,
-                            'v' : valley_style,
-                            'e' : edge_style}
+        self.styles_dict = {'m': mountain_style,
+                            'v': valley_style,
+                            'u': universal_style,
+                            's': semicrease_style,
+                            'e': edge_style}
     
     def getUnittouu(self, param):
         """ for 0.48 and 0.91 compatibility

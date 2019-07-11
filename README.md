@@ -22,6 +22,8 @@ The extension can be found on `Extensions > Origami Patterns`
 - Color for every type of stroke (mountain creases, valley creases and edges)
 - Dashes for every type os stroke
 - Width for every type of stroke
+### Extra parameters
+- Semicreases and universal creases can also be implemented, if needed.
 
 ## Output:
 Creates the pattern. 
