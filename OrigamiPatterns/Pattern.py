@@ -134,11 +134,28 @@ class Pattern(inkex.Effect):
                                      default=0.1,
                                      help='Width of semicrease strokes.')
         self.OptionParser.add_option('', '--semicrease_dashes_number', action='store',
-                                     type='float', dest='mountain_dashes_number',
+                                     type='float', dest='semicrease_dashes_number',
                                      default=6,
                                      help='Dashes per length unit.')
         self.OptionParser.add_option('', '--semicrease_dashes_bool', action='store',
                                      type='inkbool', dest='semicrease_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
+        self.OptionParser.add_option('', '--cut_stroke_color', action='store',
+                                     type='string', dest='cut_stroke_color',
+                                     default=16711935,  # Green
+                                     help='The cut creases color.')
+        self.OptionParser.add_option('', '--cut_stroke_width', action='store',
+                                     type='float', dest='cut_stroke_width',
+                                     default=0.1,
+                                     help='Width of cut strokes.')
+        self.OptionParser.add_option('', '--cut_dashes_number', action='store',
+                                     type='float', dest='cut_dashes_number',
+                                     default=6,
+                                     help='Dashes per length unit.')
+        self.OptionParser.add_option('', '--cut_dashes_bool', action='store',
+                                     type='inkbool', dest='cut_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
 
@@ -246,6 +263,10 @@ class Pattern(inkex.Effect):
                         'fill': 'none',
                         'stroke-width': self.options.semicrease_stroke_width}
 
+        cut_style = {'stroke': self.getColorString(self.options.cut_stroke_color),
+                        'fill': 'none',
+                        'stroke-width': self.options.cut_stroke_width}
+
         edge_style = {'stroke': self.getColorString(self.options.edge_stroke_color),
                       'fill': 'none',
                       'stroke-width': self.options.edge_stroke_width}
@@ -256,9 +277,11 @@ class Pattern(inkex.Effect):
         if self.options.valley_dashes_bool:
             valley_style['stroke-dasharray'] = self.options.valley_dashes_number
         if self.options.universal_dashes_bool:
-            valley_style['stroke-dasharray'] = self.options.universal_dashes_number
+            universal_style['stroke-dasharray'] = self.options.universal_dashes_number
         if self.options.semicrease_dashes_bool:
-            valley_style['stroke-dasharray'] = self.options.semicrease_dashes_number
+            semicrease_style['stroke-dasharray'] = self.options.semicrease_dashes_number
+        if self.options.cut_dashes_bool:
+            cut_style['stroke-dasharray'] = self.options.cut_dashes_number
         if self.options.edge_dashes_bool:
             edge_style['stroke-dasharray'] = self.options.edge_dashes_number
 
@@ -266,6 +289,7 @@ class Pattern(inkex.Effect):
                             'v': valley_style,
                             'u': universal_style,
                             's': semicrease_style,
+                            'c': cut_style,
                             'e': edge_style}
     
     def getUnittouu(self, param):

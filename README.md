@@ -23,7 +23,7 @@ The extension can be found on `Extensions > Origami Patterns`
 - Dashes for every type os stroke
 - Width for every type of stroke
 ### Extra parameters
-- Semicreases and universal creases can also be implemented, if needed.
+- Semicreases, universal creases and cuts (for Kirigami) can also be implemented, if needed.
 
 ## Output:
 Creates the pattern. 
