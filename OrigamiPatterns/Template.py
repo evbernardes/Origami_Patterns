@@ -75,10 +75,17 @@ class Template(Pattern):
              (0 * length, 1 * length)],  # bottom left
             'e', closed=True)
 
-        # multiplication is implemented as a rotation, and list_rot implements rotation for list of Path instances
-        mountains = Path.list_rot(mountains, theta, (1 * length, 1 * length))
-        valleys = Path.list_rot(valleys, theta, (1 * length, 1 * length))
-        edges = Path.list_rot(edges, theta, (1 * length, 1 * length))
+        # multiplication is implemented as a rotation, and list_rotate implements rotation for list of Path instances
+        mountains = Path.list_rotate(mountains, theta, (1 * length, 1 * length))
+        valleys = Path.list_rotate(valleys, theta, (1 * length, 1 * length))
+        edges = Path.list_rotate(edges, theta, (1 * length, 1 * length))
+
+        # division is implemented as a reflection, and list_reflect implements it for a list of Path instances
+        # here's a commented example:
+        # line_reflect = (0 * length, 2 * length, 1 * length, 1 * length)
+        # mountains = Path.list_reflect(mountains, line_reflect)
+        # valleys = Path.list_reflect(valleys, line_reflect)
+        # edges = Path.list_reflect(edges, line_reflect)
 
         # IMPORTANT:
         # the attribute "path_tree" must be created at the end, saving all strokes
