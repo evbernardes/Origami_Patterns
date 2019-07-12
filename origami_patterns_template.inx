@@ -17,6 +17,7 @@
 				<_option value="template2">Template pattern 2</_option>
 			</param>
 			<param name="length" type="float" max="10000" precision="3" _gui-text="Length of grid square (mm)">10.0</param>
+			<param name="theta" type="int" min="0" max="360" _gui-text="Rotation angle (degree)">0</param>
 			<_param name="help"   type="description" xml:space="preserve">"Waterbomb tessellation" creates a simple tessellation pattern repeating the Waterbomb base, with a half-step phase shift between each line.&#xA;The Magic ball is a different design that inverts both the upper half of the first line and the bottom half of the last line.</_param>
 			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>

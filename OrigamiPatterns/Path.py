@@ -206,3 +206,55 @@ class Path:
 
         return paths_new
 
+    def __mul__(self, transform):
+        """ " * " operator overload.
+        Define multiplication of a Path to a length 3 tuple as a rotation :
+        path * (theta,x0,y0) rotates path around point (x0,y0) by theta radians
+        """
+        if len(transform) != 3:
+            TypeError("Paths can only be multiplied by length 3 lists or tuples")
+
+        theta = transform[0]
+        x, y = transform[1:]
+
+        points_new = []
+        for p in self.points:
+            dx = p[0] - x
+            dy = p[1] - y
+            x_ = dx*cos(theta) - dy*sin(theta)
+            v_ = dx*sin(theta) + dy*cos(theta)
+            points_new.append([(x+x_),
+                               (y+v_)])
+
+        return Path(points_new, self.style, self.closed)
+
+    @classmethod
+    def list_rot(cls, paths, theta, translation=(0, 0)):
+        """ Generate list of new Path instances, rotation each path by transform
+
+        Parameters
+        ---------
+        paths: Path or list
+            list of N Path instances
+        theta: float (radians)
+            angle of rotation
+        translation: tuple or list 2
+            axis of rotation
+
+        Returns
+        ---------
+        paths_new: list
+            list of N Path instances
+        """
+        if len(translation) != 2:
+            TypeError("Translation must have length 2")
+
+        if type(paths) == Path:
+            paths = [paths]
+
+        paths_new = []
+        for path in paths:
+            paths_new.append(path*(theta, translation[0], translation[1]))
+
+        return paths_new
+
