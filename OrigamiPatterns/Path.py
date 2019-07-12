@@ -267,17 +267,22 @@ class Path:
             TypeError("Paths can only be divided by list or tuple of length 4")
 
         (x1, y1, x2, y2) = points
-        m = (y2 - y1)/(x2 - x1)
-        t = y1 - m*x1
 
-        t_x = [1 - m**2, 2*m, -2*m*t]
-        t_y = [2*m, m**2 - 1, +2*t]
-        t_ = m**2 + 1
+        if x1 == x2 and y1 == y2:
+            ValueError("Duplicate points don't define a line")
+        elif x1 == x2:
+            t_x = [-1, 0, 2*x1, 1]
+            t_y = [0, 1, 0, 1]
+        else:
+            m = (y2 - y1)/(x2 - x1)
+            t = y1 - m*x1
+            t_x = [1 - m**2, 2*m, -2*m*t, m**2 + 1]
+            t_y = [2*m, m**2 - 1, +2*t, m**2 + 1]
 
         points_new = []
         for p in self.points:
-            x_ = (t_x[0]*p[0] + t_x[1]*p[1] + t_x[2]) / t_
-            y_ = (t_y[0]*p[0] + t_y[1]*p[1] + t_y[2]) / t_
+            x_ = (t_x[0]*p[0] + t_x[1]*p[1] + t_x[2]) / t_x[3]
+            y_ = (t_y[0]*p[0] + t_y[1]*p[1] + t_y[2]) / t_y[3]
             points_new.append((x_, y_))
 
         return Path(points_new, self.style, self.closed)
