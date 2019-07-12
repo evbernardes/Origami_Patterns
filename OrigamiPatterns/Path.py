@@ -258,6 +258,8 @@ class Path:
 
         return paths_new
 
+    # TODO:
+    # Apparently it's not working properly, must be debugged and tested
     def __div__(self, points):
         """ " / " operator overload.
         Define division of a Path to a list or tuple of length 4 each as reflection:
@@ -287,16 +289,18 @@ class Path:
 
         return Path(points_new, self.style, self.closed)
 
+    # TODO:
+    # Apparently it's not working properly, must be debugged and tested
     @classmethod
-    def list_reflect(cls, paths, points):
+    def list_reflect(cls, paths, p1, p2):
         """ Generate list of new Path instances, rotation each path by transform
 
         Parameters
         ---------
         paths: Path or list
             list of N Path instances
-        points: tuple or list of size 4
-            (x1, y1, x2, y2) points defining line of rotation
+        p1: tuple or list of size 2
+        p2: tuple or list of size 2
 
         Returns
         ---------
@@ -309,7 +313,7 @@ class Path:
 
         paths_new = []
         for path in paths:
-            paths_new.append(path / points)
+            paths_new.append(path / (p1[0], p1[0], p2[0], p2[1]))
 
         return paths_new
 

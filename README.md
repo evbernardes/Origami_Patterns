@@ -64,6 +64,7 @@ waterbomb
 ## Patterns implemented until now:
 - Waterbomb tesselation (and Magic Ball)
 - Kresling tower
+- Hypar (hyperbolic paraboloid approximate)
 
 ## For creation of new patterns:
 - See `origami_patterns_template.inx` and `OrigamiPatterns/Template.py` for an example!
@@ -71,5 +72,5 @@ waterbomb
 ## Todo:
 - Add more patterns if necessary
 - Add option to draw points
-- Finish implementing unit selector (only milimiters for now)
+- Finish implementing unit selector (only millimeters for now)
 
