@@ -4,7 +4,7 @@ import numpy as np
 
 from math import pi, tan, sqrt, sin, cos
 
-# import inkex
+import inkex
 
 from Path import Path
 from Pattern import Pattern
@@ -108,6 +108,7 @@ class Hypar(Pattern):
             [p.points[-1] for p in diagonals],  # bottom left
             'e', closed=True)
 
+        self.translate = (radius, radius)
         self.path_tree = [zig_zags, diagonals, edges]
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape

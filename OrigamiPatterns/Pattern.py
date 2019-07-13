@@ -25,14 +25,16 @@ class Pattern(inkex.Effect):
             styles_dict = {'m' : mountain_style,
                            'v' : valley_style,
                            'e' : edge_style}
+
     topgroup: inkex.etree.SubElement
             Top Inkscape group element 
 
     path_tree: nested list 
         Contains "tree" of Path instances, defining new groups for each
         sublist
-    path: str
-            svg compliant string defining stoke lines
+
+    translate: 2 sized tuple
+        Defines translation to be added when drawing to Inkscape (default: 0,0)
     """
     
     @abstractmethod
@@ -183,6 +185,7 @@ class Pattern(inkex.Effect):
                                      help="Active tab.")
 
         self.path_tree = []
+        self.translate = (0, 0)
     
     """ 
     Draw path recursively
@@ -216,28 +219,26 @@ class Pattern(inkex.Effect):
         
         This is your main function and is called when the extension is run
         """
+        # construct dictionary containing styles
+        self.create_styles_dict()
+
+        # get paths for selected origami pattern
+        self.generate_path_tree()
+
         # ~ accuracy = self.options.accuracy
         # ~ unit_factor = self.calc_unit_factor()
         # what page are we on
         # page_id = self.options.active_tab # sometimes wrong the very first time
 
-        # This finds center of current view in inkscape
-        # t = 'translate(%s,%s)' % (self.view_center[0], self.view_center[1] )
-        t = 'translate(%s,%s)' % (0, 0 )
+        # Translate according to translate attribute
         g_attribs = {inkex.addNS('label', 'inkscape'): '{} Origami pattern'.format(self.options.pattern),
-                     #   inkex.addNS('transform-center-x','inkscape'): str(-bbox_center[0]),
-                     #   inkex.addNS('transform-center-y','inkscape'): str(-bbox_center[1]),
+                       # inkex.addNS('transform-center-x','inkscape'): str(-bbox_center[0]),
+                       # inkex.addNS('transform-center-y','inkscape'): str(-bbox_center[1]),
                      inkex.addNS('transform-center-x','inkscape'): str(0),
                      inkex.addNS('transform-center-y','inkscape'): str(0),
-                     'transform': t}
+                     'transform': 'translate(%s,%s)' % self.translate}
         # add the group to the document's current layer
         self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
-        
-        # get paths for selected origami pattern
-        self.generate_path_tree()
-
-        # construct dictionary containing styles
-        self.create_styles_dict()
 
         self.draw_path_tree()
 
