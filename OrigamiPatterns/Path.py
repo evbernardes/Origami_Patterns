@@ -226,8 +226,8 @@ class Path:
 
         if isinstance(transform, (int, long, float)):
             for p in self.points:
-                points_new.append([(transform * p[0],
-                                    transform * p[0])])
+                points_new.append((transform * p[0],
+                                   transform * p[1]))
 
         elif isinstance(transform, (list, tuple)):
             if len(transform) == 2:

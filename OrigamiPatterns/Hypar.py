@@ -53,6 +53,7 @@ class Hypar(Pattern):
         rings = self.options.rings
         simplify_center = self.options.simplify_center
         sin_ = sin(pi / float(sides))
+        a = radius*sin_  # half of length of polygon side
         H = radius*sqrt(1 - sin_**2)
 
         # create diagonals
@@ -62,38 +63,39 @@ class Hypar(Pattern):
             p2 = (radius * cos((1 + i * 2) * pi / sides), radius * sin((1 + i * 2) * pi / sides))
             diagonals.append(Path([p1, p2], 'u'))
 
-        # create points for zig zag pattern
-        points = []
-        styles = []
-        for i in range(rings):
-            dy = radius * ((i + 1.) / (rings + 1.)) * sin_
-            x = H * (i + 1.) / (rings + 1.)
-            points.append((x, +dy))
-            if i != rings:
-                points.append((x, -dy))
-            styles.append('v' if i % 2 == 0 else 'm')
-            styles.append('u')
-        points.append((H, radius * sin_))
+        # create generic closed ring
+        closed_ring = Path([p.points[-1] for p in diagonals], 'm', closed=True)
 
-        # create zig-zag pattern and correct it according to desired pattern
-        zig_zag = Path.generate_separated_paths(points, styles)
-        if pattern == "classic":
-            zig_zag = [p for p in zig_zag if p.style != 'u']
-        elif pattern == "alternate_asymmetric":
-            for i in range(len(zig_zag)):
-                if (i + 3) % 4 == 0:
-                    p1 = zig_zag[i - 1].points[0]
-                    try:
-                        p2 = zig_zag[i + 1].points[1]
-                    except IndexError:
-                        p2 = diagonals[-1].points[1]
+        # separate generic closed ring to create edges
+        edges = Path.generate_separated_paths(closed_ring.points, 'e', closed=True)
 
-                    zig_zag[i] = Path([p1, p2], style='u')
+        # scale generic closed ring to create inner rings
+        inner_rings = []
+        for i in range(rings + 1):
+            inner_rings.append(closed_ring * (float(i)/(rings+1)))
+            if i % 2:
+                inner_rings[i].style = 'v'
 
-        # reflect zig zag pattern to create all sides
-        zig_zags = [zig_zag]
-        for i in range(sides-1):
-            zig_zags.append(Path.list_reflect(zig_zags[i], *diagonals[i].points))
+        # # create points for zig zag pattern
+        zig_zags = []
+        if pattern != "classic":
+            zig_zag = []
+            for i in range(1, rings + 1):
+                y_out = a * ((i + 1.) / (rings + 1.))
+                y_in = a * (float(i) / (rings + 1.))
+                x_out = H * (i + 1.) / (rings + 1.)
+                x_in = H * float(i) / (rings + 1.)
+
+                if pattern == "alternate_asymmetric" and i%2:
+                    zig_zag.append(Path([(x_out, y_out), (x_in, -y_in)], style='u'))
+                else:
+                    zig_zag.append(Path([(x_out, -y_out), (x_in, y_in)], style='u'))
+                # inkex.debug(zig_zag[i].points)
+
+            # reflect zig zag pattern to create all sides
+            zig_zags.append(zig_zag)
+            for i in range(sides - 1):
+                zig_zags.append(Path.list_reflect(zig_zags[i], *diagonals[i].points))
 
         # modify center if needed
         if simplify_center:
@@ -103,13 +105,8 @@ class Hypar(Pattern):
                     p1 = (1./(rings+1) * p2[0], 1./(rings+1) * p2[1])
                     diagonals[i] = Path([p1, p2], 'u')
 
-        # use ending of diagonals to create edge
-        edges = Path.generate_separated_paths(
-            [p.points[-1] for p in diagonals],  # bottom left
-            'e', closed=True)
-
         self.translate = (radius, radius)
-        self.path_tree = [zig_zags, diagonals, edges]
+        self.path_tree = [diagonals, zig_zags, inner_rings, edges]
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape
 if __name__ == '__main__':
