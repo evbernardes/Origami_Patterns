@@ -216,10 +216,10 @@ class Pattern(inkex.Effect):
                     attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
                     inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
                 else:
-                    for p, r in zip(subpath.points, subpath.radius):
-                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
-                                   'cx': str(p[0]), 'cy': str(p[1]), 'r': str(r)}
-                        inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
+                    attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
+                               'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
+                               'r': str(subpath.radius)}
+                    inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
 
 
     def draw_path_tree(self):

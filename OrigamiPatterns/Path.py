@@ -6,7 +6,7 @@ Defines a path and what it is supposed to be (mountain, valley, edge)
 """
 import inkex
 
-from math import sin,cos
+from math import sin, cos
 
 
 class Path:
@@ -14,18 +14,24 @@ class Path:
 
     Attributes
     ---------
-    points: list of 2D tuples
-        stroke will connect all points
+    points: tuple or list of tuples
+        Points defining stroke lines.
     style: str
         Single character defining style of stroke. Default values are:
         'm' for mountain creases
         'v' for valley creases
         'e' for edge borders
-    path: str
-        svg compliant string defining stoke lines
+        Extra possible values:
+        'u' for universal creases
+        's' for semicreases
+        'c' for kirigami cuts
+    closed: bool
+        Tells if desired path should contain a last stroke from the last point to the first point, closing the path
+    radius: float
+        If only one point is given, it's assumed to be a circle and radius sets the radius
     """
 
-    def __init__(self, points, style, closed=False, invert=False, radius=None):
+    def __init__(self, points, style, closed=False, invert=False, radius=0.1):
         """ Constructor
 
         Parameters
@@ -43,34 +49,25 @@ class Path:
             if true, stroke will start at the last point and go all the way to the first one
         """
         if type(points) == list:
-            self.points = points
+            self.type = 'linear'
+            if invert:
+                self.points = points[::-1]
+            else:
+                self.points = points
+
         elif type(points) == tuple and len(points) == 2:
+            self.type = 'circular'
             self.points = [points]
+            self.radius = radius
         else:
-            raise TypeError("Points must be either tuple of length 2 or a list of tuples of length 2 each")
+            raise TypeError("Points must be tuple of length 2 (for a circle) or a list of tuples of length 2 each")
 
         self.style = style
         self.closed = closed
-        if radius is None:
-            self.type = 'linear'
-        elif isinstance(radius, (int, long, float)) and len(self.points) == 1:
-            self.radius = [radius]
-            self.type = 'circular'
-        elif len(points) == len(radius):
-            self.radius = radius
-            self.type = 'circular'
-        else:
-            raise IndexError("For circular path, number of points must be equal to number of radii")
-
-        if invert:
-            self.points = self.points[::-1]
-        else:
-            self.points = self.points
 
     def invert(self):
         """ Inverts path
         """
-
         self.points = self.points[::-1]
 
     @classmethod
