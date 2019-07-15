@@ -82,7 +82,7 @@
 	<object-type>all</object-type>
 		<effects-menu>
             <submenu _name="Origami Patterns">
-				<submenu _name="Hyperbolic" />
+				<submenu _name="Pleat folds" />
 			</submenu>
 		</effects-menu>
 	</effect>
