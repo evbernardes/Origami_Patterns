@@ -163,8 +163,8 @@ class Path:
 
         points_new = []
         for point, offset in zip(self.points, offsets):
-            points_new.append([(point[0]+offset[0]),
-                               (point[1]+offset[1])])
+            points_new.append((point[0]+offset[0],
+                               point[1]+offset[1]))
 
         return Path(points_new, self.style, self.closed)
 
