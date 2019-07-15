@@ -25,7 +25,7 @@ class Path:
         svg compliant string defining stoke lines
     """
 
-    def __init__(self, points, style, closed=False, invert=False):
+    def __init__(self, points, style, closed=False, invert=False, radius=None):
         """ Constructor
 
         Parameters
@@ -42,26 +42,50 @@ class Path:
         invert: bool
             if true, stroke will start at the last point and go all the way to the first one
         """
-        self.points = points
+        if type(points) == list:
+            self.points = points
+        elif type(points) == tuple and len(points) == 2:
+            self.points = [points]
+        else:
+            raise TypeError("Points must be either tuple of length 2 or a list of tuples of length 2 each")
+
         self.style = style
         self.closed = closed
+        if radius is None:
+            self.type = 'linear'
+        elif isinstance(radius, (int, long, float)) and len(self.points) == 1:
+            self.radius = [radius]
+            self.type = 'circular'
+        elif len(points) == len(radius):
+            self.radius = radius
+            self.type = 'circular'
+        else:
+            raise IndexError("For circular path, number of points must be equal to number of radii")
 
         if invert:
-            self.points = points[::-1]
+            self.points = self.points[::-1]
         else:
-            self.points = points
+            self.points = self.points
 
         self._generate_path()
 
     def _generate_path(self):
-        """ Generate svg line string defining stroke, called by the constructor
+        """ Generate svg string defining stroke, called by the constructor
         """
-        self.path = ''
         points = self.points
-        for i in range(len(points)-1):
-            self.path = self.path+'M{},{}L{},{}'.format(points[i][0], points[i][1], points[i+1][0], points[i+1][1])
-        if self.closed:
-            self.path = self.path+'M{},{}L{},{}z'.format(points[-1][0], points[-1][1], points[0][0], points[0][1])
+
+        if self.type == 'linear':
+            self.path = ''
+            for i in range(len(points)-1):
+                self.path = self.path+'M{},{}L{},{}'.format(points[i][0], points[i][1], points[i+1][0], points[i+1][1])
+            if self.closed:
+                self.path = self.path+'M{},{}L{},{}z'.format(points[-1][0], points[-1][1], points[0][0], points[0][1])
+
+        else:
+            self.path = []
+            for p, r in zip(points, self.radius):
+                self.path.append((p[0], p[1], r))
+
 
     def invert(self):
         """ Inverts path

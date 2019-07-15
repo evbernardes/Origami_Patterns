@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <!-- Name of effect -->
+	<_name>N-sided Hypar</_name>
+    <!-- Name of id -->
+	<id>org.inkscape.Origami_patterns.pleat_hypar</id>
+	<dependency type="executable" location="extensions">OrigamiPatterns</dependency>
+	<dependency type="executable" location="extensions">simplestyle.py</dependency>
+
+	<!-- start notebook -->
+	<param name='active-tab' type="notebook">
+
+		<!-- Change this first page, fill with desired parameters and help texts-->
+		<page name="title" _gui-text="Options">
+			<param name="pattern" type="optiongroup" _gui-text="Type of Hypar" >
+				<_option value="classic">Classic Hypar</_option>
+				<_option value="asymmetric">Asymmetric triangulation</_option>
+				<_option value="alternate_asymmetric">Alternating asymmetric triangulation</_option>
+			</param>
+			<param name="radius" type="float" max="10000" precision="3" _gui-text="Radius of polygon (mm)">100.0</param>
+			<param name="sides" type="int" min="3" max="100" _gui-text="Number of polygon sides">4</param>
+			<param name="rings" type="int" min="3" max="100" _gui-text="Number of rings">7</param>
+			<param name="simplify_center" type="boolean" _gui-text="Simplify center (probably not suited for odd number of sides)">false</param>
+			<_param name="help"   type="description" xml:space="preserve">Implements Hypar (classical hyperbolic paraboloid approximate).&#xA;&#xA;Classic Hypar is the easiest one to fold. However, it's not rigid foldable. More information in:&#xA;Demaine, E. D., Demaine, M. L., Hart, V., Price, G. N., & Tachi, T. (2011). (Non)Existence of Pleated Folds: How Paper Folds Between Creases. Graphs and Combinatorics, 27(3), 377–397. https://doi.org/10.1007/s00373-011-1025-2</_param>
+			<!-- <param name="units" type="optiongroup" appearance="minimal" _gui-text="">
+				<option value="mm">mm</option>
+				<option value="cm">cm</option>
+				<option value="in">in</option>
+				<option value="pt">pt</option>
+				<option value="px">px</option></param> -->
+			<!-- <param name="add_attachment" type="boolean" _gui-text="Add attachment?">false</param> -->
+
+		</page>
+		<!-- Leave next pages alone, they define common options for every Pattern -->
+		<page name="mountains" _gui-text="Mountain creases">
+			<param name="mountain_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="mountain_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">0.5</param>
+			<param name="mountain_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of mountain strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the mountain creases</param>
+			<param name="mountain_stroke_color" type="color" gui-text="Mountain creases color: ">4278190335</param>
+		</page>
+		<page name="valleys" _gui-text="Valley creases">
+			<param name="valley_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
+			<param name="valley_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">1.0</param>
+			<param name="valley_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of valley strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the valley creases</param>
+			<param name="valley_stroke_color" type="color" gui-text="Valley creases color: ">65535</param>
+		</page>
+<!--		UNCOMMENT UNIVERSAL CREASES, CUTS AND/OR SEMICREASES IF NEEDED-->
+		<page name="universal" _gui-text="Universal creases">
+			<param name="universal_dashes_bool" type="boolean" _gui-text="Dashed strokes?">false</param>
+			<param name="universal_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">0</param>
+			<param name="universal_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of universal strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the universal</param>
+			<param name="universal_stroke_color" type="color" gui-text="Universal creases color: ">4278255615</param>
+		</page>
+<!--		<page name="semicrease" _gui-text="Semicreases">-->
+<!--			<param name="semicrease_dashes_bool" type="boolean" _gui-text="Dashed strokes?">false</param>-->
+<!--			<param name="semicrease_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">0</param>-->
+<!--			<param name="semicrease_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of semicrease strokes">0.1</param>-->
+<!--			<param name="desc_unit" type="description">Set the strokes for the semicrease</param>-->
+<!--			<param name="semicrease_stroke_color" type="color" gui-text="Semicreases color: ">4294902015</param>-->
+<!--		</page>-->
+<!--		<page name="cuts" _gui-text="Cuts">-->
+<!--			<param name="cut_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>-->
+<!--			<param name="cut_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">1.0</param>-->
+<!--			<param name="cut_stroke_width" type="float" min="0.01" max="1" appearance="full" _gui-text="Width of cut strokes">0.1</param>-->
+<!--			<param name="desc_unit" type="description">Set the strokes for the cut creases</param>-->
+<!--			<param name="cut_stroke_color" type="color" gui-text="Cut creases color: ">16711935</param>-->
+<!--		</page>-->
+		<page name="edge" _gui-text="Edge">
+			<param name="edge_dashes_bool" type="boolean" _gui-text="Dashed strokes?">false</param>
+			<param name="edge_dashes_number" type="float"  min="0.1" max="1" appearance="full" precision="3" _gui-text="Dashes parameter">0</param>
+			<param name="edge_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of edge strokes">0.1</param>
+			<param name="desc_unit" type="description">Set the strokes for the edge</param>
+			<param name="edge_stroke_color" type="color" gui-text="Edge color: ">255</param>
+		</page>
+	</param>
+
+	<!-- classify which menu it appears under - can be new name -->
+	<effect>
+	<object-type>all</object-type>
+		<effects-menu>
+            <submenu _name="Origami Patterns">
+				<submenu _name="Pleat folds" />
+			</submenu>
+		</effects-menu>
+	</effect>
+	<!-- Python file for pattern -->
+
+	<script>
+		<command reldir="extensions" interpreter="python">OrigamiPatterns/Hypar.py</command>
+	</script>
+
+</inkscape-extension>

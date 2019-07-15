@@ -205,9 +205,15 @@ class Pattern(inkex.Effect):
                 subgroup = inkex.etree.SubElement(group, 'g')
                 Pattern._draw_path_recursively(subpath, subgroup, styles_dict)
             else:
-                # inkex.debug("{},{}".format(subpath.style, subpath.path))
-                attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': subpath.path}
-                inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
+                if subpath.type == 'linear':
+                    attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': subpath.path}
+                    inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
+                else:
+                    for cx, cy, r in subpath.path:
+                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
+                                   'cx': str(cx), 'cy': str(cy), 'r': str(r)}
+                        inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
+
 
     def draw_path_tree(self):
         """ Initiates static method "_draw_path_recursively"
