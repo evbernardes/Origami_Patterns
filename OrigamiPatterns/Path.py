@@ -4,6 +4,8 @@ Path Class
 Defines a path and what it is supposed to be (mountain, valley, edge)
 
 """
+import inkex
+
 from math import sin,cos
 
 
@@ -208,23 +210,44 @@ class Path:
 
     def __mul__(self, transform):
         """ " * " operator overload.
-        Define multiplication of a Path to a length 3 tuple as a rotation :
-        path * (theta,x0,y0) rotates path around point (x0,y0) by theta radians
+        Define multiplication of a Path to a vector in complex exponential representation
+
+        Parameters
+        ---------
+        transform: float of tuple of length 2 or 4
+            if float, transform represents magnitude
+                Example: path * 3
+            if tuple length 2, transform[0] represents magnitude and transform[1] represents angle of rotation
+                Example: path * (3, pi)
+            if tuple length 4, transform[2],transform[3] define a different axis of rotation
+                Example: path * (3, pi, 1, 1)
         """
-        if len(transform) != 3:
-            TypeError("Paths can only be multiplied by length 3 lists or tuples")
-
-        theta = transform[0]
-        x, y = transform[1:]
-
         points_new = []
-        for p in self.points:
-            dx = p[0] - x
-            dy = p[1] - y
-            x_ = dx*cos(theta) - dy*sin(theta)
-            v_ = dx*sin(theta) + dy*cos(theta)
-            points_new.append([(x+x_),
-                               (y+v_)])
+
+        if isinstance(transform, (int, long, float)):
+            for p in self.points:
+                points_new.append([(transform * p[0],
+                                    transform * p[0])])
+
+        elif isinstance(transform, (list, tuple)):
+            if len(transform) == 2:
+                u = transform[0]*cos(transform[1])
+                v = transform[0]*sin(transform[1])
+                x_, y_ = 0, 0
+            elif len(transform) == 4:
+                u = transform[0]*cos(transform[1])
+                v = transform[0]*sin(transform[1])
+                x_, y_ = transform[2:]
+            else:
+                raise IndexError('Paths can only be multiplied by a number or a tuple/list of length 2 or 4')
+
+            for p in self.points:
+                x, y = p[0]-x_, p[1]-y_
+                points_new.append((x_ + x * u - y * v,
+                                   y_ + x * v + y * u))
+
+        else:
+            raise TypeError('Paths can only be multiplied by a number or a tuple/list of length 2 or 4')
 
         return Path(points_new, self.style, self.closed)
 
@@ -254,7 +277,7 @@ class Path:
 
         paths_new = []
         for path in paths:
-            paths_new.append(path*(theta, translation[0], translation[1]))
+            paths_new.append(path*(1, theta, translation[0], translation[1]))
 
         return paths_new
 
