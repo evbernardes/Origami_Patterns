@@ -87,9 +87,9 @@ class Hypar(Pattern):
                 x_in = H * float(i) / (rings + 1.)
 
                 if pattern == "alternate_asymmetric" and i%2:
-                    zig_zag.append(Path([(x_out, y_out), (x_in, -y_in)], style='u'))
+                    zig_zag.append(Path([(x_in, -y_in), (x_out, y_out), ], style='u'))
                 else:
-                    zig_zag.append(Path([(x_out, -y_out), (x_in, y_in)], style='u'))
+                    zig_zag.append(Path([(x_in, y_in), (x_out, -y_out)], style='u'))
                 # inkex.debug(zig_zag[i].points)
 
             # reflect zig zag pattern to create all sides
