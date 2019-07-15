@@ -67,32 +67,11 @@ class Path:
         else:
             self.points = self.points
 
-        self._generate_path()
-
-    def _generate_path(self):
-        """ Generate svg string defining stroke, called by the constructor
-        """
-        points = self.points
-
-        if self.type == 'linear':
-            self.path = ''
-            for i in range(len(points)-1):
-                self.path = self.path+'M{},{}L{},{}'.format(points[i][0], points[i][1], points[i+1][0], points[i+1][1])
-            if self.closed:
-                self.path = self.path+'M{},{}L{},{}z'.format(points[-1][0], points[-1][1], points[0][0], points[0][1])
-
-        else:
-            self.path = []
-            for p, r in zip(points, self.radius):
-                self.path.append((p[0], p[1], r))
-
-
     def invert(self):
         """ Inverts path
         """
 
         self.points = self.points[::-1]
-        self._generate_path()
 
     @classmethod
     def generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False):
