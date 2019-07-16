@@ -76,23 +76,8 @@ class Pattern(inkex.Effect):
         #                              dest="accuracy", default=0,
         #                              help="command line help")
 
-        self.OptionParser.add_option('-v', '--valley_stroke_color', action='store',
-                                     type='string', dest='valley_stroke_color',
-                                     default=65535,  # Blue
-                                     help='The valley creases color.')
-        self.OptionParser.add_option('', '--valley_stroke_width', action='store',
-                                     type='float', dest='valley_stroke_width',
-                                     default=0.1,
-                                     help='Width of valley strokes.')
-        self.OptionParser.add_option('', '--valley_dashes_number', action='store',
-                                     type='float', dest='valley_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
-        self.OptionParser.add_option('', '--valley_dashes_bool', action='store',
-                                     type='inkbool', dest='valley_dashes_bool',
-                                     default=True,
-                                     help='Dashed strokes?.')
-
+        # --------------------------------------------------------------------------------------------------------------
+        # mountain options
         self.OptionParser.add_option('-m', '--mountain_stroke_color', action='store',
                                      type='string', dest='mountain_stroke_color',
                                      default=4278190335,  # Red
@@ -101,66 +86,44 @@ class Pattern(inkex.Effect):
                                      type='float', dest='mountain_stroke_width',
                                      default=0.1,
                                      help='Width of mountain strokes.')
-        self.OptionParser.add_option('', '--mountain_dashes_number', action='store',
-                                     type='float', dest='mountain_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
+        self.OptionParser.add_option('', '--mountain_dashes_len', action='store',
+                                     type='float', dest='mountain_dashes_len',
+                                     default=1.0,
+                                     help='Mountain dash + gap length.')
+        self.OptionParser.add_option('', '--mountain_dashes_duty', action='store',
+                                     type='float', dest='mountain_dashes_duty',
+                                     default=0.5,
+                                     help='Mountain dash duty cycle.')
         self.OptionParser.add_option('', '--mountain_dashes_bool', action='store',
                                      type='inkbool', dest='mountain_dashes_bool',
                                      default=True,
                                      help='Dashed strokes?.')
 
-        self.OptionParser.add_option('', '--universal_stroke_color', action='store',
-                                     type='string', dest='universal_stroke_color',
-                                     default=4278255615,  # Magenta
-                                     help='The universal creases color.')
-        self.OptionParser.add_option('', '--universal_stroke_width', action='store',
-                                     type='float', dest='universal_stroke_width',
+        # --------------------------------------------------------------------------------------------------------------
+        # valley options
+        self.OptionParser.add_option('-v', '--valley_stroke_color', action='store',
+                                     type='string', dest='valley_stroke_color',
+                                     default=65535,  # Blue
+                                     help='The valley creases color.')
+        self.OptionParser.add_option('', '--valley_stroke_width', action='store',
+                                     type='float', dest='valley_stroke_width',
                                      default=0.1,
-                                     help='Width of universal strokes.')
-        self.OptionParser.add_option('', '--universal_dashes_number', action='store',
-                                     type='float', dest='universal_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
-        self.OptionParser.add_option('', '--universal_dashes_bool', action='store',
-                                     type='inkbool', dest='universal_dashes_bool',
-                                     default=False,
+                                     help='Width of valley strokes.')
+        self.OptionParser.add_option('', '--valley_dashes_len', action='store',
+                                     type='float', dest='valley_dashes_len',
+                                     default=1.0,
+                                     help='Valley dash + gap length.')
+        self.OptionParser.add_option('', '--valley_dashes_duty', action='store',
+                                     type='float', dest='valley_dashes_duty',
+                                     default=0.25,
+                                     help='Valley dash duty cycle.')
+        self.OptionParser.add_option('', '--valley_dashes_bool', action='store',
+                                     type='inkbool', dest='valley_dashes_bool',
+                                     default=True,
                                      help='Dashed strokes?.')
 
-        self.OptionParser.add_option('', '--semicrease_stroke_color', action='store',
-                                     type='string', dest='semicrease_stroke_color',
-                                     default=4294902015,  # Yellow
-                                     help='The semicrease creases color.')
-        self.OptionParser.add_option('', '--semicrease_stroke_width', action='store',
-                                     type='float', dest='semicrease_stroke_width',
-                                     default=0.1,
-                                     help='Width of semicrease strokes.')
-        self.OptionParser.add_option('', '--semicrease_dashes_number', action='store',
-                                     type='float', dest='semicrease_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
-        self.OptionParser.add_option('', '--semicrease_dashes_bool', action='store',
-                                     type='inkbool', dest='semicrease_dashes_bool',
-                                     default=False,
-                                     help='Dashed strokes?.')
-
-        self.OptionParser.add_option('', '--cut_stroke_color', action='store',
-                                     type='string', dest='cut_stroke_color',
-                                     default=16711935,  # Green
-                                     help='The cut creases color.')
-        self.OptionParser.add_option('', '--cut_stroke_width', action='store',
-                                     type='float', dest='cut_stroke_width',
-                                     default=0.1,
-                                     help='Width of cut strokes.')
-        self.OptionParser.add_option('', '--cut_dashes_number', action='store',
-                                     type='float', dest='cut_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
-        self.OptionParser.add_option('', '--cut_dashes_bool', action='store',
-                                     type='inkbool', dest='cut_dashes_bool',
-                                     default=False,
-                                     help='Dashed strokes?.')
-
+        # --------------------------------------------------------------------------------------------------------------
+        # edge options
         self.OptionParser.add_option('-e', '--edge_stroke_color', action='store',
                                      type='string', dest='edge_stroke_color',
                                      default=255,  # Black
@@ -169,12 +132,85 @@ class Pattern(inkex.Effect):
                                      type='float', dest='edge_stroke_width',
                                      default=0.1,
                                      help='Width of edge strokes.')
-        self.OptionParser.add_option('', '--edge_dashes_number', action='store',
-                                     type='float', dest='edge_dashes_number',
-                                     default=6,
-                                     help='Dashes per length unit.')
+        self.OptionParser.add_option('', '--edge_dashes_len', action='store',
+                                     type='float', dest='edge_dashes_len',
+                                     default=1.0,
+                                     help='Edge dash + gap length.')
+        self.OptionParser.add_option('', '--edge_dashes_duty', action='store',
+                                     type='float', dest='edge_dashes_duty',
+                                     default=0.25,
+                                     help='Edge dash duty cycle.')
         self.OptionParser.add_option('', '--edge_dashes_bool', action='store',
                                      type='inkbool', dest='edge_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
+        # --------------------------------------------------------------------------------------------------------------
+        # universal crease options
+        self.OptionParser.add_option('', '--universal_stroke_color', action='store',
+                                     type='string', dest='universal_stroke_color',
+                                     default=4278255615,  # Magenta
+                                     help='The universal creases color.')
+        self.OptionParser.add_option('', '--universal_stroke_width', action='store',
+                                     type='float', dest='universal_stroke_width',
+                                     default=0.1,
+                                     help='Width of universal strokes.')
+        self.OptionParser.add_option('', '--universal_dashes_len', action='store',
+                                     type='float', dest='universal_dashes_len',
+                                     default=1.0,
+                                     help='Universal dash + gap length.')
+        self.OptionParser.add_option('', '--universal_dashes_duty', action='store',
+                                     type='float', dest='universal_dashes_duty',
+                                     default=0.25,
+                                     help='Universal dash duty cycle.')
+        self.OptionParser.add_option('', '--universal_dashes_bool', action='store',
+                                     type='inkbool', dest='universal_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
+        # --------------------------------------------------------------------------------------------------------------
+        # semicrease options
+        self.OptionParser.add_option('', '--semicrease_stroke_color', action='store',
+                                     type='string', dest='semicrease_stroke_color',
+                                     default=4294902015,  # Yellow
+                                     help='The semicrease creases color.')
+        self.OptionParser.add_option('', '--semicrease_stroke_width', action='store',
+                                     type='float', dest='semicrease_stroke_width',
+                                     default=0.1,
+                                     help='Width of semicrease strokes.')
+        self.OptionParser.add_option('', '--semicrease_dashes_len', action='store',
+                                     type='float', dest='semicrease_dashes_len',
+                                     default=1.0,
+                                     help='Semicrease dash + gap length.')
+        self.OptionParser.add_option('', '--semicrease_dashes_duty', action='store',
+                                     type='float', dest='semicrease_dashes_duty',
+                                     default=0.25,
+                                     help='Semicrease dash duty cycle.')
+        self.OptionParser.add_option('', '--semicrease_dashes_bool', action='store',
+                                     type='inkbool', dest='semicrease_dashes_bool',
+                                     default=False,
+                                     help='Dashed strokes?.')
+
+        # --------------------------------------------------------------------------------------------------------------
+        # cut options
+        self.OptionParser.add_option('', '--cut_stroke_color', action='store',
+                                     type='string', dest='cut_stroke_color',
+                                     default=16711935,  # Green
+                                     help='The cut creases color.')
+        self.OptionParser.add_option('', '--cut_stroke_width', action='store',
+                                     type='float', dest='cut_stroke_width',
+                                     default=0.1,
+                                     help='Width of cut strokes.')
+        self.OptionParser.add_option('', '--cut_dashes_len', action='store',
+                                     type='float', dest='cut_dashes_len',
+                                     default=1.0,
+                                     help='Cut dash + gap length.')
+        self.OptionParser.add_option('', '--cut_dashes_duty', action='store',
+                                     type='float', dest='cut_dashes_duty',
+                                     default=0.25,
+                                     help='Cut dash duty cycle.')
+        self.OptionParser.add_option('', '--cut_dashes_bool', action='store',
+                                     type='inkbool', dest='cut_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
 
@@ -280,17 +316,29 @@ class Pattern(inkex.Effect):
 
         # check if dashed option selected
         if self.options.mountain_dashes_bool:
-            mountain_style['stroke-dasharray'] = self.options.mountain_dashes_number
+            dash = self.options.mountain_dashes_len*self.options.mountain_dashes_duty
+            gap = dash - self.options.mountain_dashes_len
+            mountain_style['stroke-dasharray'] = "{} {}".format(dash, gap)
         if self.options.valley_dashes_bool:
-            valley_style['stroke-dasharray'] = self.options.valley_dashes_number
-        if self.options.universal_dashes_bool:
-            universal_style['stroke-dasharray'] = self.options.universal_dashes_number
-        if self.options.semicrease_dashes_bool:
-            semicrease_style['stroke-dasharray'] = self.options.semicrease_dashes_number
-        if self.options.cut_dashes_bool:
-            cut_style['stroke-dasharray'] = self.options.cut_dashes_number
+            dash = self.options.valley_dashes_len * self.options.valley_dashes_duty
+            gap = dash - self.options.valley_dashes_len
+            valley_style['stroke-dasharray'] = "{} {}".format(dash, gap)
         if self.options.edge_dashes_bool:
-            edge_style['stroke-dasharray'] = self.options.edge_dashes_number
+            dash = self.options.edge_dashes_len * self.options.edge_dashes_duty
+            gap = dash - self.options.edge_dashes_len
+            edge_style['stroke-dasharray'] = "{} {}".format(dash, gap)
+        if self.options.universal_dashes_bool:
+            dash = self.options.universal_dashes_len * self.options.universal_dashes_duty
+            gap = dash - self.options.universal_dashes_len
+            universal_style['stroke-dasharray'] = "{} {}".format(dash, gap)
+        if self.options.semicrease_dashes_bool:
+            dash = self.options.semicrease_dashes_len * self.options.semicrease_dashes_duty
+            gap = dash - self.options.semicrease_dashes_len
+            semicrease_style['stroke-dasharray'] = "{} {}".format(dash, gap)
+        if self.options.cut_dashes_bool:
+            dash = self.options.cut_dashes_len * self.options.cut_dashes_duty
+            gap = dash - self.options.cut_dashes_len
+            cut_style['stroke-dasharray'] = "{} {}".format(dash, gap)
 
         self.styles_dict = {'m': mountain_style,
                             'v': valley_style,
