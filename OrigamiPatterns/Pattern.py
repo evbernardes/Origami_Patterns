@@ -197,13 +197,13 @@ class Pattern(inkex.Effect):
     -- styles_dict [dict] containing all styles for path_tree
     """
     @staticmethod
-    def _draw_path_recursively(path_tree, group, styles_dict):
+    def draw_paths_recursively(path_tree, group, styles_dict):
         """ Static method, draw list of Path instances recursively
         """
         for subpath in path_tree:
             if type(subpath) == list:
                 subgroup = inkex.etree.SubElement(group, 'g')
-                Pattern._draw_path_recursively(subpath, subgroup, styles_dict)
+                Pattern.draw_paths_recursively(subpath, subgroup, styles_dict)
             else:
                 if subpath.type == 'linear':
                     path = ''
@@ -220,12 +220,6 @@ class Pattern(inkex.Effect):
                                'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
                                'r': str(subpath.radius)}
                     inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
-
-
-    def draw_path_tree(self):
-        """ Initiates static method "_draw_path_recursively"
-        """
-        Pattern._draw_path_recursively(self.path_tree, self.topgroup, self.styles_dict)
     
     def effect(self):
         """ Main function 
@@ -253,9 +247,8 @@ class Pattern(inkex.Effect):
         # add the group to the document's current layer
         self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
 
-        self.draw_path_tree()
+        self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
-    
     def create_styles_dict(self):
         """ Get stroke style parameters and use them to create the styles dictionnary.
         """
