@@ -242,12 +242,13 @@ class Pattern(inkex.Effect):
                 Pattern.draw_paths_recursively(subpath, subgroup, styles_dict)
             else:
                 if subpath.type == 'linear':
-                    path = ''
+
                     points = subpath.points
-                    for i in range(len(points) - 1):
-                        path = path + 'M{},{}L{},{}'.format(*(points[i] + points[i+1]))
+                    path = 'M{},{}'.format(*points[0])
+                    for i in range(1, len(points)):
+                        path = path + 'L{},{}'.format(*points[i])
                     if subpath.closed:
-                        path = path + 'M{},{}L{},{}z'.format(*(points[-1] + points[0]))
+                        path = path + 'z'
 
                     attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
                     inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
