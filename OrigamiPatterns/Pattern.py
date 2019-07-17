@@ -7,11 +7,10 @@ Helper functions
 import os
 from abc import abstractmethod
 
-import inkex       # Required
-import simplestyle # will be needed here for styles support
+import inkex        # Required
+import simplestyle  # will be needed here for styles support
 
 from Path import Path
-
 
 
 class Pattern(inkex.Effect):
@@ -27,7 +26,7 @@ class Pattern(inkex.Effect):
                            'e' : edge_style}
 
     topgroup: inkex.etree.SubElement
-            Top Inkscape group element 
+            Top Inkscape group element
 
     path_tree: nested list 
         Contains "tree" of Path instances, defining new groups for each
@@ -35,6 +34,40 @@ class Pattern(inkex.Effect):
 
     translate: 2 sized tuple
         Defines translation to be added when drawing to Inkscape (default: 0,0)
+
+    Methods
+    ---------
+    effect(self)
+        Main function, called when the extension is run.
+
+    create_styles_dict(self)
+        Get stroke style parameters and use them to create the styles dictionary.
+
+    calc_unit_factor(self)
+        Return the scale factor for all dimension conversions
+
+    add_text(self, node, text, position, text_height=12)
+        Create and insert a single line of text into the svg under node.
+
+    getColorString(self, longColor, verbose=False)
+        Convert the long into a #RRGGBB color value
+
+    Abstract Methods
+    ---------
+    __init__(self)
+        Parse all options
+
+    generate_path_tree(self)
+        Generate nested list of Path
+
+    Static Methods
+    ---------
+    draw_paths_recursively(path_tree, group, styles_dict) [STATIC METHOD]
+        Draw path recursively
+
+
+
+
     """
     
     @abstractmethod
@@ -103,7 +136,7 @@ class Pattern(inkex.Effect):
         # valley options
         self.OptionParser.add_option('-v', '--valley_stroke_color', action='store',
                                      type='string', dest='valley_stroke_color',
-                                     default=65535,  # Blue
+                                     default=65535,  # Blue---------
                                      help='The valley creases color.')
         self.OptionParser.add_option('', '--valley_stroke_width', action='store',
                                      type='float', dest='valley_stroke_width',
@@ -259,9 +292,7 @@ class Pattern(inkex.Effect):
                     inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
     
     def effect(self):
-        """ Main function 
-        
-        This is your main function and is called when the extension is run
+        """ Main function, called when the extension is run.
         """
         # construct dictionary containing styles
         self.create_styles_dict()
@@ -287,7 +318,7 @@ class Pattern(inkex.Effect):
         self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
     def create_styles_dict(self):
-        """ Get stroke style parameters and use them to create the styles dictionnary.
+        """ Get stroke style parameters and use them to create the styles dictionary.
         """
         
         # define colour and stroke width
@@ -300,16 +331,16 @@ class Pattern(inkex.Effect):
                         'stroke-width': self.options.valley_stroke_width}
 
         universal_style = {'stroke': self.getColorString(self.options.universal_stroke_color),
-                        'fill': 'none',
-                        'stroke-width': self.options.universal_stroke_width}
+                           'fill': 'none',
+                           'stroke-width': self.options.universal_stroke_width}
 
         semicrease_style = {'stroke': self.getColorString(self.options.semicrease_stroke_color),
-                        'fill': 'none',
-                        'stroke-width': self.options.semicrease_stroke_width}
+                            'fill': 'none',
+                            'stroke-width': self.options.semicrease_stroke_width}
 
         cut_style = {'stroke': self.getColorString(self.options.cut_stroke_color),
-                        'fill': 'none',
-                        'stroke-width': self.options.cut_stroke_width}
+                     'fill': 'none',
+                     'stroke-width': self.options.cut_stroke_width}
 
         edge_style = {'stroke': self.getColorString(self.options.edge_stroke_color),
                       'fill': 'none',
@@ -347,15 +378,7 @@ class Pattern(inkex.Effect):
                             's': semicrease_style,
                             'c': cut_style,
                             'e': edge_style}
-    
-    def getUnittouu(self, param):
-        """ for 0.48 and 0.91 compatibility
-        """
-        try:
-            return inkex.unittouu(param)
-        except AttributeError:
-            return self.unittouu(param)
-            
+
     def getColorString(self, longColor, verbose=False):
         """ Convert the long into a #RRGGBB color value
             - verbose=true pops up value for us in defaults
@@ -385,15 +408,17 @@ class Pattern(inkex.Effect):
 
            
     def calc_unit_factor(self):
-        """ return the scale factor for all dimension conversions.
+        """ Return the scale factor for all dimension conversions.
+
             - The document units are always irrelevant as
               everything in inkscape is expected to be in 90dpi pixel units
         """
         # namedView = self.document.getroot().find(inkex.addNS('namedview', 'sodipodi'))
         # doc_units = self.getUnittouu(str(1.0) + namedView.get(inkex.addNS('document-units', 'inkscape')))
-        unit_factor = self.getUnittouu(str(1.0) + self.options.units)
-        return unit_factor
-    
+        try:
+            return inkex.unittouu(str(1.0) + self.options.units)
+        except AttributeError:
+            return self.unittouu(str(1.0) + self.options.units)
 
 
 

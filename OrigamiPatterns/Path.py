@@ -29,6 +29,49 @@ class Path:
         Tells if desired path should contain a last stroke from the last point to the first point, closing the path
     radius: float
         If only one point is given, it's assumed to be a circle and radius sets the radius
+
+
+    Methods
+    ---------
+    invert(self)
+        Inverts path
+
+    Overloaded Operators
+    ---------
+    __add__(self, offsets)
+        Adding a tuple to a Path returns a new path with all points having an offset defined by the tuple
+
+    __mul__(self, transform)
+        Define multiplication of a Path to a vector in complex exponential representation
+
+
+    Static Methods
+    ---------
+    generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False)
+        Generate list of Path instances, in which each Path is a stroke defining a horizontal grid dividing the space
+        xlims * ylims nb_of_divisions times.
+
+    generate_vgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False)
+        Generate list of Path instances, in which each Path is a stroke defining a vertical grid dividing the space
+        xlims * ylims nb_of_divisions times.
+
+    generate_separated_paths(cls, points, styles, closed=False)
+        Generate list of Path instances, in which each Path is the stroke between each two point tuples, in case each
+        stroke must be handled separately
+
+    reflect(cls, path, p1, p2)
+        Reflects each point of path on line defined by two points and return new Path instance with new reflected points
+
+    list_reflect(cls, paths, p1, p2)
+        Generate list of new Path instances, rotation each path by transform
+
+    list_rotate(cls, paths, theta, translation=(0, 0))
+        Generate list of new Path instances, rotation each path by transform
+
+    list_add(cls, paths, offsets)
+        Generate list of new Path instances, adding a different tuple for each list
+
+
     """
 
     def __init__(self, points, style, closed=False, invert=False, radius=0.1):
@@ -283,15 +326,23 @@ class Path:
 
     # TODO:
     # Apparently it's not working properly, must be debugged and tested
-    def __div__(self, points):
-        """ " / " operator overload.
-        Define division of a Path to a list or tuple of length 4 each as reflection:
-        path / [(x1, y1, x2, y2)] finds line passing through points (x1,y1) and (x1,y1) and reflects path over it
-        """
-        if len(points) != 4:
-            TypeError("Paths can only be divided by list or tuple of length 4")
+    @classmethod
+    def reflect(cls, path, p1, p2):
+        """ Reflects each point of path on line defined by two points and return new Path instance with new reflected points
 
-        (x1, y1, x2, y2) = points
+        Parameters
+        ---------
+        path: Path
+        p1: tuple or list of size 2
+        p2: tuple or list of size 2
+
+        Returns
+        ---------
+        path_reflected: Path
+        """
+
+        (x1, y1) = p1
+        (x2, y2) = p2
 
         if x1 == x2 and y1 == y2:
             ValueError("Duplicate points don't define a line")
@@ -305,12 +356,12 @@ class Path:
             t_y = [2*m, m**2 - 1, +2*t, m**2 + 1]
 
         points_new = []
-        for p in self.points:
+        for p in path.points:
             x_ = (t_x[0]*p[0] + t_x[1]*p[1] + t_x[2]) / t_x[3]
             y_ = (t_y[0]*p[0] + t_y[1]*p[1] + t_y[2]) / t_y[3]
             points_new.append((x_, y_))
 
-        return Path(points_new, self.style, self.closed)
+        return Path(points_new, path.style, path.closed)
 
     # TODO:
     # Apparently it's not working properly, must be debugged and tested
@@ -336,7 +387,7 @@ class Path:
 
         paths_new = []
         for path in paths:
-            paths_new.append(path / (p1[0], p1[0], p2[0], p2[1]))
+            paths_new.append(Path.reflect(path, p1, p2))
 
         return paths_new
 
