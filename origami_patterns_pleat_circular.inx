@@ -15,8 +15,8 @@
 			<param name="radius" type="float" max="10000" precision="3" _gui-text="Radius of circle">55.0</param>
 			<param name="ratio" type="float" min="0" max="1" precision="3" _gui-text="Opening ratio">0.4</param>
 			<param name="rings" type="int" min="3" max="100" _gui-text="Number of rings">15</param>
-			<param name="semicreases_bool" type="boolean" _gui-text="Draw semicreases for simulator?">true</param>
-			<param name="semicreases_number" type="int" min="2" max="100" _gui-text="Semicreases division">20</param>
+			<param name="simulation_mode" type="boolean" _gui-text="Approximate circle and draw semicreases for simulation?">true</param>
+			<param name="simulation_approximation" type="int" min="2" max="100" _gui-text="Semicreases division">20</param>
 			<_param name="help"   type="description" xml:space="preserve">The .inx file defines the bridge between Inkscape's interface and the python script.</_param>
 			<param name="units" type="optiongroup" appearance="minimal" _gui-text="">
 				<option value="mm">mm</option>

@@ -42,14 +42,14 @@ class PleatCircular(Pattern):
                                      dest="rings", default=15,
                                      help="Number of rings")
 
-        self.OptionParser.add_option("", "--semicreases_bool",
+        self.OptionParser.add_option("", "--simulation_mode",
                                      action="store", type="inkbool",
-                                     dest="semicreases_bool", default=True,
-                                     help="Draw semicreases for simulator?")
+                                     dest="simulation_mode", default=True,
+                                     help="Approximate circle and draw semicreases for simulation?")
 
-        self.OptionParser.add_option("", "--semicreases_number",
+        self.OptionParser.add_option("", "--simulation_approximation",
                                      action="store", type="int",
-                                     dest="semicreases_number", default=20,
+                                     dest="simulation_approximation", default=20,
                                      help="Semicreases division")
 
     def generate_path_tree(self):
@@ -62,36 +62,51 @@ class PleatCircular(Pattern):
         r = R * ratio
         rings = self.options.rings
         dr = (1.-ratio)*R/rings
-
-        inner_circles = []
-        for i in range(1, rings):
-            inner_circles.append(Path((0, 0), radius=r + i*dr, style='m' if i % 2 else 'v'))
-
-        edges = [Path((0, 0), radius=R, style='e'),
-                 Path((0, 0), radius=r, style='e')]
-
         self.translate = (R, R)
-        self.path_tree = [inner_circles, edges]
+
+        if not self.options.simulation_mode:
+            inner_circles = []
+            for i in range(1, rings):
+                inner_circles.append(Path((0, 0), radius=r + i*dr, style='m' if i % 2 else 'v'))
+
+            edges = [Path((0, 0), radius=R, style='e'),
+                     Path((0, 0), radius=r, style='e')]
+
+            self.path_tree = [inner_circles, edges]
 
         # append semicreases for simulation
-        if self.options.semicreases_bool:
-            top = []
-            bottom = []
-            dtheta = pi / self.options.semicreases_number
+        else:
+            dtheta = pi / self.options.simulation_approximation
             s = sin(dtheta)
             c = cos(dtheta)
+
+            # Edge
+            paths = [Path([(c * R, -s * R), (R, 0), (c * R, s * R)], style='e'),
+                     Path([(c * r, -s * r), (r, 0), (c * r, s * r)], style='e')]
+
+            # MV circles
+            for i in range(1, rings):
+                r_i = r + i * dr
+                paths.append(Path([(c * r_i, -s * r_i), (r_i, 0), (c * r_i, s * r_i)],
+                                          style='m' if i % 2 else 'v'))
+
+            # Semicreases
+            top = []
+            bottom = []
             for i in range(rings + 1):
                 r_i = r + i*dr
                 top.append((r_i*(1 + (i % 2)*(c-1)), -(i % 2)*s*r_i))
                 bottom.append((r_i*(1 + (i % 2)*(c-1)), (i % 2)*s*r_i))
-            semicreases = [[Path([(r, 0), (R, 0)], 's'),
-                           Path([(r*c, r*s), (R*c, R*s)], 's', invert=True),
-                           Path(top, 's'),
-                           Path(bottom, 's')]]
+            paths = paths + [Path([(r, 0), (R, 0)], 's'),                       # straight line 1
+                             Path([(r*c, r*s), (R*c, R*s)], 's', invert=True),  # straight line 2
+                             Path(top, 's'),                                    # top half of semicrease pattern
+                             Path(bottom, 's')]                                # bottom half of semicrease pattern
 
-            for i in range(1, self.options.semicreases_number):
-                semicreases.append(Path.list_rotate(semicreases[0], i*2*dtheta))
-            self.path_tree.append(semicreases)
+            all_paths = [paths]
+            for i in range(1, self.options.simulation_approximation):
+                all_paths.append(Path.list_rotate(all_paths[0], i*2*dtheta))
+
+            self.path_tree = all_paths
 
 
 
