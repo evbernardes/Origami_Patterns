@@ -29,17 +29,17 @@ class PleatCircular(Pattern):
 
         self.OptionParser.add_option("", "--radius",
                                      action="store", type="float",
-                                     dest="radius", default=10.0,
-                                     help="Length of grid square")
+                                     dest="radius", default=55.0,
+                                     help="Radius of circle")
 
         self.OptionParser.add_option("", "--ratio",
                                      action="store", type="float",
-                                     dest="ratio", default=0.2,
+                                     dest="ratio", default=0.4,
                                      help="Opening ratio")
 
         self.OptionParser.add_option("", "--rings",
                                      action="store", type="int",
-                                     dest="rings", default=7,
+                                     dest="rings", default=15,
                                      help="Number of rings")
 
     def generate_path_tree(self):
@@ -54,7 +54,7 @@ class PleatCircular(Pattern):
 
         inner_circles = []
         for i in range(1, rings):
-            inner_circles.append(Path((0, 0), radius=ratio*radius + i*dr, style='m' if i%2 else 'v'))
+            inner_circles.append(Path((0, 0), radius=ratio*radius + i*dr, style='m' if i % 2 else 'v'))
 
         edges = [Path((0, 0), radius=radius, style='e'),
                  Path((0, 0), radius=ratio*radius, style='e')]
