@@ -61,10 +61,10 @@ class Pattern(inkex.Effect):
             self.tty = open(os.devnull, 'w')  # '/dev/null' for POSIX, 'nul' for Windows.
             # print >>self.tty, "gears-dev " + __version__
 
-        # self.OptionParser.add_option("-u", "--units",
-        #                              action="store", type="string",
-        #                              dest="units", default='mm',
-        #                              help="Units this dialog is using")
+        self.OptionParser.add_option("-u", "--units",
+                                     action="store", type="string",
+                                     dest="units", default='mm',
+                                     help="Units this dialog is using")
                                      
         # self.OptionParser.add_option("-a", "--add_attachment",
         #                              action="store", type="inkbool", 
@@ -278,8 +278,8 @@ class Pattern(inkex.Effect):
         g_attribs = {inkex.addNS('label', 'inkscape'): '{} Origami pattern'.format(self.options.pattern),
                        # inkex.addNS('transform-center-x','inkscape'): str(-bbox_center[0]),
                        # inkex.addNS('transform-center-y','inkscape'): str(-bbox_center[1]),
-                     inkex.addNS('transform-center-x','inkscape'): str(0),
-                     inkex.addNS('transform-center-y','inkscape'): str(0),
+                     inkex.addNS('transform-center-x', 'inkscape'): str(0),
+                     inkex.addNS('transform-center-y', 'inkscape'): str(0),
                      'transform': 'translate(%s,%s)' % self.translate}
         # add the group to the document's current layer
         self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)

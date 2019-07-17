@@ -44,7 +44,8 @@ class Waterbomb(Pattern):
     def generate_path_tree(self):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
-        length = self.options.length
+        unit_factor = self.calc_unit_factor()
+        length = self.options.length * unit_factor
         cols = self.options.columns
         lines = self.options.lines
         phase_shift = self.options.phase_shift

@@ -47,8 +47,9 @@ class Hypar(Pattern):
         """ Specialized path generation for your origami pattern
         """
         # retrieve saved parameters
+        unit_factor = self.calc_unit_factor()
         pattern = self.options.pattern
-        radius = self.options.radius
+        radius = self.options.radius * unit_factor
         sides = self.options.sides
         rings = self.options.rings
         simplify_center = self.options.simplify_center

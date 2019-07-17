@@ -68,9 +68,10 @@ class Kresling(Pattern):
     def generate_path_tree(self):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
+        unit_factor = self.calc_unit_factor()
         lines = self.options.lines
         sides = self.options.sides
-        radius = self.options.radius
+        radius = self.options.radius * unit_factor
         angle_ratio = self.options.angle_ratio
 
         theta = (pi/2.)*(1 - 2./sides)

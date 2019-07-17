@@ -46,7 +46,8 @@ class PleatCircular(Pattern):
         """ Specialized path generation for your origami pattern
         """
         # retrieve saved parameters
-        radius = self.options.radius
+        unit_factor = self.calc_unit_factor()
+        radius = self.options.radius * unit_factor
         ratio = self.options.ratio
         rings = self.options.rings
         dr = (1.-ratio)*radius/rings

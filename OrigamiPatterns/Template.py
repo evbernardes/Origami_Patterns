@@ -40,8 +40,11 @@ class Template(Pattern):
     def generate_path_tree(self):
         """ Specialized path generation for your origami pattern
         """
-        # retrieve saved parameters
-        length = self.options.length
+        # retrieve conversion factor for selected unit
+        unit_factor = self.calc_unit_factor()
+
+        # retrieve saved parameters, and apply unit factor where needed
+        length = self.options.length * unit_factor
         pattern = self.options.pattern
         theta = self.options.theta * pi / 180
 

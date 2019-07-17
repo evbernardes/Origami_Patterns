@@ -19,6 +19,7 @@ The extension can be found on `Extensions > Origami Patterns`
 - Number of columns
 - etc...
 ### Common parameters
+- Desired unit (mm, cm, px, etc.)
 - Color for every type of stroke (mountain creases, valley creases and edges)
 - Dashes for every type os stroke
 - Width for every type of stroke
@@ -72,5 +73,4 @@ waterbomb
 ## Todo:
 - Add more patterns if necessary
 - Add option to draw points
-- Finish implementing unit selector (only millimeters for now)
 
