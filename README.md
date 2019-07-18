@@ -74,3 +74,14 @@ waterbomb
 - Add more patterns if necessary
 - Add option to draw points
 
+## Simulation:
+To simulate the patterns, Amanda Ghassaei's [OrigamiSimulator](http://apps.amandaghassaei.com/OrigamiSimulator/) can be used:
+
+- Check foldability of pattern (simulation mode with semicreases for circular pleat, triangulation for hypar, etc)
+- Create desired pattern with properly selected parameters
+- Set default values for all stroke colors (check `File > File Import Tips` on OrigamiSimulator)
+- Save as .svg
+- Import .svg file from OrigamiSimulator
+
+If pattern does not import correctly, you can try to create a bigger version of the same pattern.
+
