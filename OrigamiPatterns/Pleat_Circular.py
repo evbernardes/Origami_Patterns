@@ -47,10 +47,10 @@ class PleatCircular(Pattern):
                                      dest="simulation_mode", default=True,
                                      help="Approximate circle and draw semicreases for simulation?")
 
-        self.OptionParser.add_option("", "--simulation_approximation",
+        self.OptionParser.add_option("", "--sides",
                                      action="store", type="int",
-                                     dest="simulation_approximation", default=20,
-                                     help="Semicreases division")
+                                     dest="sides", default=20,
+                                     help="Number of sides for polygon approximating half circle")
 
     def generate_path_tree(self):
         """ Specialized path generation for your origami pattern
@@ -76,7 +76,15 @@ class PleatCircular(Pattern):
 
         # append semicreases for simulation
         else:
-            dtheta = pi / self.options.simulation_approximation
+            sides = self.options.sides
+            dtheta = pi / sides
+            # create diagonals
+            diagonals = []
+            for i in range(sides):
+                p1 = (0, 0)
+                p2 = (R * cos((1 + i * 2) * dtheta), R * sin((1 + i * 2) * dtheta))
+                diagonals.append(Path([p1, p2], 'u'))
+
             s = sin(dtheta)
             c = cos(dtheta)
 
@@ -103,7 +111,7 @@ class PleatCircular(Pattern):
                              Path(bottom, 's')]                                # bottom half of semicrease pattern
 
             all_paths = [paths]
-            for i in range(1, self.options.simulation_approximation):
+            for i in range(1, sides):
                 all_paths.append(Path.list_rotate(all_paths[0], i*2*dtheta))
 
             self.path_tree = all_paths

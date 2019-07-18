@@ -77,7 +77,7 @@ class Hypar(Pattern):
             if i % 2:
                 inner_rings[i].style = 'v'
 
-        # # create points for zig zag pattern
+        # create points for zig zag pattern
         zig_zags = []
         if pattern != "classic":
             zig_zag = []
@@ -88,9 +88,9 @@ class Hypar(Pattern):
                 x_in = H * float(i) / (rings + 1.)
 
                 if pattern == "alternate_asymmetric" and i%2:
-                    zig_zag.append(Path([(x_in, -y_in), (x_out, y_out), ], style='u'))
+                    zig_zag.append(Path([(x_in, -y_in), (x_out, -y_out)], style='u'))
                 else:
-                    zig_zag.append(Path([(x_in, y_in), (x_out, -y_out)], style='u'))
+                    zig_zag.append(Path([(x_in, +y_in), (x_out, -y_out)], style='u'))
                 # inkex.debug(zig_zag[i].points)
 
             # reflect zig zag pattern to create all sides
@@ -103,8 +103,7 @@ class Hypar(Pattern):
             for i in range(sides):
                 if i % 2 == 0:
                     p2 = diagonals[i].points[1]
-                    p1 = (1./(rings+1) * p2[0], 1./(rings+1) * p2[1])
-                    diagonals[i] = Path([p1, p2], 'u')
+                    diagonals[i].points[0] = (1./(rings+1) * p2[0], 1./(rings+1) * p2[1])
 
         self.translate = (radius, radius)
         self.path_tree = [diagonals, zig_zags, inner_rings, edges]
