@@ -57,25 +57,21 @@ class Hypar(Pattern):
         a = radius*sin_  # half of length of polygon side
         H = radius*sqrt(1 - sin_**2)
 
+        polygon = Path.generate_polygon(sides, radius, 'e')
+
         # create diagonals
         diagonals = []
         for i in range(sides):
-            p1 = (0, 0)
-            p2 = (radius * cos((1 + i * 2) * pi / sides), radius * sin((1 + i * 2) * pi / sides))
-            diagonals.append(Path([p1, p2], 'u'))
-
-        # create generic closed ring
-        closed_ring = Path([p.points[-1] for p in diagonals], 'm', closed=True)
+            diagonals.append(Path([(0, 0), polygon.points[i]], 'u'))
 
         # separate generic closed ring to create edges
-        edges = Path.generate_separated_paths(closed_ring.points, 'e', closed=True)
+        edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
 
         # scale generic closed ring to create inner rings
         inner_rings = []
         for i in range(rings + 1):
-            inner_rings.append(closed_ring * (float(i)/(rings+1)))
-            if i % 2:
-                inner_rings[i].style = 'v'
+            inner_rings.append(polygon * (float(i)/(rings+1)))
+            inner_rings[i].style = 'v' if i % 2 else 'm'
 
         # create points for zig zag pattern
         zig_zags = []
@@ -88,10 +84,9 @@ class Hypar(Pattern):
                 x_in = H * float(i) / (rings + 1.)
 
                 if pattern == "alternate_asymmetric" and i%2:
-                    zig_zag.append(Path([(x_in, -y_in), (x_out, -y_out)], style='u'))
+                    zig_zag.append(Path([(x_in, -y_in), (x_out, +y_out)], style='u'))
                 else:
                     zig_zag.append(Path([(x_in, +y_in), (x_out, -y_out)], style='u'))
-                # inkex.debug(zig_zag[i].points)
 
             # reflect zig zag pattern to create all sides
             zig_zags.append(zig_zag)

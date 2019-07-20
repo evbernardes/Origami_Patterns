@@ -6,7 +6,7 @@ Defines a path and what it is supposed to be (mountain, valley, edge)
 """
 import inkex
 
-from math import sin, cos
+from math import sin, cos, pi
 
 
 class Path:
@@ -167,6 +167,14 @@ class Path:
                               (xlims[0]+i*rect_len, ylims[1])],
                              style=style, invert=i % 2 == 0))
         return vgrid
+
+    @classmethod
+    def generate_polygon(cls, sides, radius, style, center=(0, 0)):
+        points = []
+        for i in range(sides):
+            points.append((radius * cos((1 + i * 2) * pi / sides),
+                           radius * sin((1 + i * 2) * pi / sides)))
+        return Path(points, style, closed=True)
 
     @classmethod
     def generate_separated_paths(cls, points, styles, closed=False):
