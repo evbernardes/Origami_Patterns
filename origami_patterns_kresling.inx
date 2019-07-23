@@ -52,6 +52,12 @@
 			<param name="edge_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of edge strokes">0.1</param>
 			<param name="edge_stroke_color" type="color" gui-text="Edge color: ">255</param>
 		</page>
+		<page name="vertices" _gui-text="Vertices">
+			<param name="vertex_bool" type="boolean" _gui-text="Draw vertices?">false</param>
+			<param name="vertex_radius" type="float" min="0.01" max="50" appearance="full"  _gui-text="Radius of vertices">0.1</param>
+			<param name="vertex_stroke_width" type="float" min="0.01" max="1" appearance="full"  _gui-text="Width of vertex strokes">0.1</param>
+			<param name="vertex_stroke_color" type="color" gui-text="Vertices\' color: ">255</param>
+		</page>
 	</param>
 	<!-- classify which menu it appears under - can be new name -->
 	<effect>

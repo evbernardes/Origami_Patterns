@@ -69,6 +69,7 @@ class Kresling(Pattern):
         """ Specialized path generation for Waterbomb tesselation pattern
         """
         unit_factor = self.calc_unit_factor()
+        vertex_radius = self.options.vertex_radius * unit_factor
         lines = self.options.lines
         sides = self.options.sides
         radius = self.options.radius * unit_factor
@@ -83,18 +84,11 @@ class Kresling(Pattern):
         gamma = pi/2 - angle_ratio*theta - phi
         dy = b*cos(gamma)
         dx = b*sin(gamma)
-        
-        # # create grid
-        # x_grid = []
-        # for j in range(lines, -1, -1):
-        #     x_grid_ = [dx*j + a*i for i in range(0, sides + 1)]
-        #     x_grid.append(x_grid_)
-        # y_grid = [dy*j for j in range(0, lines + 1)]
 
-        # create points
-        # points = []
-        # for y in zip(*y_grid)[1]:
-        #     points.append([(x,y) for x in zip(*x_grid)[1]])
+        vertices = []
+        for i in range(sides + 1):
+            for j in range(lines + 1):
+                vertices.append(Path((dx*(lines - j) + a*i, dy*j), style='p', radius=vertex_radius))
         
         # create a horizontal grid, then offset each line according to angle
         grid_h = Path.generate_hgrid([0, a * sides], [0, dy * lines], lines, 'm')
@@ -113,7 +107,7 @@ class Kresling(Pattern):
              (0                 , dy*lines  )],  # bottom left
             'e', closed=True)
 
-        self.path_tree = [grid_h, zigzags, edges]
+        self.path_tree = [grid_h, zigzags, vertices, edges]
 
 
 if __name__ == '__main__':
