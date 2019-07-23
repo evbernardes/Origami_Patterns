@@ -54,9 +54,21 @@ class Waterbomb(Pattern):
 
         # create vertices
         vertices = []
-        for i in range(2*cols + 1):
-            for j in range(2*lines + 1):
-                vertices.append(Path(((i / 2.) * length, (j / 2.) * length), style='p', radius=vertex_radius))
+        vertex_line_types = [[Path(((i / 2.) * length, 0), style='p', radius=vertex_radius) for i in range(2*cols + 1)],
+                             [Path((i * length, 0), style='p', radius=vertex_radius) for i in range(cols + 1)],
+                             [Path(((i + 0.5) * length, 0), style='p', radius=vertex_radius) for i in range(cols)]]
+        # for i in range(2*cols + 1):
+        #     for j in range(2*lines + 1):
+        #         vertices.append(Path(((i / 2.) * length, (j / 2.) * length), style='p', radius=vertex_radius))
+
+        for i in range(2*lines + 1):
+            if i % 2 == 0 or (i == 1 or i == 2*lines - 1) and pattern == 'magic_ball':
+                type = 0
+            elif(i/2 + phase_shift) % 2 == 0:
+                type = 1
+            else:
+                type = 2
+            vertices = vertices + Path.list_add(vertex_line_types[type], (0, 0.5*i*length))
 
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
