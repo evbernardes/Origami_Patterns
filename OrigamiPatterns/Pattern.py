@@ -271,6 +271,25 @@ class Pattern(inkex.Effect):
                                      default=True,
                                      help='Draw cuts?.')
 
+        # --------------------------------------------------------------------------------------------------------------
+        # vertex options
+        self.OptionParser.add_option('', '--vertex_stroke_color', action='store',
+                                     type='string', dest='vertex_stroke_color',
+                                     default=255,  # Black
+                                     help='Vertices\' color.')
+        self.OptionParser.add_option('', '--vertex_stroke_width', action='store',
+                                     type='float', dest='vertex_stroke_width',
+                                     default=0.1,
+                                     help='Width of vertex strokes.')
+        self.OptionParser.add_option('', '--vertex_radius', action='store',
+                                     type='float', dest='vertex_radius',
+                                     default=0.1,
+                                     help='Radius of vertices.')
+        self.OptionParser.add_option('', '--vertex_bool', action='store',
+                                     type='inkbool', dest='vertex_bool',
+                                     default=True,
+                                     help='Draw vertices?.')
+
         # here so we can have tabs - but we do not use it directly - else error
         self.OptionParser.add_option("", "--active-tab",
                                      action="store", type="string",
@@ -377,6 +396,11 @@ class Pattern(inkex.Effect):
                       'fill': 'none',
                       'stroke-width': self.options.edge_stroke_width}
 
+        vertex_style = {'draw': self.options.vertex_bool,
+                        'stroke': self.getColorString(self.options.vertex_stroke_color),
+                        'fill': 'none',
+                        'stroke-width': self.options.vertex_stroke_width}
+
         # check if dashed option selected
         if self.options.mountain_dashes_bool:
             dash = self.options.mountain_dashes_len*self.options.mountain_dashes_duty
@@ -408,7 +432,8 @@ class Pattern(inkex.Effect):
                             'u': universal_style,
                             's': semicrease_style,
                             'c': cut_style,
-                            'e': edge_style}
+                            'e': edge_style,
+                            'p': vertex_style}
 
     def getColorString(self, longColor, verbose=False):
         """ Convert the long into a #RRGGBB color value

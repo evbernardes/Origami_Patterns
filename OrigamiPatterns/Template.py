@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-
 from math import pi
+
+import inkex
 
 from Path import Path
 from Pattern import Pattern
@@ -45,6 +46,7 @@ class Template(Pattern):
 
         # retrieve saved parameters, and apply unit factor where needed
         length = self.options.length * unit_factor
+        vertex_radius = self.options.vertex_radius * unit_factor
         pattern = self.options.pattern
         theta = self.options.theta * pi / 180
 
@@ -78,7 +80,13 @@ class Template(Pattern):
              (0 * length, 1 * length)],  # bottom left
             'e', closed=True)
 
+        vertices = []
+        for i in range(3):
+            for j in range(3):
+                vertices.append(Path(((i/2.) * length, (j/2.) * length), style='p', radius=vertex_radius))
+
         # multiplication is implemented as a rotation, and list_rotate implements rotation for list of Path instances
+        vertices = Path.list_rotate(vertices, theta, (1 * length, 1 * length))
         mountains = Path.list_rotate(mountains, theta, (1 * length, 1 * length))
         valleys = Path.list_rotate(valleys, theta, (1 * length, 1 * length))
         edges = Path.list_rotate(edges, theta, (1 * length, 1 * length))
@@ -92,7 +100,7 @@ class Template(Pattern):
 
         # IMPORTANT:
         # the attribute "path_tree" must be created at the end, saving all strokes
-        self.path_tree = [mountains, valleys, edges]
+        self.path_tree = [mountains, valleys, vertices, edges]
 
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape

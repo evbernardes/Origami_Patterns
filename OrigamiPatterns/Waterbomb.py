@@ -46,20 +46,18 @@ class Waterbomb(Pattern):
         """
         unit_factor = self.calc_unit_factor()
         length = self.options.length * unit_factor
+        vertex_radius = self.options.vertex_radius * unit_factor
         cols = self.options.columns
         lines = self.options.lines
         phase_shift = self.options.phase_shift
         pattern = self.options.pattern
-        
-        # # create grid
-        # x_grid = [length*i/2. for i in range(0, 2*cols + 1)]  # each element is [i,x(i)]
-        # y_grid = [length*i/2. for i in range(0, 2*lines + 1)]    # each element is [i,y(i)]
-        #
-        # # create points
-        # points = []
-        # for y in zip(y_grid):
-        #     points.append([(x, y) for x in zip(x_grid)])
-        
+
+        # create vertices
+        vertices = []
+        for i in range(2*cols + 1):
+            for j in range(2*lines + 1):
+                vertices.append(Path(((i / 2.) * length, (j / 2.) * length), style='p', radius=vertex_radius))
+
         # create a list for the horizontal creases and another for the vertical creases
         # alternate strokes to minimize laser cutter path
         corr = length/2 if pattern == 'magic_ball' else 0
@@ -100,7 +98,7 @@ class Waterbomb(Pattern):
              (0*length*cols, 1*length*lines)],  # bottom left
             'e', closed=True)
         
-        self.path_tree = [grid, valleys, edges]
+        self.path_tree = [grid, valleys, vertices, edges]
 
 
 if __name__ == '__main__':

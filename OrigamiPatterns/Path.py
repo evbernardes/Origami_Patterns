@@ -91,17 +91,23 @@ class Path:
         invert: bool
             if true, stroke will start at the last point and go all the way to the first one
         """
-        if type(points) == list:
+        if type(points) == list and len(points) != 1:
             self.type = 'linear'
             if invert:
                 self.points = points[::-1]
             else:
                 self.points = points
 
-        elif type(points) == tuple and len(points) == 2:
+        elif (type(points) == list and len(points) == 1):
+            self.type = 'circular'
+            self.points = points
+            self.radius = radius
+
+        elif (type(points) == tuple and len(points) == 2):
             self.type = 'circular'
             self.points = [points]
             self.radius = radius
+
         else:
             raise TypeError("Points must be tuple of length 2 (for a circle) or a list of tuples of length 2 each")
 
@@ -212,12 +218,20 @@ class Path:
         else:
             offsets = [offsets] * len(self.points)
 
+        # if type(self.points) == list:
         points_new = []
         for point, offset in zip(self.points, offsets):
             points_new.append((point[0]+offset[0],
                                point[1]+offset[1]))
 
-        return Path(points_new, self.style, self.closed)
+        if self.type == 'circular':
+            radius = self.radius
+        else:
+            radius = 0.2
+
+         # if self.type == 'circular' else 0.1
+
+        return Path(points_new, self.style, self.closed, radius=radius)
 
     @classmethod
     def list_add(cls, paths, offsets):
@@ -297,10 +311,15 @@ class Path:
                 points_new.append((x_ + x * u - y * v,
                                    y_ + x * v + y * u))
 
+            if self.type == 'circular':
+                radius = self.radius
+            else:
+                radius = 0.2
+
         else:
             raise TypeError('Paths can only be multiplied by a number or a tuple/list of length 2 or 4')
 
-        return Path(points_new, self.style, self.closed)
+        return Path(points_new, self.style, self.closed, radius=radius)
 
     @classmethod
     def list_rotate(cls, paths, theta, translation=(0, 0)):
