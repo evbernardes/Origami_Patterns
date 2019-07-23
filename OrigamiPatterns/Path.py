@@ -310,14 +310,13 @@ class Path:
                 x, y = p[0]-x_, p[1]-y_
                 points_new.append((x_ + x * u - y * v,
                                    y_ + x * v + y * u))
-
-            if self.type == 'circular':
-                radius = self.radius
-            else:
-                radius = 0.2
-
         else:
             raise TypeError('Paths can only be multiplied by a number or a tuple/list of length 2 or 4')
+
+        if self.type == 'circular':
+            radius = self.radius
+        else:
+            radius = 0.2
 
         return Path(points_new, self.style, self.closed, radius=radius)
 

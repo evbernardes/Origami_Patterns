@@ -48,6 +48,7 @@ class Hypar(Pattern):
         """
         # retrieve saved parameters
         unit_factor = self.calc_unit_factor()
+        vertex_radius = self.options.vertex_radius * unit_factor
         pattern = self.options.pattern
         radius = self.options.radius * unit_factor
         sides = self.options.sides
@@ -67,6 +68,23 @@ class Hypar(Pattern):
         # separate generic closed ring to create edges
         edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
 
+        # vertex creation
+        vertices = [Path((0, 0), style='p', radius=vertex_radius)]
+        vertex_line = []
+        for i in range(1, rings + 2):
+            y = a * (float(i) / (rings + 1.))
+            x = H * float(i) / (rings + 1.)
+            vertex_line.append((Path((x, y), style='p', radius=vertex_radius)))
+
+        for i in range(sides):
+            vertices = vertices+Path.list_rotate(vertex_line, i * 2 * pi / float(sides))
+        # for v in vertices:
+        #     inkex.debug(v.type)
+        #     inkex.debug(v.radius)
+        #     inkex.debug(v.points)
+        #     inkex.debug(' ')
+
+
         # scale generic closed ring to create inner rings
         inner_rings = []
         for i in range(rings + 1):
@@ -83,7 +101,7 @@ class Hypar(Pattern):
                 x_out = H * (i + 1.) / (rings + 1.)
                 x_in = H * float(i) / (rings + 1.)
 
-                if pattern == "alternate_asymmetric" and i%2:
+                if pattern == "alternate_asymmetric" and i % 2:
                     zig_zag.append(Path([(x_in, -y_in), (x_out, +y_out)], style='u'))
                 else:
                     zig_zag.append(Path([(x_in, +y_in), (x_out, -y_out)], style='u'))
@@ -101,7 +119,7 @@ class Hypar(Pattern):
                     diagonals[i].points[0] = (1./(rings+1) * p2[0], 1./(rings+1) * p2[1])
 
         self.translate = (radius, radius)
-        self.path_tree = [diagonals, zig_zags, inner_rings, edges]
+        self.path_tree = [diagonals, zig_zags, inner_rings, vertices, edges]
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape
 if __name__ == '__main__':
