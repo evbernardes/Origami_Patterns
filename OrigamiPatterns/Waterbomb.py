@@ -53,14 +53,11 @@ class Waterbomb(Pattern):
         pattern = self.options.pattern
 
         # create vertices
-        vertices = []
         vertex_line_types = [[Path(((i / 2.) * length, 0), style='p', radius=vertex_radius) for i in range(2*cols + 1)],
                              [Path((i * length, 0), style='p', radius=vertex_radius) for i in range(cols + 1)],
                              [Path(((i + 0.5) * length, 0), style='p', radius=vertex_radius) for i in range(cols)]]
-        # for i in range(2*cols + 1):
-        #     for j in range(2*lines + 1):
-        #         vertices.append(Path(((i / 2.) * length, (j / 2.) * length), style='p', radius=vertex_radius))
 
+        vertices = []
         for i in range(2*lines + 1):
             if i % 2 == 0 or (i == 1 or i == 2*lines - 1) and pattern == 'magic_ball':
                 type = 0
