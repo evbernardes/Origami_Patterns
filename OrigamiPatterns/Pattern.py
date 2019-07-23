@@ -364,42 +364,43 @@ class Pattern(inkex.Effect):
     def create_styles_dict(self):
         """ Get stroke style parameters and use them to create the styles dictionary.
         """
+        unit_factor = self.calc_unit_factor()
         
         # define colour and stroke width
         mountain_style = {'draw': self.options.mountain_bool,
                           'stroke': self.getColorString(self.options.mountain_stroke_color),
                           'fill': 'none',
-                          'stroke-width': self.options.mountain_stroke_width}
+                          'stroke-width': self.options.mountain_stroke_width*unit_factor}
 
         valley_style = {'draw': self.options.valley_bool,
                         'stroke': self.getColorString(self.options.valley_stroke_color),
                         'fill': 'none',
-                        'stroke-width': self.options.valley_stroke_width}
+                        'stroke-width': self.options.valley_stroke_width*unit_factor}
 
         universal_style = {'draw': self.options.universal_bool,
                            'stroke': self.getColorString(self.options.universal_stroke_color),
                            'fill': 'none',
-                           'stroke-width': self.options.universal_stroke_width}
+                           'stroke-width': self.options.universal_stroke_width*unit_factor}
 
         semicrease_style = {'draw': self.options.semicrease_bool,
                             'stroke': self.getColorString(self.options.semicrease_stroke_color),
                             'fill': 'none',
-                            'stroke-width': self.options.semicrease_stroke_width}
+                            'stroke-width': self.options.semicrease_stroke_width*unit_factor}
 
         cut_style = {'draw': self.options.cut_bool,
                      'stroke': self.getColorString(self.options.cut_stroke_color),
                      'fill': 'none',
-                     'stroke-width': self.options.cut_stroke_width}
+                     'stroke-width': self.options.cut_stroke_width*unit_factor}
 
         edge_style = {'draw': self.options.edge_bool,
                       'stroke': self.getColorString(self.options.edge_stroke_color),
                       'fill': 'none',
-                      'stroke-width': self.options.edge_stroke_width}
+                      'stroke-width': self.options.edge_stroke_width*unit_factor}
 
         vertex_style = {'draw': self.options.vertex_bool,
                         'stroke': self.getColorString(self.options.vertex_stroke_color),
                         'fill': 'none',
-                        'stroke-width': self.options.vertex_stroke_width}
+                        'stroke-width': self.options.vertex_stroke_width*unit_factor}
 
         # check if dashed option selected
         if self.options.mountain_dashes_bool:
