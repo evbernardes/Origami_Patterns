@@ -131,6 +131,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='mountain_dashes_bool',
                                      default=True,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--mountain_bool', action='store',
+                                     type='inkbool', dest='mountain_bool',
+                                     default=True,
+                                     help='Draw mountains?.')
 
         # --------------------------------------------------------------------------------------------------------------
         # valley options
@@ -154,6 +158,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='valley_dashes_bool',
                                      default=True,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--valley_bool', action='store',
+                                     type='inkbool', dest='valley_bool',
+                                     default=True,
+                                     help='Draw valleys?.')
 
         # --------------------------------------------------------------------------------------------------------------
         # edge options
@@ -177,6 +185,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='edge_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--edge_bool', action='store',
+                                     type='inkbool', dest='edge_bool',
+                                     default=True,
+                                     help='Draw edges?.')
 
         # --------------------------------------------------------------------------------------------------------------
         # universal crease options
@@ -200,6 +212,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='universal_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--universal_bool', action='store',
+                                     type='inkbool', dest='universal_bool',
+                                     default=True,
+                                     help='Draw universal creases?.')
 
         # --------------------------------------------------------------------------------------------------------------
         # semicrease options
@@ -223,6 +239,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='semicrease_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--semicrease_bool', action='store',
+                                     type='inkbool', dest='semicrease_bool',
+                                     default=True,
+                                     help='Draw semicreases?.')
 
         # --------------------------------------------------------------------------------------------------------------
         # cut options
@@ -246,6 +266,10 @@ class Pattern(inkex.Effect):
                                      type='inkbool', dest='cut_dashes_bool',
                                      default=False,
                                      help='Dashed strokes?.')
+        self.OptionParser.add_option('', '--cut_bool', action='store',
+                                     type='inkbool', dest='cut_bool',
+                                     default=True,
+                                     help='Draw cuts?.')
 
         # here so we can have tabs - but we do not use it directly - else error
         self.OptionParser.add_option("", "--active-tab",
@@ -274,22 +298,23 @@ class Pattern(inkex.Effect):
                 subgroup = inkex.etree.SubElement(group, 'g')
                 Pattern.draw_paths_recursively(subpath, subgroup, styles_dict)
             else:
-                if subpath.type == 'linear':
+                if styles_dict[subpath.style]['draw']:
+                    if subpath.type == 'linear':
 
-                    points = subpath.points
-                    path = 'M{},{}'.format(*points[0])
-                    for i in range(1, len(points)):
-                        path = path + 'L{},{}'.format(*points[i])
-                    if subpath.closed:
-                        path = path + 'z'
+                        points = subpath.points
+                        path = 'M{},{}'.format(*points[0])
+                        for i in range(1, len(points)):
+                            path = path + 'L{},{}'.format(*points[i])
+                        if subpath.closed:
+                            path = path + 'z'
 
-                    attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
-                    inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
-                else:
-                    attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
-                               'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
-                               'r': str(subpath.radius)}
-                    inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
+                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
+                        inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
+                    else:
+                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
+                                   'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
+                                   'r': str(subpath.radius)}
+                        inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
     
     def effect(self):
         """ Main function, called when the extension is run.
@@ -322,27 +347,33 @@ class Pattern(inkex.Effect):
         """
         
         # define colour and stroke width
-        mountain_style = {'stroke': self.getColorString(self.options.mountain_stroke_color),
+        mountain_style = {'draw': self.options.mountain_bool,
+                          'stroke': self.getColorString(self.options.mountain_stroke_color),
                           'fill': 'none',
                           'stroke-width': self.options.mountain_stroke_width}
 
-        valley_style = {'stroke': self.getColorString(self.options.valley_stroke_color),
+        valley_style = {'draw': self.options.valley_bool,
+                        'stroke': self.getColorString(self.options.valley_stroke_color),
                         'fill': 'none',
                         'stroke-width': self.options.valley_stroke_width}
 
-        universal_style = {'stroke': self.getColorString(self.options.universal_stroke_color),
+        universal_style = {'draw': self.options.universal_bool,
+                           'stroke': self.getColorString(self.options.universal_stroke_color),
                            'fill': 'none',
                            'stroke-width': self.options.universal_stroke_width}
 
-        semicrease_style = {'stroke': self.getColorString(self.options.semicrease_stroke_color),
+        semicrease_style = {'draw': self.options.semicrease_bool,
+                            'stroke': self.getColorString(self.options.semicrease_stroke_color),
                             'fill': 'none',
                             'stroke-width': self.options.semicrease_stroke_width}
 
-        cut_style = {'stroke': self.getColorString(self.options.cut_stroke_color),
+        cut_style = {'draw': self.options.cut_bool,
+                     'stroke': self.getColorString(self.options.cut_stroke_color),
                      'fill': 'none',
                      'stroke-width': self.options.cut_stroke_width}
 
-        edge_style = {'stroke': self.getColorString(self.options.edge_stroke_color),
+        edge_style = {'draw': self.options.edge_bool,
+                      'stroke': self.getColorString(self.options.edge_stroke_color),
                       'fill': 'none',
                       'stroke-width': self.options.edge_stroke_width}
 
