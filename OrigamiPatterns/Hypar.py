@@ -78,12 +78,6 @@ class Hypar(Pattern):
 
         for i in range(sides):
             vertices = vertices+Path.list_rotate(vertex_line, i * 2 * pi / float(sides))
-        # for v in vertices:
-        #     inkex.debug(v.type)
-        #     inkex.debug(v.radius)
-        #     inkex.debug(v.points)
-        #     inkex.debug(' ')
-
 
         # scale generic closed ring to create inner rings
         inner_rings = []
