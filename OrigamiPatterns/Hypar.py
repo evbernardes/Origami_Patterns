@@ -60,24 +60,50 @@ class Hypar(Pattern):
 
         polygon = Path.generate_polygon(sides, radius, 'e')
 
-        # create diagonals
-        diagonals = []
-        for i in range(sides):
-            diagonals.append(Path([(0, 0), polygon.points[i]], 'u'))
+        # # OLD diagonals generation with universal creases
+        # diagonals = []
+        # for i in range(sides):
+        #     diagonals.append(Path([(0, 0), polygon.points[i]], 'u'))
+        # points = [(x, y) for x, y in polygon.points]
+        # diagonals = diagonals + [Path.generate_separated_paths(points, 'm')]
+
+        # # modify center if needed
+        # if simplify_center:
+        #     for i in range(sides):
+        #         if i % 2 == 0:
+        #             p2 = diagonals[i].points[1]
+        #             diagonals[i].points[0] = (1. / (rings + 1) * p2[0], 1. / (rings + 1) * p2[1])
 
         # separate generic closed ring to create edges
         edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
 
-        # vertex creation
-        vertices = [Path((0, 0), style='p', radius=vertex_radius)]
+        # vertex and diagonal lines creation
         vertex_line = []
+        diagonal_line = []
         for i in range(1, rings + 2):
-            y = a * (float(i) / (rings + 1.))
-            x = H * float(i) / (rings + 1.)
-            vertex_line.append((Path((x, y), style='p', radius=vertex_radius)))
+            y1 = a * (float(i - 1) / (rings + 1.))
+            x1 = H * float(i - 1) / (rings + 1.)
+            y2 = a * (float(i) / (rings + 1.))
+            x2 = H * float(i) / (rings + 1.)
+            vertex_line.append((Path((x2, y2), style='p', radius=vertex_radius)))
+            diagonal_line.append((Path([(x1, y1), (x2, y2)], style='m' if i % 2 else 'v')))
 
+        # rotation of vertices and diagonals for completing the drawing
+        diagonals = []
+        vertices = [Path((0, 0), style='p', radius=vertex_radius)]
         for i in range(sides):
             vertices = vertices+Path.list_rotate(vertex_line, i * 2 * pi / float(sides))
+            diagonals = diagonals+[Path.list_rotate(diagonal_line, i * 2 * pi / float(sides))]
+
+        # modify center if needed
+        if simplify_center:
+            for i in range(sides):
+                if i % 2 == 0:
+                    del diagonals[i][0]
+
+        # inkex.debug(len(diagonals))
+        # inkex.debug(len(diagonals[0]))
+        # diagonals = diagonals + diagonal
 
         # scale generic closed ring to create inner rings
         inner_rings = []
@@ -103,14 +129,8 @@ class Hypar(Pattern):
             # reflect zig zag pattern to create all sides
             zig_zags.append(zig_zag)
             for i in range(sides - 1):
-                zig_zags.append(Path.list_reflect(zig_zags[i], *diagonals[i].points))
-
-        # modify center if needed
-        if simplify_center:
-            for i in range(sides):
-                if i % 2 == 0:
-                    p2 = diagonals[i].points[1]
-                    diagonals[i].points[0] = (1./(rings+1) * p2[0], 1./(rings+1) * p2[1])
+                points = diagonals[i][0].points
+                zig_zags.append(Path.list_reflect(zig_zags[i], points[0], points[1]))
 
         self.translate = (radius, radius)
         self.path_tree = [diagonals, zig_zags, inner_rings, vertices, edges]
