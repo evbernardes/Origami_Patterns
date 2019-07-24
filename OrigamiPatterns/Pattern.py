@@ -321,11 +321,11 @@ class Pattern(inkex.Effect):
                     if subpath.type == 'linear':
 
                         points = subpath.points
-                        path = 'M{},{}'.format(*points[0])
+                        path = 'M{},{} '.format(*points[0])
                         for i in range(1, len(points)):
-                            path = path + 'L{},{}'.format(*points[i])
+                            path = path + 'L{},{} '.format(*points[i])
                         if subpath.closed:
-                            path = path + 'z'
+                            path = path + 'L{},{} Z'.format(*points[0])
 
                         attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
                         inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
