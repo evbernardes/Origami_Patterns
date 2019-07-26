@@ -74,7 +74,7 @@ class Path:
 
     """
 
-    def __init__(self, points, style, closed=False, invert=False, radius=0.1):
+    def __init__(self, points, style, closed=False, invert=False, radius=0.1, separated=False):
         """ Constructor
 
         Parameters

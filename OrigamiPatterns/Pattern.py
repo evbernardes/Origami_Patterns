@@ -130,11 +130,11 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--mountain_dashes_bool', action='store',
                                      type='inkbool', dest='mountain_dashes_bool',
                                      default=True,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--mountain_bool', action='store',
                                      type='inkbool', dest='mountain_bool',
                                      default=True,
-                                     help='Draw mountains?.')
+                                     help='Draw mountains?')
 
         # --------------------------------------------------------------------------------------------------------------
         # valley options
@@ -157,11 +157,11 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--valley_dashes_bool', action='store',
                                      type='inkbool', dest='valley_dashes_bool',
                                      default=True,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--valley_bool', action='store',
                                      type='inkbool', dest='valley_bool',
                                      default=True,
-                                     help='Draw valleys?.')
+                                     help='Draw valleys?')
 
         # --------------------------------------------------------------------------------------------------------------
         # edge options
@@ -184,11 +184,15 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--edge_dashes_bool', action='store',
                                      type='inkbool', dest='edge_dashes_bool',
                                      default=False,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--edge_bool', action='store',
                                      type='inkbool', dest='edge_bool',
                                      default=True,
-                                     help='Draw edges?.')
+                                     help='Draw edges?')
+        self.OptionParser.add_option('', '--edge_single_path', action='store',
+                                     type='inkbool', dest='edge_single_path',
+                                     default=True,
+                                     help='Edges as single path?')
 
         # --------------------------------------------------------------------------------------------------------------
         # universal crease options
@@ -211,11 +215,11 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--universal_dashes_bool', action='store',
                                      type='inkbool', dest='universal_dashes_bool',
                                      default=False,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--universal_bool', action='store',
                                      type='inkbool', dest='universal_bool',
                                      default=True,
-                                     help='Draw universal creases?.')
+                                     help='Draw universal creases?')
 
         # --------------------------------------------------------------------------------------------------------------
         # semicrease options
@@ -238,11 +242,11 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--semicrease_dashes_bool', action='store',
                                      type='inkbool', dest='semicrease_dashes_bool',
                                      default=False,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--semicrease_bool', action='store',
                                      type='inkbool', dest='semicrease_bool',
                                      default=True,
-                                     help='Draw semicreases?.')
+                                     help='Draw semicreases?')
 
         # --------------------------------------------------------------------------------------------------------------
         # cut options
@@ -265,11 +269,11 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--cut_dashes_bool', action='store',
                                      type='inkbool', dest='cut_dashes_bool',
                                      default=False,
-                                     help='Dashed strokes?.')
+                                     help='Dashed strokes?')
         self.OptionParser.add_option('', '--cut_bool', action='store',
                                      type='inkbool', dest='cut_bool',
                                      default=True,
-                                     help='Draw cuts?.')
+                                     help='Draw cuts?')
 
         # --------------------------------------------------------------------------------------------------------------
         # vertex options
@@ -288,7 +292,7 @@ class Pattern(inkex.Effect):
         self.OptionParser.add_option('', '--vertex_bool', action='store',
                                      type='inkbool', dest='vertex_bool',
                                      default=True,
-                                     help='Draw vertices?.')
+                                     help='Draw vertices?')
 
         # here so we can have tabs - but we do not use it directly - else error
         self.OptionParser.add_option("", "--active-tab",

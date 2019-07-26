@@ -73,12 +73,14 @@ class Template(Pattern):
         # created. Using method generate_separated_paths, you can instead return a list of separated strokes
         # linking each two points
         # create a list for edge strokes
-        edges = Path.generate_separated_paths(
-            [(0 * length, 0 * length),  # top left
-             (1 * length, 0 * length),  # top right
-             (1 * length, 1 * length),  # bottom right
-             (0 * length, 1 * length)],  # bottom left
-            'e', closed=True)
+        edge_points = [(0 * length, 0 * length),  # top left
+                       (1 * length, 0 * length),  # top right
+                       (1 * length, 1 * length),  # bottom right
+                       (0 * length, 1 * length)]  # bottom left
+        if self.options.edge_single_path:
+            edges = [Path(edge_points, 'e', closed=True)]
+        else:
+            edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
 
         vertices = []
         for i in range(3):

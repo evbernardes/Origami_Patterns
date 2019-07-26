@@ -75,7 +75,10 @@ class Hypar(Pattern):
         #             diagonals[i].points[0] = (1. / (rings + 1) * p2[0], 1. / (rings + 1) * p2[1])
 
         # separate generic closed ring to create edges
-        edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
+        if self.options.edge_single_path:
+            edges = [Path(polygon.points, 'e', closed=True)]
+        else:
+            edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
 
         # vertex and diagonal lines creation
         vertex_line = []
