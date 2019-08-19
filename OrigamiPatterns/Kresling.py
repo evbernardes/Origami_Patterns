@@ -104,8 +104,9 @@ class Kresling(Pattern):
                        (dx*lines + a*sides, 0         ),   # top right
                        (a*sides           , dy*lines  ),   # bottom right
                        (0                 , dy*lines  )]  # bottom left
+
         if self.options.edge_single_path:
-            edges = [Path(edge_points, 'e', closed=True)]
+            edges = Path(edge_points, 'e', closed=True)
         else:
             edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
 

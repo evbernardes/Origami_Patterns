@@ -76,7 +76,7 @@ class Hypar(Pattern):
 
         # separate generic closed ring to create edges
         if self.options.edge_single_path:
-            edges = [Path(polygon.points, 'e', closed=True)]
+            edges = Path(polygon.points, 'e', closed=True)
         else:
             edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
 

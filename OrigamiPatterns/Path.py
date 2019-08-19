@@ -341,13 +341,15 @@ class Path:
         if len(translation) != 2:
             TypeError("Translation must have length 2")
 
-        if type(paths) == Path:
+        if type(paths) != list:
             paths = [paths]
 
         paths_new = []
         for path in paths:
             paths_new.append(path*(1, theta, translation[0], translation[1]))
 
+        if len(paths_new) == 1:
+            paths_new = paths_new[0]
         return paths_new
 
     # TODO:

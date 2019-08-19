@@ -105,7 +105,7 @@ class Waterbomb(Pattern):
                        (1*length*cols, 1*length*lines),   # bottom right
                        (0*length*cols, 1*length*lines)]  # bottom left
         if self.options.edge_single_path:
-            edges = [Path(edge_points, 'e', closed=True)]
+            edges = Path(edge_points, 'e', closed=True)
         else:
             edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
         

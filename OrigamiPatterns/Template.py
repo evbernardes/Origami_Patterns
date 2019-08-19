@@ -58,8 +58,8 @@ class Template(Pattern):
                                     (length, length / 2)]
 
         # ... and then create the Path instances, defining its type ('m' for mountain, etc...)
-        mountains = [Path(mountain_h_stroke_points, 'm'),
-                     Path(mountain_v_stroke_points, 'm')]
+        mountains = [Path(mountain_h_stroke_points, 'm' if pattern == 'template1' else 'v'),
+                     Path(mountain_v_stroke_points, 'm' if pattern == 'template1' else 'v')]
 
         # doing the same for valleys
         valley_1st_stroke_points = [(0, 0),
@@ -78,7 +78,7 @@ class Template(Pattern):
                        (1 * length, 1 * length),  # bottom right
                        (0 * length, 1 * length)]  # bottom left
         if self.options.edge_single_path:
-            edges = [Path(edge_points, 'e', closed=True)]
+            edges = Path(edge_points, 'e', closed=True)
         else:
             edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
 
