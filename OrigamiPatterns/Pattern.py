@@ -318,7 +318,10 @@ class Pattern(inkex.Effect):
         """
         for subpath in path_tree:
             if type(subpath) == list:
-                subgroup = inkex.etree.SubElement(group, 'g')
+                if len(subpath) == 1:
+                    subgroup = group
+                else:
+                    subgroup = inkex.etree.SubElement(group, 'g')
                 Pattern.draw_paths_recursively(subpath, subgroup, styles_dict)
             else:
                 if styles_dict[subpath.style]['draw']:
@@ -360,8 +363,12 @@ class Pattern(inkex.Effect):
                      inkex.addNS('transform-center-x', 'inkscape'): str(0),
                      inkex.addNS('transform-center-y', 'inkscape'): str(0),
                      'transform': 'translate(%s,%s)' % self.translate}
+
         # add the group to the document's current layer
-        self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
+        if type(self.path_tree) == list and len(self.path_tree) != 1:
+            self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
+        else:
+            self.topgroup = self.current_layer
 
         self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
