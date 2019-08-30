@@ -9,9 +9,14 @@
 	<param name='active-tab' type="notebook">
 		<!-- one per page(tab) - unique names. Can discover which page in program-->
 		<page name="title" _gui-text="Options">
-			<param name="pattern" type="optiongroup" _gui-text="Type of magic ball" >
+			<param name="pattern_first_line" type="optiongroup" _gui-text="First line:" >
 				<!-- underscores indicate translatability -->
-				<_option value="waterbomb">Waterbomb tessellation</_option>
+				<_option value="waterbomb">Regular waterbomb</_option>
+				<_option value="magic_ball">Magic ball</_option>
+			</param>
+			<param name="pattern_last_line" type="optiongroup" _gui-text="Last line:" >
+				<!-- underscores indicate translatability -->
+				<_option value="waterbomb">Regular waterbomb</_option>
 				<_option value="magic_ball">Magic ball</_option>
 			</param>
 			<param name="phase_shift" type="boolean" _gui-text="Shift phase?">false</param>
