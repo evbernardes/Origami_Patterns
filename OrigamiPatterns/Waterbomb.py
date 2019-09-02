@@ -73,7 +73,7 @@ class Waterbomb(Pattern):
 
         vertices = []
         for i in range(2*lines + 1):
-            if i % 2 == 0 or (i == 1 or i == 2*lines - 1) and pattern_first_line == 'magic_ball':
+            if i % 2 == 0 or (pattern_first_line == 'magic_ball' and i == 1) or (pattern_last_line == 'magic_ball' and i == 2*lines - 1):
                 type = 0
             elif(i/2 + phase_shift) % 2 == 0:
                 type = 1
