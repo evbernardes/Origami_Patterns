@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-from math import pi
+from math import pi, sin, cos
 
 import inkex
 
@@ -49,6 +49,7 @@ class Template(Pattern):
         vertex_radius = self.options.vertex_radius * unit_factor
         pattern = self.options.pattern
         theta = self.options.theta * pi / 180
+        s, c = sin(theta), cos(theta)
 
         # create all Path instances defining strokes
         # first define its points as a list of tuples...
@@ -69,18 +70,7 @@ class Template(Pattern):
         valleys = [Path(valley_1st_stroke_points, 'v' if pattern == 'template1' else 'm'),
                    Path(valley_2nd_stroke_points, 'v' if pattern == 'template1' else 'm')]
 
-        # if Path constructor is called with more than two points, a single stroke connecting all of then will be
-        # created. Using method generate_separated_paths, you can instead return a list of separated strokes
-        # linking each two points
-        # create a list for edge strokes
-        edge_points = [(0 * length, 0 * length),  # top left
-                       (1 * length, 0 * length),  # top right
-                       (1 * length, 1 * length),  # bottom right
-                       (0 * length, 1 * length)]  # bottom left
-        if self.options.edge_single_path:
-            edges = Path(edge_points, 'e', closed=True)
-        else:
-            edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
+
 
         vertices = []
         for i in range(3):
@@ -91,6 +81,18 @@ class Template(Pattern):
         vertices = Path.list_rotate(vertices, theta, (1 * length, 1 * length))
         mountains = Path.list_rotate(mountains, theta, (1 * length, 1 * length))
         valleys = Path.list_rotate(valleys, theta, (1 * length, 1 * length))
+
+        # if Path constructor is called with more than two points, a single stroke connecting all of then will be
+        # created. Using method generate_separated_paths, you can instead return a list of separated strokes
+        # linking each two points
+        # create a list for edge strokes
+        edge_points = [(0 * length, 0 * length),  # top left
+                       (1 * length, 0 * length),  # top right
+                       (1 * length, 1 * length),  # bottom right
+                       (0 * length, 1 * length)]  # bottom left
+
+        # create path from points to be able to use the already built rotate method
+        edges = Path(edge_points, 'e', closed=True)
         edges = Path.list_rotate(edges, theta, (1 * length, 1 * length))
 
         # division is implemented as a reflection, and list_reflect implements it for a list of Path instances
@@ -100,9 +102,16 @@ class Template(Pattern):
         # valleys = Path.list_reflect(valleys, line_reflect)
         # edges = Path.list_reflect(edges, line_reflect)
 
-        # IMPORTANT:
-        # the attribute "path_tree" must be created at the end, saving all strokes
-        self.path_tree = [mountains, valleys, vertices, edges]
+        # IMPORTANT: at the end, save edge points as "self.edge_points", to simplify selection of single or multiple
+        # strokes for the edge
+        self.edge_points = edges.points
+
+        # IMPORTANT: the attribute "path_tree" must be created at the end, saving all strokes
+        self.path_tree = [mountains, valleys, vertices]
+        # if you decide not to declare "self.edge_points", then the edge must be explicitly created in the path_tree:
+        # self.path_tree = [mountains, valleys, vertices, edges]
+
+
 
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape

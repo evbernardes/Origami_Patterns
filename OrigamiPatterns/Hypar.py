@@ -75,10 +75,7 @@ class Hypar(Pattern):
         #             diagonals[i].points[0] = (1. / (rings + 1) * p2[0], 1. / (rings + 1) * p2[1])
 
         # separate generic closed ring to create edges
-        if self.options.edge_single_path:
-            edges = Path(polygon.points, 'e', closed=True)
-        else:
-            edges = Path.generate_separated_paths(polygon.points, 'e', closed=True)
+        self.edge_points = polygon.points
 
         # vertex and diagonal lines creation
         vertex_line = []
@@ -136,7 +133,7 @@ class Hypar(Pattern):
                 zig_zags.append(Path.list_reflect(zig_zags[i], points[0], points[1]))
 
         self.translate = (radius, radius)
-        self.path_tree = [diagonals, zig_zags, inner_rings, vertices, edges]
+        self.path_tree = [diagonals, zig_zags, inner_rings, vertices]
 
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape
 if __name__ == '__main__':

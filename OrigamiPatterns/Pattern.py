@@ -301,6 +301,7 @@ class Pattern(inkex.Effect):
                                      help="Active tab.")
 
         self.path_tree = []
+        self.edge_points = []
         self.translate = (0, 0)
     
     """ 
@@ -370,7 +371,16 @@ class Pattern(inkex.Effect):
         else:
             self.topgroup = self.current_layer
 
-        self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
+        if len(self.edge_points) == 0:
+            self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
+        elif self.options.edge_single_path:
+            edges = Path(self.edge_points, 'e', closed=True)
+            self.draw_paths_recursively(self.path_tree + [edges], self.topgroup, self.styles_dict)
+        else:
+            edges = Path.generate_separated_paths(self.edge_points, 'e', closed=True)
+            self.draw_paths_recursively(self.path_tree + edges, self.topgroup, self.styles_dict)
+
+        # self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
     def create_styles_dict(self):
         """ Get stroke style parameters and use them to create the styles dictionary.

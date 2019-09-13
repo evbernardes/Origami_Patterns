@@ -100,17 +100,12 @@ class Kresling(Pattern):
             zigzags.append(Path.list_add(zigzag, (i * dx, (lines - i) * dy)))
 
         # create a list for edge strokes        
-        edge_points = [(dx*lines          , 0         ),   # top left
+        self.edge_points = [(dx*lines          , 0         ),   # top left
                        (dx*lines + a*sides, 0         ),   # top right
                        (a*sides           , dy*lines  ),   # bottom right
                        (0                 , dy*lines  )]  # bottom left
 
-        if self.options.edge_single_path:
-            edges = Path(edge_points, 'e', closed=True)
-        else:
-            edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
-
-        self.path_tree = [grid_h, zigzags, vertices, edges]
+        self.path_tree = [grid_h, zigzags, vertices]
 
 
 if __name__ == '__main__':

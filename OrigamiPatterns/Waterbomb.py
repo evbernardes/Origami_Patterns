@@ -124,16 +124,12 @@ class Waterbomb(Pattern):
         for i in range(1, 2*lines, 2):
             valleys[i].invert()
 
-        edge_points = [(0*length*cols, 0*length*lines),   # top left
+        self.edge_points = [(0*length*cols, 0*length*lines),   # top left
                        (1*length*cols, 0*length*lines),   # top right
                        (1*length*cols, 1*length*lines),   # bottom right
                        (0*length*cols, 1*length*lines)]  # bottom left
-        if self.options.edge_single_path:
-            edges = Path(edge_points, 'e', closed=True)
-        else:
-            edges = Path.generate_separated_paths(edge_points, 'e', closed=True)
         
-        self.path_tree = [grid, valleys, vertices, edges]
+        self.path_tree = [grid, valleys, vertices]
 
 
 if __name__ == '__main__':
