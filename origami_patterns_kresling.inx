@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-	<_name>Kresling(cells, n of sides, angle ratio)</_name>
+	<_name>Kresling(cells, n of sides, angle ratio, external radius)</_name>
 	<id>org.inkscape.Origami_patterns.kresling</id>
 	<dependency type="executable" location="extensions">OrigamiPatterns</dependency>
 	<dependency type="executable" location="extensions">simplestyle.py</dependency>
