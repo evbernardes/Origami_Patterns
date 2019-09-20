@@ -39,8 +39,13 @@ class Kresling(Pattern):
                                      dest="radius", default=10.0,
                                      help="Radius of tower (mm)")
 
+        self.OptionParser.add_option("", "--add_attachment",
+                                     action="store", type="inkbool",
+                                     dest="add_attachment", default=False,
+                                     help="Add attachment?")
+
     @staticmethod
-    def generate_kresling_zigzag(sides, radius, angle_ratio):
+    def generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment):
 
         theta = (pi / 2.) * (1 - 2. / sides)
         length = 2. * radius * cos(theta * (1. - angle_ratio))
@@ -61,6 +66,9 @@ class Kresling(Pattern):
             styles.append('v')
             if i != sides - 1:
                 styles.append('m')
+            elif add_attachment:
+                points.append((sides * a, 0))
+                styles.append('m')
 
         path = Path.generate_separated_paths(points, styles)
         return path
@@ -74,6 +82,7 @@ class Kresling(Pattern):
         sides = self.options.sides
         radius = self.options.radius * unit_factor
         angle_ratio = self.options.angle_ratio
+        add_attachment = self.options.add_attachment
 
         theta = (pi/2.)*(1 - 2./sides)
         length = 2.*radius*cos(theta*(1.-angle_ratio))
@@ -94,16 +103,31 @@ class Kresling(Pattern):
         grid_h = Path.generate_hgrid([0, a * sides], [0, dy * lines], lines, 'm')
         grid_h = Path.list_add(grid_h, [(i*dx, 0) for i in range(lines-1, 0, -1)])
 
-        zigzag = Kresling.generate_kresling_zigzag(sides, radius, angle_ratio)
+        zigzag = Kresling.generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment)
         zigzags = []
         for i in range(lines):
             zigzags.append(Path.list_add(zigzag, (i * dx, (lines - i) * dy)))
 
-        # create a list for edge strokes        
-        self.edge_points = [(dx*lines          , 0         ),   # top left
-                       (dx*lines + a*sides, 0         ),   # top right
-                       (a*sides           , dy*lines  ),   # bottom right
-                       (0                 , dy*lines  )]  # bottom left
+        # # create a list for edge strokes
+        # self.edge_points = [
+        #     (dx*lines          , 0         ),   # top left
+        #     (dx*lines + a*sides, 0         ),   # top right
+        #     (a*sides           , dy*lines  ),   # bottom right
+        #     (0                 , dy*lines  )]  # bottom left
+
+        # create a list for edge strokes
+        self.edge_points = [
+            (a*sides               , dy*lines  ),   # bottom right
+            (0                     , dy*lines  ),   # bottom left
+            (dx * lines            , 0),            # top left
+            (dx * lines + a * sides, 0)]            # top right
+
+        if add_attachment:
+            for i in range(lines):
+                self.edge_points.append((dx*(lines - i    ) + a*(sides + 1), dy*i      ))
+                if i != lines - 1:
+                    self.edge_points.append((dx*(lines - i - 1) + a*(sides)    , dy*(i + 1)))
+
 
         self.path_tree = [grid_h, zigzags, vertices]
 

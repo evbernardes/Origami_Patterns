@@ -24,6 +24,7 @@
 				<option value="pt">pt</option>
 				<option value="px">px</option></param>
 			<param name="radial_ratio" type="float" min="0" max="0.70" precision="3" appearance="full" _gui-text="Radial Ratio (constrained by number of polygon sides)">0.2</param>
+			<param name="add_attachment" type="boolean" _gui-text="Add attachment to close the tower?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="minimize_polygon" type="boolean" _gui-text="Minimize polygon for radial ratio (ignores input number of polygon &#xA;sides and calculate the minimum value for given radial ratio)">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>

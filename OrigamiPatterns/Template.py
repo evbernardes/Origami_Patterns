@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-from math import pi, sin, cos
+from math import pi
 
 import inkex
 
@@ -49,7 +49,6 @@ class Template(Pattern):
         vertex_radius = self.options.vertex_radius * unit_factor
         pattern = self.options.pattern
         theta = self.options.theta * pi / 180
-        s, c = sin(theta), cos(theta)
 
         # create all Path instances defining strokes
         # first define its points as a list of tuples...
