@@ -80,6 +80,7 @@ To simulate the patterns, Amanda Ghassaei's [OrigamiSimulator](http://apps.amand
 - Check foldability of pattern (simulation mode with semicreases for circular pleat, triangulation for hypar, etc)
 - Create desired pattern with properly selected parameters
 - Set default values for all stroke colors (check `File > File Import Tips` on OrigamiSimulator)
+- IMPORTANT: Before saving, de-group every object, since OrigamiSimulator does not currently work with Inkscape's group transforms.
 - Save as .svg
 - Import .svg file from OrigamiSimulator
 
