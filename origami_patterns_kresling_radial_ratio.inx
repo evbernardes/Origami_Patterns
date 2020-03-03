@@ -29,6 +29,7 @@
 			<param name="radial_ratio" type="float" min="0" max="0.70" precision="3" appearance="full" _gui-text="Radial Ratio (constrained by number of polygon sides)">0.2</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="add_attachment" type="boolean" _gui-text="Add attachment to close the tower?">false</param>
+			<param name="mirror_cells" type="boolean" _gui-text="Mirror odd cells?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<_param name="help"   type="description" xml:space="preserve">Ratio between internal radius and external radius. &#xA; Translates to an angle ratio parameter: &#xA; For angle ratio = 1, radial ratio = 0. &#xA; For angle ratio = 0.5, radial ratio = sin[(pi/4)*(1 - 2/n)], where n is the number of sides of the polygon. &#xA; Max value for some values of n: &#xA;n = 3, ratio = 0.258819045103&#xA;n = 4, ratio = 0.382683432365&#xA;n = 5, ratio = 0.45399049974&#xA;n = 6, ratio = 0.5&#xA;n = 7, ratio = 0.532032076515&#xA;n = 8, ratio = 0.55557023302&#xA;n = 9, ratio = 0.573576436351&#xA; It approaches 1/sqrt(2) for a really big number (and the polygon approaches a circle). If a value bigger than the accepted value is given, the maximum accepted value will be taken as the chosen value.</_param>
 

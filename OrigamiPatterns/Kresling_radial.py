@@ -24,6 +24,7 @@ class KreslingRadial(Kresling):
                                      action="store", type="inkbool", 
                                      dest="minimize_polygon", default=False,
                                      help="Minimize polygon for radial ratio")
+
         
     def generate_path_tree(self):
         """ Convert radial to angular ratio, then call regular Kresling constructor

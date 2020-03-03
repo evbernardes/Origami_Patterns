@@ -27,6 +27,7 @@
 				<option value="px">px</option></param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<param name="add_attachment" type="boolean" _gui-text="Add attachment to close the tower?">false</param>
+			<param name="mirror_cells" type="boolean" _gui-text="Mirror odd cells?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<_param name="help"   type="description" xml:space="preserve">"Angle between a and l" parameter varies between 45(1 - 2/n) and 90(1-2/n) degrees, &#xA;where n = number of sides of polygon.&#xA;For large values of n, phi must be larger than 45.</_param>
 

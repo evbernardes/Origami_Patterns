@@ -44,6 +44,11 @@ class Kresling(Pattern):
                                      dest="add_attachment", default=False,
                                      help="Add attachment?")
 
+        self.OptionParser.add_option("", "--mirror_cells",
+                                     action="store", type="inkbool",
+                                     dest="mirror_cells", default=False,
+                                     help="Mirror odd cells?")
+
     @staticmethod
     def generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment):
 
@@ -83,6 +88,7 @@ class Kresling(Pattern):
         radius = self.options.radius * unit_factor
         angle_ratio = self.options.angle_ratio
         add_attachment = self.options.add_attachment
+        mirror_cells = self.options.mirror_cells
 
         theta = (pi/2.)*(1 - 2./sides)
         length = 2.*radius*cos(theta*(1.-angle_ratio))
@@ -97,16 +103,34 @@ class Kresling(Pattern):
         vertices = []
         for i in range(sides + 1):
             for j in range(lines + 1):
-                vertices.append(Path((dx*(lines - j) + a*i, dy*j), style='p', radius=vertex_radius))
+                if mirror_cells:
+                    vertices.append(Path((dx*((lines - j)%2) + a*i, dy * j), style='p', radius=vertex_radius))
+                else:
+                    vertices.append(Path((dx*(lines - j) + a*i, dy*j), style='p', radius=vertex_radius))
         
         # create a horizontal grid, then offset each line according to angle
         grid_h = Path.generate_hgrid([0, a * sides], [0, dy * lines], lines, 'm')
-        grid_h = Path.list_add(grid_h, [(i*dx, 0) for i in range(lines-1, 0, -1)])
+        if mirror_cells:
+            grid_h = Path.list_add(grid_h, [((i%2)*dx, 0) for i in range(lines-1, 0, -1)])
+        else:
+            grid_h = Path.list_add(grid_h, [(i*dx, 0) for i in range(lines-1, 0, -1)])
 
         zigzag = Kresling.generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment)
+        #zigzag_mirror = Kresling.generate_kresling_zigzag(sides, radius, -angle_ratio, add_attachment)
+        zigzag_mirror = Path.list_reflect(zigzag, (0, (lines)*dy/2), (dx, (lines)*dy/2))
+        #zigzag_mirror = Path.list_add(zigzag_mirror, (0, -dy))
         zigzags = []
-        for i in range(lines):
-            zigzags.append(Path.list_add(zigzag, (i * dx, (lines - i) * dy)))
+
+        if mirror_cells:
+            for i in range(lines):
+                if i % 2 == 1:
+                    zigzags.append(Path.list_add(zigzag_mirror, (0, -(lines - i + (lines-1)%2) * dy)))
+                else:
+                    zigzags.append(Path.list_add(zigzag, (0, (lines - i ) * dy)))
+        else:
+            for i in range(lines):
+                zigzags.append(Path.list_add(zigzag, (i * dx, (lines - i) * dy)))
+
 
         # # create a list for edge strokes
         # self.edge_points = [
@@ -116,11 +140,23 @@ class Kresling(Pattern):
         #     (0                 , dy*lines  )]  # bottom left
 
         # create a list for edge strokes
-        self.edge_points = [
-            (a*sides               , dy*lines  ),   # bottom right
-            (0                     , dy*lines  ),   # bottom left
-            (dx * lines            , 0),            # top left
-            (dx * lines + a * sides, 0)]            # top right
+
+        if mirror_cells:
+            self.edge_points = [(0, dy*lines), (a*sides, dy*lines)]
+            for i in range(lines + 1):
+                self.edge_points.append([(a*sides + (i%2)*dx), dy*(lines - i)])
+            self.edge_points.append([dx*(1 - (lines+1)%2), dy*(lines - i)])
+            for i in range(lines):
+                self.edge_points.append([((lines+i)%2)*dx, dy*i])
+
+            # self.edge_points.append([(0, dy * lines)])
+
+        else:
+            self.edge_points = [
+                (a*sides               , dy*lines  ),   # bottom right
+                (0                     , dy*lines  ),   # bottom left
+                (dx * lines            , 0),            # top left
+                (dx * lines + a * sides, 0)]            # top right
 
         if add_attachment:
             for i in range(lines):
