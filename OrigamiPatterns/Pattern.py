@@ -60,13 +60,6 @@ class Pattern(inkex.Effect):
     generate_path_tree(self)
         Generate nested list of Path
 
-    Static Methods
-    ---------
-    draw_paths_recursively(path_tree, group, styles_dict) [STATIC METHOD]
-        Draw path recursively
-
-
-
 
     """
     
@@ -303,46 +296,7 @@ class Pattern(inkex.Effect):
         self.path_tree = []
         self.edge_points = []
         self.translate = (0, 0)
-    
-    """ 
-    Draw path recursively
-    - Static method
-    - Draws strokes defined on "path_tree" to "group"
-    - Inputs:
-    -- path_tree [nested list] of Path instances
-    -- group [inkex.etree.SubElement]
-    -- styles_dict [dict] containing all styles for path_tree
-    """
-    @staticmethod
-    def draw_paths_recursively(path_tree, group, styles_dict):
-        """ Static method, draw list of Path instances recursively
-        """
-        for subpath in path_tree:
-            if type(subpath) == list:
-                if len(subpath) == 1:
-                    subgroup = group
-                else:
-                    subgroup = inkex.etree.SubElement(group, 'g')
-                Pattern.draw_paths_recursively(subpath, subgroup, styles_dict)
-            else:
-                if styles_dict[subpath.style]['draw']:
-                    if subpath.type == 'linear':
 
-                        points = subpath.points
-                        path = 'M{},{} '.format(*points[0])
-                        for i in range(1, len(points)):
-                            path = path + 'L{},{} '.format(*points[i])
-                        if subpath.closed:
-                            path = path + 'L{},{} Z'.format(*points[0])
-
-                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
-                        inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs )
-                    else:
-                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
-                                   'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
-                                   'r': str(subpath.radius)}
-                        inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs )
-    
     def effect(self):
         """ Main function, called when the extension is run.
         """
@@ -372,18 +326,18 @@ class Pattern(inkex.Effect):
             self.topgroup = self.current_layer
 
         if len(self.edge_points) == 0:
-            self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
+            Path.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
         elif self.options.edge_single_path:
             edges = Path(self.edge_points, 'e', closed=True)
-            self.draw_paths_recursively(self.path_tree + [edges], self.topgroup, self.styles_dict)
+            Path.draw_paths_recursively(self.path_tree + [edges], self.topgroup, self.styles_dict)
         else:
             edges = Path.generate_separated_paths(self.edge_points, 'e', closed=True)
-            self.draw_paths_recursively(self.path_tree + edges, self.topgroup, self.styles_dict)
+            Path.draw_paths_recursively(self.path_tree + edges, self.topgroup, self.styles_dict)
 
         # self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
     def create_styles_dict(self):
-        """ Get stroke style parameters and use them to create the styles dictionary.
+        """ Get stroke style parameters and use them to create the styles dictionary, used for the Path generation
         """
         unit_factor = self.calc_unit_factor()
         

@@ -4,7 +4,8 @@ Path Class
 Defines a path and what it is supposed to be (mountain, valley, edge)
 
 """
-import inkex
+import inkex        # Required
+import simplestyle  # will be needed here for styles support
 
 from math import sin, cos, pi
 
@@ -47,6 +48,11 @@ class Path:
 
     Static Methods
     ---------
+    draw_paths_recursively(path_tree, group, styles_dict)
+        Draws strokes defined on "path_tree" to "group". Styles dict maps style of path_tree element to the definition
+        of the style. Ex.:
+        if path_tree[i].style = 'm', styles_dict must have an element 'm'.
+
     generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False)
         Generate list of Path instances, in which each Path is a stroke defining a horizontal grid dividing the space
         xlims * ylims nb_of_divisions times.
@@ -82,7 +88,8 @@ class Path:
         points: list of 2D tuples
             stroke will connect all points
         style: str
-            Single character defining style of stroke. Default values are:
+            Single character defining style of stroke. For use with the OrigamiPatterns class (probably the only
+            project that will ever use this file) the default values are:
             'm' for mountain creases
             'v' for valley creases
             'e' for edge borders
@@ -118,6 +125,45 @@ class Path:
         """ Inverts path
         """
         self.points = self.points[::-1]
+
+    """ 
+        Draw path recursively
+        - Static method
+        - Draws strokes defined on "path_tree" to "group"
+        - Inputs:
+        -- path_tree [nested list] of Path instances
+        -- group [inkex.etree.SubElement]
+        -- styles_dict [dict] containing all styles for path_tree
+        """
+    @staticmethod
+    def draw_paths_recursively(path_tree, group, styles_dict):
+        """ Static method, draw list of Path instances recursively
+        """
+        for subpath in path_tree:
+            if type(subpath) == list:
+                if len(subpath) == 1:
+                    subgroup = group
+                else:
+                    subgroup = inkex.etree.SubElement(group, 'g')
+                Path.draw_paths_recursively(subpath, subgroup, styles_dict)
+            else:
+                if styles_dict[subpath.style]['draw']:
+                    if subpath.type == 'linear':
+
+                        points = subpath.points
+                        path = 'M{},{} '.format(*points[0])
+                        for i in range(1, len(points)):
+                            path = path + 'L{},{} '.format(*points[i])
+                        if subpath.closed:
+                            path = path + 'L{},{} Z'.format(*points[0])
+
+                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
+                        inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs)
+                    else:
+                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
+                                   'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
+                                   'r': str(subpath.radius)}
+                        inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs)
 
     @classmethod
     def generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False):
