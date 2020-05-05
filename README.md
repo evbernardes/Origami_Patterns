@@ -39,7 +39,7 @@ These groups can also be divided into smaller groups:
 
 ```
 waterbomb
-├── enclosures
+├── edges
 │   ├── bottom
 │   ├── left
 │   ├── right
