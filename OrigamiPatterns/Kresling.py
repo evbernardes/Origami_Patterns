@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from math import pi, sin, cos, acos, sqrt
+from math import pi, sin, cos, tan, acos, sqrt
 import inkex
 
 from Path import Path
@@ -43,6 +43,11 @@ class Kresling(Pattern):
                                      action="store", type="inkbool",
                                      dest="add_attachment", default=False,
                                      help="Add attachment?")
+
+        self.OptionParser.add_option("", "--attachment_percentage",
+                                     action="store", type="float",
+                                     dest="attachment_percentage", default=100.,
+                                     help="Length percentage of extra facet")
 
         self.OptionParser.add_option("", "--mirror_cells",
                                      action="store", type="inkbool",
@@ -87,7 +92,6 @@ class Kresling(Pattern):
         sides = self.options.sides
         radius = self.options.radius * unit_factor
         angle_ratio = self.options.angle_ratio
-        add_attachment = self.options.add_attachment
         mirror_cells = self.options.mirror_cells
 
         theta = (pi/2.)*(1 - 2./sides)
@@ -99,6 +103,10 @@ class Kresling(Pattern):
         gamma = pi/2 - angle_ratio*theta - phi
         dy = b*cos(gamma)
         dx = b*sin(gamma)
+
+        add_attachment = self.options.add_attachment
+        attachment_percentage = self.options.attachment_percentage/100.
+        attachment_height = a*(attachment_percentage-1)*tan(angle_ratio*theta)
 
         vertices = []
         for i in range(sides + 1):
@@ -121,7 +129,7 @@ class Kresling(Pattern):
             if add_attachment:
                 for i in range(lines%2, lines-1, 2):
                     # hacky solution, changes length of every other mountain line
-                    grid_h[i].points[1-i%2] = (grid_h[i].points[1-i%2][0] + a, grid_h[i].points[1-i%2][1])
+                    grid_h[i].points[1-i%2] = (grid_h[i].points[1-i%2][0] + a*attachment_percentage, grid_h[i].points[1-i%2][1])
 
 
         # create MV zigzag for Kresling pattern
@@ -150,9 +158,12 @@ class Kresling(Pattern):
 
             if add_attachment:
                 for i in range(lines):
-                    self.edge_points.append((dx * (lines - i) + a * (sides + 1), dy * i))
+                    x = dx * (lines - i) + a * (sides + attachment_percentage)
+                    self.edge_points.append((x, dy * i))
+                    self.edge_points.append((x, dy * i - attachment_height))
                     if i != lines - 1:
-                        self.edge_points.append((dx * (lines - i - 1) + a * sides, dy * (i + 1)))
+                        self.edge_points.append((x-dx-a*attachment_percentage, dy * (i + 1)))
+                        pass
 
         else:
             self.edge_points = [(a * sides + (lines % 2)*dx, 0)]
@@ -164,7 +175,14 @@ class Kresling(Pattern):
 
             if add_attachment:
                 for i in range(lines + 1):
-                    self.edge_points.append([a*sides + (i%2)*(dx+a), dy*(lines - i)])
+
+                    if not i%2 == 0:
+                        self.edge_points.append([a*sides + (i%2)*(dx+a*attachment_percentage), dy*(lines - i) - (i%2)*attachment_height])
+                        self.edge_points.append([a*sides + (i%2)*(dx+a*attachment_percentage), dy*(lines - i)])
+                        if (i != lines):
+                            self.edge_points.append([a * sides + (i % 2) * (dx + a * attachment_percentage), dy * (lines - i) + (i % 2) * attachment_height])
+                    else:
+                        self.edge_points.append([a * sides + (i % 2) * (dx + a * attachment_percentage), dy * (lines - i)])
             else:
                 for i in range(lines + 1):
                     self.edge_points.append([a*sides + (i%2)*dx, dy*(lines - i)])

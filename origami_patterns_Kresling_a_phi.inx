@@ -26,14 +26,18 @@
 				<option value="pt">pt</option>
 				<option value="px">px</option></param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
-			<param name="add_attachment" type="boolean" _gui-text="Add attachment to close the tower?">false</param>
 			<param name="mirror_cells" type="boolean" _gui-text="Mirror odd cells?">false</param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
 			<_param name="help"   type="description" xml:space="preserve">"Angle between a and l" parameter varies between 45(1 - 2/n) and 90(1-2/n) degrees, &#xA;where n = number of sides of polygon.&#xA;For large values of n, phi must be larger than 45.</_param>
 
 		</page>
 		<!-- next tab -->
-				<page name="mountains" _gui-text="Mountain creases">
+		<page name="extra_options" _gui-text="Extra Options">
+			<param name="add_attachment" type="boolean" _gui-text="Add one more facet to close tower?">false</param>
+			<param name="attachment_percentage" type="float" min="0" max="100" precision="1" appearance="full" _gui-text="Length percentage of extra facet">100</param>
+			<_param name="help"   type="description" xml:space="preserve">------------------------------</_param>
+		</page>
+		<page name="mountains" _gui-text="Mountain creases">
 			<param name="mountain_bool" type="boolean" _gui-text="Draw mountains?">true</param>
 			<param name="mountain_dashes_bool" type="boolean" _gui-text="Dashed strokes?">true</param>
 			<param name="mountain_dashes_len" type="float"  min="0.1" max="10" appearance="full" precision="2" _gui-text="Mountain dash + gap length">1</param>
