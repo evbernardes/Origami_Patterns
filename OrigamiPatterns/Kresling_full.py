@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from math import sin, cos, asin, pi, ceil
+from math import sin, cos, sqrt, asin, pi, ceil
 import inkex
 
 from Path import Path
@@ -40,10 +40,10 @@ class KreslingRadial(Kresling):
                          dest="angle_ratio", default=0.5,
                          help="Anle ratio")
 
-        self.add_argument('--phi',
+        self.add_argument('--lambdatheta',
                          action="store", type="float",
-                         dest="phi", default=45,
-                         help="phi")
+                         dest="lambdatheta", default=45,
+                         help="lambdatheta")
         
     def generate_path_tree(self):
         """ Convert radial to angular ratio, then call regular Kresling constructor
@@ -58,29 +58,36 @@ class KreslingRadial(Kresling):
             if radial_ratio > max_radial_ratio:
                 inkex.errormsg(_("For polygon of {} sides, the maximal radial ratio is = {}".format(n, max_radial_ratio)))
                 radial_ratio = max_radial_ratio
-            angle_ratio = 1 - 2*n*asin(radial_ratio)/((n-2)*pi)
-        elif parameter == 'phi':
-            phi = self.options.phi
+            self.options.angle_ratio = 1 - 2*n*asin(radial_ratio)/((n-2)*pi)
+
+        elif parameter == 'lambdatheta':
+            lambdatheta = self.options.lambdatheta
             angle_min = 45. * (1 - 2. / n)
             angle_max = 2 * angle_min
-            if phi < angle_min:
+            if lambdatheta < angle_min:
                 inkex.errormsg(_(
-                    "For polygon of {} sides, phi must be between {} and {} degrees, \nsetting phi = {}\n".format(
+                    "For polygon of {} sides, phi must be between {} and {} degrees, \nsetting lambda*theta = {}\n".format(
                         n, angle_min, angle_max, angle_min)))
-                phi = angle_min
-            elif phi > angle_max:
+                lambdatheta = angle_min
+            elif lambdatheta > angle_max:
                 inkex.errormsg(_(
-                    "For polygon of {} sides, phi must be between {} and {} degrees, \nsetting phi = {}\n".format(
+                    "For polygon of {} sides, phi must be between {} and {} degrees, \nsetting lambda*theta = {}\n".format(
                         n, angle_min, angle_max, angle_max)))
-                phi = angle_max
-            angle_ratio = phi * n / (90. * (n - 2.))
-        self.options.angle_ratio = angle_ratio
+                lambdatheta = angle_max
+            self.options.angle_ratio = lambdatheta * n / (90. * (n - 2.))
+
 
         # define some length
         mtype = self.options.measure_type
         mvalue = self.options.measure_value
+        angle_ratio = self.options.angle_ratio
         if mtype == 'a':
             radius = 0.5*mvalue / (sin(pi/n))
+        if mtype == 'b':
+            A = cos(theta*(1-angle_ratio))
+            B = sin(pi/n)
+            C = cos(theta*angle_ratio)
+            radius = 0.5*mvalue / sqrt(A**2 + B**2 - 2*A*B*C)
         elif mtype == 'l':
             radius = 0.5*mvalue/cos(theta*(1-angle_ratio))
         elif mtype == 'radius_external':

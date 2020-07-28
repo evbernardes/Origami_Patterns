@@ -20,11 +20,9 @@
             <_param name="help"   type="description" xml:space="preserve">------------------------------------------------------------</_param>
             <param name="measure_value" type="float" max="10000"  precision="3" _gui-text="Measure value:">10.0</param>
             <param name="measure_type" type="optiongroup" appearance="minimal" _gui-text="Measure type:">
-				<option value="a">Polygon side</option>
-<!--
-                <option value="b">Vertical mountain crease</option>
--->
-                <option value="l">Diagonal valley crease</option>
+				<option value="a">Polygon side (a)</option>
+                <option value="b">Vertical mountain crease (b)</option>
+                <option value="l">Diagonal valley crease (l)</option>
 				<option value="radius_external">External radius</option>
 				<option value="radius_internal">Internal radius (totally closed)</option>
 				<option value="diameter_external">External diameter</option>
@@ -41,12 +39,12 @@
 				<option value="px">px</option></param>
 			<_param name="help"   type="description" xml:space="preserve">------------------------------------------------------------</_param>
             <param name="parameter_type" type="optiongroup" appearance="full" _gui-text="Parameter type:">
-				<option value="angle_ratio">Angle ratio</option>
+				<option value="angle_ratio">Angle ratio (lambda)</option>
 				<option value="radial_ratio">Radial ratio</option>
-				<option value="phi">Angle between a and l</option></param>
+				<option value="lambdatheta">Angle between a and l (lambda * theta)</option></param>
 			<param name="radial_ratio" type="float" min="0" max="0.7"  precision="3" _gui-text="Radial ratio:">0.5</param>
 			<param name="angle_ratio" type="float" min="0.5" max="1"  precision="3" _gui-text="Angle ratio:">0.5</param>
-			<param name="phi" type="float" min="15" max="90"  precision="2" _gui-text="Angle between a and l (phi)">60.0</param>
+			<param name="lambdatheta" type="float" min="15" max="90"  precision="2" _gui-text="Angle between a and l">60.0</param>
 <!--				<option value="angle">Angle between l and a</option>-->
 		</page>
 		<!-- next tab -->
