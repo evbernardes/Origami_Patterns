@@ -23,20 +23,20 @@ class Template(Pattern):
         Pattern.__init__(self)  # Must be called in order to parse common options
 
         # save all custom parameters defined on .inx file
-        self.OptionParser.add_option("-p", "--pattern",
-                                     action="store", type="string",
-                                     dest="pattern", default="template1",
-                                     help="Origami pattern")
+        self.add_argument('-p', '--pattern',
+                          action="store", type=self.str,
+                          dest="pattern", default="template1",
+                          help="Origami pattern")
 
-        self.OptionParser.add_option("", "--length",
-                                     action="store", type="float",
-                                     dest="length", default=10.0,
-                                     help="Length of grid square")
+        self.add_argument('--length',
+                          action="store", type=self.float,
+                          dest="length", default=10.0,
+                          help="Length of grid square")
 
-        self.OptionParser.add_option("", "--theta",
-                                     action="store", type="int",
-                                     dest="theta", default=0,
-                                     help="Rotation angle (degree)")
+        self.add_argument('--theta',
+                          action="store", type=self.int,
+                          dest="theta", default=0,
+                          help="Rotation angle (degree)")
 
     def generate_path_tree(self):
         """ Specialized path generation for your origami pattern
@@ -111,9 +111,8 @@ class Template(Pattern):
         # self.path_tree = [mountains, valleys, vertices, edges]
 
 
-
-
-# Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape
+# Main function, creates an instance of the Class and calls self.draw() to draw the origami on inkscape
+# self.draw() is either a call to inkex.affect() or to svg.run(), depending on python version
 if __name__ == '__main__':
     e = Template()  # remember to put the name of your Class here!
-    e.affect()
+    e.draw()

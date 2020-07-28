@@ -18,30 +18,30 @@ class Hypar(Pattern):
         Pattern.__init__(self)  # Must be called in order to parse common options
 
         # save all custom parameters defined on .inx file
-        self.OptionParser.add_option("-p", "--pattern",
-                                     action="store", type="string",
-                                     dest="pattern", default="template1",
-                                     help="Origami pattern")
+        self.add_argument("-p", "--pattern",
+                          action="store", type=self.str,
+                          dest="pattern", default="template1",
+                          help="Origami pattern")
 
-        self.OptionParser.add_option("", "--radius",
-                                     action="store", type="float",
-                                     dest="radius", default=10.0,
-                                     help="Radius of tower (mm)")
+        self.add_argument("--radius",
+                          action="store", type=self.float,
+                          dest="radius", default=10.0,
+                          help="Radius of tower (mm)")
 
-        self.OptionParser.add_option("", "--sides",
-                                     action="store", type="int",
-                                     dest="sides", default=4,
-                                     help="Number of polygon sides")
+        self.add_argument("--sides",
+                          action="store", type=self.int,
+                          dest="sides", default=4,
+                          help="Number of polygon sides")
 
-        self.OptionParser.add_option("", "--rings",
-                                     action="store", type="int",
-                                     dest="rings", default=7,
-                                     help="Number of rings")
+        self.add_argument("--rings",
+                          action="store", type=self.int,
+                          dest="rings", default=7,
+                          help="Number of rings")
 
-        self.OptionParser.add_option("", "--simplify_center",
-                                     action="store", type="inkbool",
-                                     dest="simplify_center", default=0,
-                                     help="Simplify center")
+        self.add_argument("--simplify_center",
+                          action="store", type=self.bool,
+                          dest="simplify_center", default=0,
+                          help="Simplify center")
 
     def generate_path_tree(self):
         """ Specialized path generation for your origami pattern
@@ -138,4 +138,4 @@ class Hypar(Pattern):
 # Main function, creates an instance of the Class and calls inkex.affect() to draw the origami on inkscape
 if __name__ == '__main__':
     e = Hypar()  # remember to put the name of your Class here!
-    e.affect()
+    e.draw()

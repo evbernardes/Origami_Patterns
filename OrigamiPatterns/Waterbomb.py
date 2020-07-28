@@ -19,38 +19,38 @@ class Waterbomb(Pattern):
         """
         Pattern.__init__(self)  # Must be called in order to parse common options
 
-        self.OptionParser.add_option("-p", "--pattern",
-                                     action="store", type="string",
+        self.add_argument("-p", "--pattern",
+                                     action="store", type=self.str,
                                      dest="pattern", default="waterbomb",
                                      help="Origami pattern")
 
-        self.OptionParser.add_option("", "--pattern_first_line",
-                                     action="store", type="string",
+        self.add_argument("--pattern_first_line",
+                                     action="store", type=self.str,
                                      dest="pattern_first_line", default="waterbomb",
                                      help="Origami pattern")
 
-        self.OptionParser.add_option("", "--pattern_last_line",
-                                     action="store", type="string",
+        self.add_argument("--pattern_last_line",
+                                     action="store", type=self.str,
                                      dest="pattern_last_line", default="waterbomb",
                                      help="Origami pattern")
         
-        self.OptionParser.add_option("", "--lines",
-                                     action="store", type="int",
+        self.add_argument("--lines",
+                                     action="store", type=self.int,
                                      dest="lines", default=8,
                                      help="Number of lines")
         
-        self.OptionParser.add_option("", "--columns",
-                                     action="store", type="int", 
+        self.add_argument("--columns",
+                                     action="store", type=self.int, 
                                      dest="columns", default=16,
                                      help="Number of columns")
 
-        self.OptionParser.add_option("", "--length",
-                                     action="store", type="float", 
+        self.add_argument("--length",
+                                     action="store", type=self.float, 
                                      dest="length", default=10.0,
                                      help="Length of grid square")
         
-        self.OptionParser.add_option('', '--phase_shift', action='store',
-                                     type='inkbool', dest='phase_shift',
+        self.add_argument('--phase_shift', action='store',
+                                     type=self.bool, dest='phase_shift',
                                      default=True,
                                      help='Shift phase of tesselation.')
     
@@ -135,4 +135,4 @@ class Waterbomb(Pattern):
 if __name__ == '__main__':
 
     e = Waterbomb()
-    e.affect()
+    e.draw()

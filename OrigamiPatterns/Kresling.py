@@ -14,45 +14,35 @@ class Kresling(Pattern):
         """
         Pattern.__init__(self)  # Must be called in order to parse common options
 
-        self.OptionParser.add_option("-p", "--pattern",
-                                     action="store", type="string",
-                                     dest="pattern", default="kresling",
-                                     help="Origami pattern")      
+        self.add_argument("-p", "--pattern",
+                          action="store", type=self.str,
+                          dest="pattern", default="kresling",
+                          help="Origami pattern")
         
-        self.OptionParser.add_option("", "--lines",
-                                     action="store", type="int",
-                                     dest="lines", default=1,
-                                     help="Number of lines")
+        self.add_argument("--lines",
+                          action="store", type=self.int,
+                          dest="lines", default=1,
+                          help="Number of lines")
         
-        self.OptionParser.add_option("", "--sides",
-                                     action="store", type="int", 
-                                     dest="sides", default=3,
-                                     help="Number of polygon sides")
+        self.add_argument("--sides",
+                          action="store", type=self.int,
+                          dest="sides", default=3,
+                          help="Number of polygon sides")
 
-        self.OptionParser.add_option("", "--angle_ratio",
-                                     action="store", type="float", 
-                                     dest="angle_ratio", default=0.5,
-                                     help="Angle ratio")
+        self.add_argument("--add_attachment",
+                          action="store", type=self.bool,
+                          dest="add_attachment", default=False,
+                          help="Add attachment?")
 
-        self.OptionParser.add_option("", "--radius",
-                                     action="store", type="float", 
-                                     dest="radius", default=10.0,
-                                     help="Radius of tower (mm)")
+        self.add_argument("--attachment_percentage",
+                          action="store", type=self.float,
+                          dest="attachment_percentage", default=100.,
+                          help="Length percentage of extra facet")
 
-        self.OptionParser.add_option("", "--add_attachment",
-                                     action="store", type="inkbool",
-                                     dest="add_attachment", default=False,
-                                     help="Add attachment?")
-
-        self.OptionParser.add_option("", "--attachment_percentage",
-                                     action="store", type="float",
-                                     dest="attachment_percentage", default=100.,
-                                     help="Length percentage of extra facet")
-
-        self.OptionParser.add_option("", "--mirror_cells",
-                                     action="store", type="inkbool",
-                                     dest="mirror_cells", default=False,
-                                     help="Mirror odd cells?")
+        self.add_argument("--mirror_cells",
+                          action="store", type=self.bool,
+                          dest="mirror_cells", default=False,
+                          help="Mirror odd cells?")
 
     @staticmethod
     def generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment):
