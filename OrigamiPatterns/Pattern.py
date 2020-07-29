@@ -442,17 +442,17 @@ class Pattern(inkex.Effect):
         """
         # compatibility hack, no "long" in Python 3
         try:
-            long_ = long
+            longColor = long(longColor)
+            if longColor < 0: longColor = long(longColor) & 0xFFFFFFFF
+            hexColor = hex(longColor)[2:-3]
         except:
-            long_ = int
-        
-        
-        if verbose: inkex.debug("%s ="%(longColor))
-        longColor = long_(longColor)
-        if longColor <0: longColor = long_(longColor) & 0xFFFFFFFF
-        hexColor = hex(longColor)[2:-3]
+            longColor = int(longColor)
+            hexColor = hex(longColor)[2:-2]
+            inkex.debug = inkex.utils.debug
+
         hexColor = '#' + hexColor.rjust(6, '0').upper()
-        if verbose: inkex.debug("  %s for color default value"%(hexColor))
+        if verbose: inkex.debug("longColor = {}, hex = {}".format(longColor,hexColor))
+
         return hexColor
     
     def add_text(self, node, text, position, text_height=12):
