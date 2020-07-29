@@ -435,24 +435,24 @@ class Pattern(inkex.Effect):
                             'e': edge_style,
                             'p': vertex_style}
 
-    def getColorString(self, longColor, verbose=False):
+    def getColorString(self, longColor, verbose=True):
         """ Convert the long into a #RRGGBB color value
             - verbose=true pops up value for us in defaults
             conversion back is A + B*256^1 + G*256^2 + R*256^3
         """
         # compatibility hack, no "long" in Python 3
         try:
-            long_ = long
+            longColor = long(longColor)
+            if longColor < 0: longColor = long(longColor) & 0xFFFFFFFF
+            hexColor = hex(longColor)[3:-2]
         except:
-            long_ = int
-        
-        
-        if verbose: inkex.debug("%s ="%(longColor))
-        longColor = long_(longColor)
-        if longColor <0: longColor = long_(longColor) & 0xFFFFFFFF
-        hexColor = hex(longColor)[2:-3]
+            longColor = int(longColor)
+            hexColor = hex(longColor)[2:-2]
+            inkex.debug = inkex.utils.debug
+
         hexColor = '#' + hexColor.rjust(6, '0').upper()
-        if verbose: inkex.debug("  %s for color default value"%(hexColor))
+        if verbose: inkex.debug("longColor = {}, hex = {}".format(longColor,hexColor))
+
         return hexColor
     
     def add_text(self, node, text, position, text_height=12):
