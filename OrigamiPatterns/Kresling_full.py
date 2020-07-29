@@ -8,7 +8,7 @@ from Pattern import Pattern
 from Kresling import Kresling
 
 
-class KreslingRadial(Kresling):
+class Kresling_Full(Kresling):
     
     def __init__(self):
         """ Constructor
@@ -16,32 +16,32 @@ class KreslingRadial(Kresling):
         Kresling.__init__(self)  # Must be called in order to parse common options
 
         self.add_argument('--measure_value',
-                         action="store", type="float",
+                         action="store", type=self.float,
                          dest="measure_value", default=10.0,
                          help="Length")
 
         self.add_argument('--measure_type',
-                         action="store", type="string",
+                         action="store", type=self.str,
                          dest="measure_type", default=60,
                          help="Type of length")
 
         self.add_argument('--parameter_type',
-                         action="store", type="string",
+                         action="store", type=self.str,
                          dest="parameter_type", default=60,
                          help="Type of parameter")
 
         self.add_argument('--radial_ratio',
-                         action="store", type="float",
+                         action="store", type=self.float,
                          dest="radial_ratio", default=0.5,
                          help="Radial ratio")
 
         self.add_argument('--angle_ratio',
-                         action="store", type="float",
+                         action="store", type=self.float,
                          dest="angle_ratio", default=0.5,
                          help="Anle ratio")
 
         self.add_argument('--lambdatheta',
-                         action="store", type="float",
+                         action="store", type=self.float,
                          dest="lambdatheta", default=45,
                          help="lambdatheta")
         
@@ -111,5 +111,5 @@ class KreslingRadial(Kresling):
 
 
 if __name__ == '__main__':
-    e = KreslingRadial()
+    e = Kresling_Full()
     e.draw()

@@ -4,10 +4,28 @@ Path Class
 Defines a path and what it is supposed to be (mountain, valley, edge)
 
 """
+
 import inkex        # Required
 import simplestyle  # will be needed here for styles support
 
+# compatibility hack
+try:
+    from lxml import etree
+    inkex.etree = etree
+except:
+    pass
+
 from math import sin, cos, pi
+
+# compatibility hack for formatStyle
+def format_style(style):
+    try:
+        return str(inkex.Style(style)) # new
+    except:
+        return simplestyle.formatStyle(style) # old
+# def format_style(style):
+    # return simplestyle.formatStyle(style)
+
 
 
 class Path:
@@ -157,10 +175,10 @@ class Path:
                         if subpath.closed:
                             path = path + 'L{},{} Z'.format(*points[0])
 
-                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]), 'd': path}
+                        attribs = {'style': format_style(styles_dict[subpath.style]), 'd': path}
                         inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs)
                     else:
-                        attribs = {'style': simplestyle.formatStyle(styles_dict[subpath.style]),
+                        attribs = {'style': format_style(styles_dict[subpath.style]),
                                    'cx': str(subpath.points[0][0]), 'cy': str(subpath.points[0][1]),
                                    'r': str(subpath.radius)}
                         inkex.etree.SubElement(group, inkex.addNS('circle', 'svg'), attribs)

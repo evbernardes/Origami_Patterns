@@ -7,11 +7,7 @@ Helper functions
 import os
 from abc import abstractmethod
 
-import inkex        # Required
-import simplestyle  # will be needed here for styles support
-
-from Path import Path
-
+from Path import Path, inkex, simplestyle
 
 class Pattern(inkex.Effect):
     """ Class that inherits inkex.Effect and further specializes it for different
@@ -92,7 +88,7 @@ class Pattern(inkex.Effect):
             self.int = "int"
             self.float = "float"
             self.bool = "inkbool"
-        
+
         # Two ways to get debug info:
         # OR just use inkex.debug(string) instead...
         try:
@@ -335,9 +331,9 @@ class Pattern(inkex.Effect):
 
         # add the group to the document's current layer
         if type(self.path_tree) == list and len(self.path_tree) != 1:
-            self.topgroup = inkex.etree.SubElement(self.current_layer, 'g', g_attribs)
+            self.topgroup = inkex.etree.SubElement(self.get_layer(), 'g', g_attribs)
         else:
-            self.topgroup = self.current_layer
+            self.topgroup = self.get_layer()
 
         if len(self.edge_points) == 0:
             Path.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
@@ -350,11 +346,19 @@ class Pattern(inkex.Effect):
 
         # self.draw_paths_recursively(self.path_tree, self.topgroup, self.styles_dict)
 
+    # compatibility hack, "affect()" is replaced by "run()"
     def draw(self):
         try:
-            self.run()
+            self.run() # new
         except:
-            self.affect()
+            self.affect() # old
+
+    # compatibility hack
+    def get_layer(self):
+        try:
+            return self.svg.get_current_layer() # new
+        except:
+            return self.current_layer # old
 
     def create_styles_dict(self):
         """ Get stroke style parameters and use them to create the styles dictionary, used for the Path generation
@@ -436,6 +440,7 @@ class Pattern(inkex.Effect):
             - verbose=true pops up value for us in defaults
             conversion back is A + B*256^1 + G*256^2 + R*256^3
         """
+        # compatibility hack, no "long" in Python 3
         try:
             long_ = long
         except:

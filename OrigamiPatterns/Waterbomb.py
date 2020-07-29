@@ -106,6 +106,7 @@ class Waterbomb(Pattern):
 
         # define which lines must be of which type, according to parity and options
         senses = np.array([bool((i % 2+i)/2 % 2) for i in range(2*lines)])
+        senses = 1*senses # converts bool array to 0's and 1's
         if phase_shift:
             senses = np.invert(senses)
         if pattern_first_line == "magic_ball":
