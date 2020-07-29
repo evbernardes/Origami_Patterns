@@ -45,7 +45,7 @@ class Pattern(inkex.Effect):
     add_text(self, node, text, position, text_height=12)
         Create and insert a single line of text into the svg under node.
 
-    getColorString(self, longColor, verbose=False)
+    get_color_string(self, longColor, verbose=False)
         Convert the long into a #RRGGBB color value
 
     Abstract Methods
@@ -367,37 +367,37 @@ class Pattern(inkex.Effect):
         
         # define colour and stroke width
         mountain_style = {'draw': self.options.mountain_bool,
-                          'stroke': self.getColorString(self.options.mountain_stroke_color),
+                          'stroke': self.get_color_string(self.options.mountain_stroke_color),
                           'fill': 'none',
                           'stroke-width': self.options.mountain_stroke_width*unit_factor}
 
         valley_style = {'draw': self.options.valley_bool,
-                        'stroke': self.getColorString(self.options.valley_stroke_color),
+                        'stroke': self.get_color_string(self.options.valley_stroke_color),
                         'fill': 'none',
                         'stroke-width': self.options.valley_stroke_width*unit_factor}
 
         universal_style = {'draw': self.options.universal_bool,
-                           'stroke': self.getColorString(self.options.universal_stroke_color),
+                           'stroke': self.get_color_string(self.options.universal_stroke_color),
                            'fill': 'none',
                            'stroke-width': self.options.universal_stroke_width*unit_factor}
 
         semicrease_style = {'draw': self.options.semicrease_bool,
-                            'stroke': self.getColorString(self.options.semicrease_stroke_color),
+                            'stroke': self.get_color_string(self.options.semicrease_stroke_color),
                             'fill': 'none',
                             'stroke-width': self.options.semicrease_stroke_width*unit_factor}
 
         cut_style = {'draw': self.options.cut_bool,
-                     'stroke': self.getColorString(self.options.cut_stroke_color),
+                     'stroke': self.get_color_string(self.options.cut_stroke_color),
                      'fill': 'none',
                      'stroke-width': self.options.cut_stroke_width*unit_factor}
 
         edge_style = {'draw': self.options.edge_bool,
-                      'stroke': self.getColorString(self.options.edge_stroke_color),
+                      'stroke': self.get_color_string(self.options.edge_stroke_color),
                       'fill': 'none',
                       'stroke-width': self.options.edge_stroke_width*unit_factor}
 
         vertex_style = {'draw': self.options.vertex_bool,
-                        'stroke': self.getColorString(self.options.vertex_stroke_color),
+                        'stroke': self.get_color_string(self.options.vertex_stroke_color),
                         'fill': 'none',
                         'stroke-width': self.options.vertex_stroke_width*unit_factor}
 
@@ -435,7 +435,7 @@ class Pattern(inkex.Effect):
                             'e': edge_style,
                             'p': vertex_style}
 
-    def getColorString(self, longColor, verbose=False):
+    def get_color_string(self, longColor, verbose=False):
         """ Convert the long into a #RRGGBB color value
             - verbose=true pops up value for us in defaults
             conversion back is A + B*256^1 + G*256^2 + R*256^3

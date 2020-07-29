@@ -48,14 +48,13 @@ class Kresling(Pattern):
     def generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment):
 
         theta = (pi / 2.) * (1 - 2. / sides)
-        length = 2. * radius * cos(theta * (1. - angle_ratio))
+        l = 2. * radius * cos(theta * (1. - angle_ratio))
         a = 2. * radius * sin(pi / sides)
-        b = sqrt(a * a + length * length - 2 * a * length * cos(angle_ratio * theta))
-
-        phi = abs(acos((length * length + b * b - a * a) / (2 * length * b)))
-        gamma = pi / 2 - angle_ratio * theta - phi
-        dy = b * cos(gamma)
-        dx = b * sin(gamma)
+        # b = sqrt(a * a + l * l - 2 * a * l * cos(angle_ratio * theta))
+        # phi = abs(acos((l * l + b * b - a * a) / (2 * l * b)))
+        # gamma = pi / 2 - angle_ratio * theta - phi
+        dy = l * sin(theta * angle_ratio)
+        dx = l * cos(theta * angle_ratio) - a
 
         points = []
         styles = []
@@ -85,14 +84,15 @@ class Kresling(Pattern):
         mirror_cells = self.options.mirror_cells
 
         theta = (pi/2.)*(1 - 2./sides)
-        length = 2.*radius*cos(theta*(1.-angle_ratio))
+        l = 2.*radius*cos(theta*(1.-angle_ratio))
         a = 2.*radius*sin(pi/sides)
-        b = sqrt(a*a + length*length - 2*a*length*cos(angle_ratio*theta))
-
-        phi = abs(acos((length*length + b*b - a*a)/(2*length*b)))
-        gamma = pi/2 - angle_ratio*theta - phi
-        dy = b*cos(gamma)
-        dx = b*sin(gamma)
+        # b = sqrt(a*a + l*l - 2*a*l*cos(angle_ratio*theta))
+        # phi = abs(acos((l*l + b*b - a*a)/(2*l*b)))
+        # gamma = pi/2 - angle_ratio*theta - phi
+        # dy = b*cos(gamma)
+        # dx = b*sin(gamma)
+        dy = l * sin(theta * angle_ratio)
+        dx = l * cos(theta * angle_ratio) - a
 
         add_attachment = self.options.add_attachment
         attachment_percentage = self.options.attachment_percentage/100.
