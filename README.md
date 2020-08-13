@@ -28,8 +28,7 @@ The extension can be found on `Extensions > Origami Patterns`
 
 ## Output:
 Creates the pattern. 
-To simplify manual editing on Inkscape, the drawn pattern is composed of subgroups of
-of strokes.
+To simplify manual editing on Inkscape, the drawn pattern is composed of subgroups of strokes.
 For example, ungrouping the Waterbomb tesselation, you get three distinct groups of objects:
 - the mountain creases
 - the valley creases
@@ -76,8 +75,7 @@ waterbomb
 
 ## Deprecation and compatibility issues:
 Deprecated functions are being replaced for Inkscape 1.0 while making sure it still works with older versions of Inkscape.
-What still does not work in Inkscape 1.0:
-- Dashed strokes break everything
+I fixed all the bugs that I know of for now, but compatibility issues might still happen with Inkscape 1.0. 
 
 
 ## Simulation:
