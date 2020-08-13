@@ -76,8 +76,7 @@ waterbomb
 
 ## Deprecation and compatibility issues:
 Deprecated functions are being replaced for Inkscape 1.0 while making sure it still works with older versions of Inkscape.
-What still does not work in Inkscape 1.0:
-- Dashed strokes break everything
+I fixed all the bugs that I know of for now, but compatibility issues might still happen with Inkscape 1.0. 
 
 
 ## Simulation:

@@ -364,68 +364,64 @@ class Pattern(inkex.Effect):
         """ Get stroke style parameters and use them to create the styles dictionary, used for the Path generation
         """
         unit_factor = self.calc_unit_factor()
-        
-        # define colour and stroke width
-        mountain_style = {'draw': self.options.mountain_bool,
-                          'stroke': self.get_color_string(self.options.mountain_stroke_color),
-                          'fill': 'none',
-                          'stroke-width': self.options.mountain_stroke_width*unit_factor}
 
-        valley_style = {'draw': self.options.valley_bool,
-                        'stroke': self.get_color_string(self.options.valley_stroke_color),
-                        'fill': 'none',
-                        'stroke-width': self.options.valley_stroke_width*unit_factor}
-
-        universal_style = {'draw': self.options.universal_bool,
-                           'stroke': self.get_color_string(self.options.universal_stroke_color),
-                           'fill': 'none',
-                           'stroke-width': self.options.universal_stroke_width*unit_factor}
-
-        semicrease_style = {'draw': self.options.semicrease_bool,
-                            'stroke': self.get_color_string(self.options.semicrease_stroke_color),
-                            'fill': 'none',
-                            'stroke-width': self.options.semicrease_stroke_width*unit_factor}
-
-        cut_style = {'draw': self.options.cut_bool,
-                     'stroke': self.get_color_string(self.options.cut_stroke_color),
+        def create_style(draw_bool, color, width, dash_bool, dash_gap_len = 1, dash_duty_cycle = 1):
+            style = {'draw': draw_bool,
+                     'stroke': self.get_color_string(color),
                      'fill': 'none',
-                     'stroke-width': self.options.cut_stroke_width*unit_factor}
+                     'stroke-width': width * unit_factor}
+            if dash_bool:
+                dash = (dash_gap_len * unit_factor) * dash_duty_cycle
+                gap = (dash_gap_len* unit_factor) * (1 - dash_duty_cycle)
+                style['stroke-dasharray'] = "{} {}".format(dash, gap)
+            return style
 
-        edge_style = {'draw': self.options.edge_bool,
-                      'stroke': self.get_color_string(self.options.edge_stroke_color),
-                      'fill': 'none',
-                      'stroke-width': self.options.edge_stroke_width*unit_factor}
+        mountain_style = create_style(self.options.mountain_bool,
+                                      self.options.mountain_stroke_color,
+                                      self.options.mountain_stroke_width,
+                                      self.options.mountain_dashes_bool,
+                                      self.options.mountain_dashes_len,
+                                      self.options.mountain_dashes_duty)
 
-        vertex_style = {'draw': self.options.vertex_bool,
-                        'stroke': self.get_color_string(self.options.vertex_stroke_color),
-                        'fill': 'none',
-                        'stroke-width': self.options.vertex_stroke_width*unit_factor}
+        valley_style = create_style(self.options.valley_bool,
+                                    self.options.valley_stroke_color,
+                                    self.options.valley_stroke_width,
+                                    self.options.valley_dashes_bool,
+                                    self.options.valley_dashes_len,
+                                    self.options.valley_dashes_duty)
 
-        # check if dashed option selected
-        if self.options.mountain_dashes_bool:
-            dash = self.options.mountain_dashes_len*self.options.mountain_dashes_duty*unit_factor
-            gap = dash - self.options.mountain_dashes_len*unit_factor
-            mountain_style['stroke-dasharray'] = "{} {}".format(dash, gap)
-        if self.options.valley_dashes_bool:
-            dash = self.options.valley_dashes_len * self.options.valley_dashes_duty*unit_factor
-            gap = dash - self.options.valley_dashes_len*unit_factor
-            valley_style['stroke-dasharray'] = "{} {}".format(dash, gap)
-        if self.options.edge_dashes_bool:
-            dash = self.options.edge_dashes_len * self.options.edge_dashes_duty*unit_factor
-            gap = dash - self.options.edge_dashes_len*unit_factor
-            edge_style['stroke-dasharray'] = "{} {}".format(dash, gap)
-        if self.options.universal_dashes_bool:
-            dash = self.options.universal_dashes_len * self.options.universal_dashes_duty*unit_factor
-            gap = dash - self.options.universal_dashes_len*unit_factor
-            universal_style['stroke-dasharray'] = "{} {}".format(dash, gap)
-        if self.options.semicrease_dashes_bool:
-            dash = self.options.semicrease_dashes_len * self.options.semicrease_dashes_duty*unit_factor
-            gap = dash - self.options.semicrease_dashes_len*unit_factor
-            semicrease_style['stroke-dasharray'] = "{} {}".format(dash, gap)
-        if self.options.cut_dashes_bool:
-            dash = self.options.cut_dashes_len * self.options.cut_dashes_duty*unit_factor
-            gap = dash - self.options.cut_dashes_len*unit_factor
-            cut_style['stroke-dasharray'] = "{} {}".format(dash, gap)
+        universal_style = create_style(self.options.universal_bool,
+                                       self.options.universal_stroke_color,
+                                       self.options.universal_stroke_width,
+                                       self.options.universal_dashes_bool,
+                                       self.options.universal_dashes_len,
+                                       self.options.universal_dashes_duty)
+
+        semicrease_style = create_style(self.options.semicrease_bool,
+                                        self.options.semicrease_stroke_color,
+                                        self.options.semicrease_stroke_width,
+                                        self.options.semicrease_dashes_bool,
+                                        self.options.semicrease_dashes_len,
+                                        self.options.semicrease_dashes_duty)
+
+        cut_style = create_style(self.options.cut_bool,
+                                 self.options.cut_stroke_color,
+                                 self.options.cut_stroke_width,
+                                 self.options.cut_dashes_bool,
+                                 self.options.cut_dashes_len,
+                                 self.options.cut_dashes_duty)
+
+        edge_style = create_style(self.options.edge_bool,
+                                  self.options.edge_stroke_color,
+                                  self.options.edge_stroke_width,
+                                  self.options.edge_dashes_bool,
+                                  self.options.edge_dashes_len,
+                                  self.options.edge_dashes_duty)
+
+        vertex_style = create_style(self.options.vertex_bool,
+                                    self.options.vertex_stroke_color,
+                                    self.options.vertex_stroke_width,
+                                    False)
 
         self.styles_dict = {'m': mountain_style,
                             'v': valley_style,
