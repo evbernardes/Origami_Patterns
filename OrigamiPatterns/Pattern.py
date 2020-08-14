@@ -296,6 +296,10 @@ class Pattern(inkex.Effect):
                          type=self.bool, dest='vertex_bool',
                          default=True,
                          help='Draw vertices?')
+        self.add_argument('--vertex_dashes_bool', action='store',
+                          type=self.bool, dest='vertex_dashes_bool',
+                          default=False,
+                          help='Dashed strokes?')
 
         # here so we can have tabs - but we do not use it directly - else error
         self.add_argument('--active-tab',
@@ -365,71 +369,26 @@ class Pattern(inkex.Effect):
         """
         unit_factor = self.calc_unit_factor()
 
-        def create_style(draw_bool, color, width, dash_bool, dash_gap_len = 1, dash_duty_cycle = 1):
-            style = {'draw': draw_bool,
-                     'stroke': self.get_color_string(color),
+        def create_style(type):
+            style = {'draw': getattr(self.options,type+"_bool"),
+                     'stroke': self.get_color_string(getattr(self.options,type+"_stroke_color")),
                      'fill': 'none',
-                     'stroke-width': width * unit_factor}
-            if dash_bool:
-                dash = (dash_gap_len * unit_factor) * dash_duty_cycle
-                gap = (dash_gap_len* unit_factor) * (1 - dash_duty_cycle)
+                     'stroke-width': getattr(self.options,type+"_stroke_width") * unit_factor}
+            if getattr(self.options,type+"_dashes_bool"):
+                dash_gap_len = getattr(self.options,type+"_dashes_len")
+                duty = getattr(self.options,type+"_dashes_duty")
+                dash = (dash_gap_len * unit_factor) * duty
+                gap = (dash_gap_len * unit_factor) * (1 - duty)
                 style['stroke-dasharray'] = "{} {}".format(dash, gap)
             return style
 
-        mountain_style = create_style(self.options.mountain_bool,
-                                      self.options.mountain_stroke_color,
-                                      self.options.mountain_stroke_width,
-                                      self.options.mountain_dashes_bool,
-                                      self.options.mountain_dashes_len,
-                                      self.options.mountain_dashes_duty)
-
-        valley_style = create_style(self.options.valley_bool,
-                                    self.options.valley_stroke_color,
-                                    self.options.valley_stroke_width,
-                                    self.options.valley_dashes_bool,
-                                    self.options.valley_dashes_len,
-                                    self.options.valley_dashes_duty)
-
-        universal_style = create_style(self.options.universal_bool,
-                                       self.options.universal_stroke_color,
-                                       self.options.universal_stroke_width,
-                                       self.options.universal_dashes_bool,
-                                       self.options.universal_dashes_len,
-                                       self.options.universal_dashes_duty)
-
-        semicrease_style = create_style(self.options.semicrease_bool,
-                                        self.options.semicrease_stroke_color,
-                                        self.options.semicrease_stroke_width,
-                                        self.options.semicrease_dashes_bool,
-                                        self.options.semicrease_dashes_len,
-                                        self.options.semicrease_dashes_duty)
-
-        cut_style = create_style(self.options.cut_bool,
-                                 self.options.cut_stroke_color,
-                                 self.options.cut_stroke_width,
-                                 self.options.cut_dashes_bool,
-                                 self.options.cut_dashes_len,
-                                 self.options.cut_dashes_duty)
-
-        edge_style = create_style(self.options.edge_bool,
-                                  self.options.edge_stroke_color,
-                                  self.options.edge_stroke_width,
-                                  self.options.edge_dashes_bool,
-                                  self.options.edge_dashes_len,
-                                  self.options.edge_dashes_duty)
-
-        vertex_style = create_style(self.options.vertex_bool,
-                                    self.options.vertex_stroke_color,
-                                    self.options.vertex_stroke_width,
-                                    False)
-
-        self.styles_dict = {'m': mountain_style,
-                            'v': valley_style,
-                            'u': universal_style,
-                            's': semicrease_style,
-                            'c': cut_style,
-                            'e': edge_style,
-                            'p': vertex_style}
+        self.styles_dict = {'m': create_style("mountain"),
+                            'v': create_style("valley"),
+                            'u': create_style("universal"),
+                            's': create_style("semicrease"),
+                            'c': create_style("cut"),
+                            'e': create_style("edge"),
+                            'p': create_style("vertex")}
 
     def get_color_string(self, longColor, verbose=False):
         """ Convert the long into a #RRGGBB color value
