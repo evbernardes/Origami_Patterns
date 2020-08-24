@@ -95,217 +95,74 @@ class Pattern(inkex.Effect):
             self.tty = open("/dev/tty", 'w')
         except:
             self.tty = open(os.devnull, 'w')  # '/dev/null' for POSIX, 'nul' for Windows.
-            # print >>self.tty, "gears-dev " + __version__
 
-        self.add_argument("-u", "--units",
-                         action="store", type=self.str,
-                         dest="units", default='mm',
-                         help="Units this dialog is using")
-                                     
-        # self.add_argument("-a", "--add_attachment",
-        #                              action="store", type="inkbool", 
-        #                              dest="add_attachment", default=False,
-        #                              help="command line help")
-
-        # self.add_argument("", "--accuracy", # note no cli shortcut
-        #                              action="store", type="int",
-        #                              dest="accuracy", default=0,
-        #                              help="command line help")
+        self.add_argument('-u', '--units', type=self.str, default='mm')
 
         # --------------------------------------------------------------------------------------------------------------
         # mountain options
-        self.add_argument('-m', '--mountain_stroke_color', action='store',
-                         type=self.str, dest='mountain_stroke_color',
-                         default=4278190335,  # Red
-                         help='The mountain creases color.')
-        self.add_argument('--mountain_stroke_width', action='store',
-                         type=self.float, dest='mountain_stroke_width',
-                         default=0.1,
-                         help='Width of mountain strokes.')
-        self.add_argument('--mountain_dashes_len', action='store',
-                         type=self.float, dest='mountain_dashes_len',
-                         default=1.0,
-                         help='Mountain dash + gap length.')
-        self.add_argument('--mountain_dashes_duty', action='store',
-                         type=self.float, dest='mountain_dashes_duty',
-                         default=0.5,
-                         help='Mountain dash duty cycle.')
-        self.add_argument('--mountain_dashes_bool', action='store',
-                         type=self.bool, dest='mountain_dashes_bool',
-                         default=True,
-                         help='Dashed strokes?')
-        self.add_argument('--mountain_bool', action='store',
-                         type=self.bool, dest='mountain_bool',
-                         default=True,
-                         help='Draw mountains?')
+        self.add_argument('--mountain_stroke_color', type=self.str,  default=4278190335)  # Red
+        self.add_argument('--mountain_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--mountain_dashes_len', type=self.float, default=1.0)
+        self.add_argument('--mountain_dashes_duty', type=self.float, default=0.5)
+        self.add_argument('--mountain_dashes_bool', type=self.bool, default=True)
+        self.add_argument('--mountain_bool', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # valley options
-        self.add_argument('-v', '--valley_stroke_color', action='store',
-                         type=self.str, dest='valley_stroke_color',
-                         default=65535,  # Blue---------
-                         help='The valley creases color.')
-        self.add_argument('--valley_stroke_width', action='store',
-                         type=self.float, dest='valley_stroke_width',
-                         default=0.1,
-                         help='Width of valley strokes.')
-        self.add_argument('--valley_dashes_len', action='store',
-                         type=self.float, dest='valley_dashes_len',
-                         default=1.0,
-                         help='Valley dash + gap length.')
-        self.add_argument('--valley_dashes_duty', action='store',
-                         type=self.float, dest='valley_dashes_duty',
-                         default=0.25,
-                         help='Valley dash duty cycle.')
-        self.add_argument('--valley_dashes_bool', action='store',
-                         type=self.bool, dest='valley_dashes_bool',
-                         default=True,
-                         help='Dashed strokes?')
-        self.add_argument('--valley_bool', action='store',
-                         type=self.bool, dest='valley_bool',
-                         default=True,
-                         help='Draw valleys?')
+        self.add_argument('--valley_stroke_color', type=self.str, default=65535)  # Blue---------
+        self.add_argument('--valley_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--valley_dashes_len', type=self.float, default=1.0)
+        self.add_argument('--valley_dashes_duty', type=self.float, default=0.25)
+        self.add_argument('--valley_dashes_bool', type=self.bool, default=True)
+        self.add_argument('--valley_bool', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # edge options
-        self.add_argument('-e', '--edge_stroke_color', action='store',
-                         type=self.str, dest='edge_stroke_color',
-                         default=255,  # Black
-                         help='The mountain creases color.')
-        self.add_argument('--edge_stroke_width', action='store',
-                         type=self.float, dest='edge_stroke_width',
-                         default=0.1,
-                         help='Width of edge strokes.')
-        self.add_argument('--edge_dashes_len', action='store',
-                         type=self.float, dest='edge_dashes_len',
-                         default=1.0,
-                         help='Edge dash + gap length.')
-        self.add_argument('--edge_dashes_duty', action='store',
-                         type=self.float, dest='edge_dashes_duty',
-                         default=0.25,
-                         help='Edge dash duty cycle.')
-        self.add_argument('--edge_dashes_bool', action='store',
-                         type=self.bool, dest='edge_dashes_bool',
-                         default=False,
-                         help='Dashed strokes?')
-        self.add_argument('--edge_bool', action='store',
-                         type=self.bool, dest='edge_bool',
-                         default=True,
-                         help='Draw edges?')
-        self.add_argument('--edge_single_path', action='store',
-                         type=self.bool, dest='edge_single_path',
-                         default=True,
-                         help='Edges as single path?')
+        self.add_argument('--edge_stroke_color', type=self.str,  default=255)  # Black
+        self.add_argument('--edge_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--edge_dashes_len', type=self.float, default=1.0)
+        self.add_argument('--edge_dashes_duty', type=self.float, default=0.25)
+        self.add_argument('--edge_dashes_bool', type=self.bool, default=False)
+        self.add_argument('--edge_bool', type=self.bool, default=True)
+        self.add_argument('--edge_single_path', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # universal crease options
-        self.add_argument('--universal_stroke_color', action='store',
-                         type=self.str, dest='universal_stroke_color',
-                         default=4278255615,  # Magenta
-                         help='The universal creases color.')
-        self.add_argument('--universal_stroke_width', action='store',
-                         type=self.float, dest='universal_stroke_width',
-                         default=0.1,
-                         help='Width of universal strokes.')
-        self.add_argument('--universal_dashes_len', action='store',
-                         type=self.float, dest='universal_dashes_len',
-                         default=1.0,
-                         help='Universal dash + gap length.')
-        self.add_argument('--universal_dashes_duty', action='store',
-                         type=self.float, dest='universal_dashes_duty',
-                         default=0.25,
-                         help='Universal dash duty cycle.')
-        self.add_argument('--universal_dashes_bool', action='store',
-                         type=self.bool, dest='universal_dashes_bool',
-                         default=False,
-                         help='Dashed strokes?')
-        self.add_argument('--universal_bool', action='store',
-                         type=self.bool, dest='universal_bool',
-                         default=True,
-                         help='Draw universal creases?')
+        self.add_argument('--universal_stroke_color', type=self.str, default=4278255615)  # Magenta
+        self.add_argument('--universal_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--universal_dashes_len',  type=self.float,  default=1.0)
+        self.add_argument('--universal_dashes_duty', type=self.float, default=0.25)
+        self.add_argument('--universal_dashes_bool', type=self.bool, default=False)
+        self.add_argument('--universal_bool', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # semicrease options
-        self.add_argument('--semicrease_stroke_color', action='store',
-                         type=self.str, dest='semicrease_stroke_color',
-                         default=4294902015,  # Yellow
-                         help='The semicrease creases color.')
-        self.add_argument('--semicrease_stroke_width', action='store',
-                         type=self.float, dest='semicrease_stroke_width',
-                         default=0.1,
-                         help='Width of semicrease strokes.')
-        self.add_argument('--semicrease_dashes_len', action='store',
-                         type=self.float, dest='semicrease_dashes_len',
-                         default=1.0,
-                         help='Semicrease dash + gap length.')
-        self.add_argument('--semicrease_dashes_duty', action='store',
-                         type=self.float, dest='semicrease_dashes_duty',
-                         default=0.25,
-                         help='Semicrease dash duty cycle.')
-        self.add_argument('--semicrease_dashes_bool', action='store',
-                         type=self.bool, dest='semicrease_dashes_bool',
-                         default=False,
-                         help='Dashed strokes?')
-        self.add_argument('--semicrease_bool', action='store',
-                         type=self.bool, dest='semicrease_bool',
-                         default=True,
-                         help='Draw semicreases?')
+        self.add_argument('--semicrease_stroke_color', type=self.str, default=4294902015)  # Yellow
+        self.add_argument('--semicrease_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--semicrease_dashes_len', type=self.float, default=1.0)
+        self.add_argument('--semicrease_dashes_duty', type=self.float, default=0.25)
+        self.add_argument('--semicrease_dashes_bool', type=self.bool, default=False)
+        self.add_argument('--semicrease_bool', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # cut options
-        self.add_argument('--cut_stroke_color', action='store',
-                         type=self.str, dest='cut_stroke_color',
-                         default=16711935,  # Green
-                         help='The cut creases color.')
-        self.add_argument('--cut_stroke_width', action='store',
-                         type=self.float, dest='cut_stroke_width',
-                         default=0.1,
-                         help='Width of cut strokes.')
-        self.add_argument('--cut_dashes_len', action='store',
-                         type=self.float, dest='cut_dashes_len',
-                         default=1.0,
-                         help='Cut dash + gap length.')
-        self.add_argument('--cut_dashes_duty', action='store',
-                         type=self.float, dest='cut_dashes_duty',
-                         default=0.25,
-                         help='Cut dash duty cycle.')
-        self.add_argument('--cut_dashes_bool', action='store',
-                         type=self.bool, dest='cut_dashes_bool',
-                         default=False,
-                         help='Dashed strokes?')
-        self.add_argument('--cut_bool', action='store',
-                         type=self.bool, dest='cut_bool',
-                         default=True,
-                         help='Draw cuts?')
+        self.add_argument('--cut_stroke_color', type=self.str, default=16711935)  # Green
+        self.add_argument('--cut_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--cut_dashes_len', type=self.float, default=1.0)
+        self.add_argument('--cut_dashes_duty', type=self.float, default=0.25)
+        self.add_argument('--cut_dashes_bool', type=self.bool, default=False)
+        self.add_argument('--cut_bool', type=self.bool, default=True)
 
         # --------------------------------------------------------------------------------------------------------------
         # vertex options
-        self.add_argument('--vertex_stroke_color', action='store',
-                         type=self.str, dest='vertex_stroke_color',
-                         default=255,  # Black
-                         help='Vertices\' color.')
-        self.add_argument('--vertex_stroke_width', action='store',
-                         type=self.float, dest='vertex_stroke_width',
-                         default=0.1,
-                         help='Width of vertex strokes.')
-        self.add_argument('--vertex_radius', action='store',
-                         type=self.float, dest='vertex_radius',
-                         default=0.1,
-                         help='Radius of vertices.')
-        self.add_argument('--vertex_bool', action='store',
-                         type=self.bool, dest='vertex_bool',
-                         default=True,
-                         help='Draw vertices?')
-        self.add_argument('--vertex_dashes_bool', action='store',
-                          type=self.bool, dest='vertex_dashes_bool',
-                          default=False,
-                          help='Dashed strokes?')
+        self.add_argument('--vertex_stroke_color', type=self.str, default=255)  # Black
+        self.add_argument('--vertex_stroke_width', type=self.float, default=0.1)
+        self.add_argument('--vertex_radius', type=self.float, default=0.1)
+        self.add_argument('--vertex_bool', type=self.bool, default=True)
+        self.add_argument('--vertex_dashes_bool', type=self.bool, default=False)
 
         # here so we can have tabs - but we do not use it directly - else error
-        self.add_argument('--active-tab',
-                         action="store", type=self.str,
-                         dest="active_tab", default='title',  # use a legitimate default
-                         help="Active tab.")
+        self.add_argument('--active-tab', type=self.str, default='title')  # use a legitimate default
 
         self.path_tree = []
         self.edge_points = []

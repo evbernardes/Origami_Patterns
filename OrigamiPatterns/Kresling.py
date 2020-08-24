@@ -14,35 +14,12 @@ class Kresling(Pattern):
         """
         Pattern.__init__(self)  # Must be called in order to parse common options
 
-        self.add_argument("-p", "--pattern",
-                          action="store", type=self.str,
-                          dest="pattern", default="kresling",
-                          help="Origami pattern")
-        
-        self.add_argument("--lines",
-                          action="store", type=self.int,
-                          dest="lines", default=1,
-                          help="Number of lines")
-        
-        self.add_argument("--sides",
-                          action="store", type=self.int,
-                          dest="sides", default=3,
-                          help="Number of polygon sides")
-
-        self.add_argument("--add_attachment",
-                          action="store", type=self.bool,
-                          dest="add_attachment", default=False,
-                          help="Add attachment?")
-
-        self.add_argument("--attachment_percentage",
-                          action="store", type=self.float,
-                          dest="attachment_percentage", default=100.,
-                          help="Length percentage of extra facet")
-
-        self.add_argument("--mirror_cells",
-                          action="store", type=self.bool,
-                          dest="mirror_cells", default=False,
-                          help="Mirror odd cells?")
+        self.add_argument('--pattern', type=self.str, default="kresling")
+        self.add_argument('--lines', type=self.int, default=1)
+        self.add_argument('--sides', type=self.int, default=3)
+        self.add_argument('--add_attachment', type=self.bool, default=False)
+        self.add_argument('--attachment_percentage', type=self.float, default=100.)
+        self.add_argument('--mirror_cells', type=self.bool, default=False)
 
     @staticmethod
     def generate_kresling_zigzag(sides, radius, angle_ratio, add_attachment):

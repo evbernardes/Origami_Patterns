@@ -19,40 +19,13 @@ class Waterbomb(Pattern):
         """
         Pattern.__init__(self)  # Must be called in order to parse common options
 
-        self.add_argument("-p", "--pattern",
-                                     action="store", type=self.str,
-                                     dest="pattern", default="waterbomb",
-                                     help="Origami pattern")
-
-        self.add_argument("--pattern_first_line",
-                                     action="store", type=self.str,
-                                     dest="pattern_first_line", default="waterbomb",
-                                     help="Origami pattern")
-
-        self.add_argument("--pattern_last_line",
-                                     action="store", type=self.str,
-                                     dest="pattern_last_line", default="waterbomb",
-                                     help="Origami pattern")
-        
-        self.add_argument("--lines",
-                                     action="store", type=self.int,
-                                     dest="lines", default=8,
-                                     help="Number of lines")
-        
-        self.add_argument("--columns",
-                                     action="store", type=self.int, 
-                                     dest="columns", default=16,
-                                     help="Number of columns")
-
-        self.add_argument("--length",
-                                     action="store", type=self.float, 
-                                     dest="length", default=10.0,
-                                     help="Length of grid square")
-        
-        self.add_argument('--phase_shift', action='store',
-                                     type=self.bool, dest='phase_shift',
-                                     default=True,
-                                     help='Shift phase of tesselation.')
+        self.add_argument('--pattern', type=self.str, default='waterbomb')
+        self.add_argument('--pattern_first_line', type=self.str, default='waterbomb')
+        self.add_argument('--pattern_last_line', type=self.str, default='waterbomb')
+        self.add_argument('--lines', type=self.int, default=8)
+        self.add_argument('--columns', type=self.int, default=16)
+        self.add_argument('--length', type=self.float, default=10.0)
+        self.add_argument('--phase_shift', type=self.bool, default=True)
     
     def generate_path_tree(self):
         """ Specialized path generation for Waterbomb tesselation pattern

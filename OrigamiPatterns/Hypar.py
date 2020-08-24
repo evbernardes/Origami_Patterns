@@ -18,30 +18,11 @@ class Hypar(Pattern):
         Pattern.__init__(self)  # Must be called in order to parse common options
 
         # save all custom parameters defined on .inx file
-        self.add_argument("-p", "--pattern",
-                          action="store", type=self.str,
-                          dest="pattern", default="template1",
-                          help="Origami pattern")
-
-        self.add_argument("--radius",
-                          action="store", type=self.float,
-                          dest="radius", default=10.0,
-                          help="Radius of tower (mm)")
-
-        self.add_argument("--sides",
-                          action="store", type=self.int,
-                          dest="sides", default=4,
-                          help="Number of polygon sides")
-
-        self.add_argument("--rings",
-                          action="store", type=self.int,
-                          dest="rings", default=7,
-                          help="Number of rings")
-
-        self.add_argument("--simplify_center",
-                          action="store", type=self.bool,
-                          dest="simplify_center", default=0,
-                          help="Simplify center")
+        self.add_argument('--pattern', type=self.str, default='template1')
+        self.add_argument('--radius', type=self.float, default=10.0)
+        self.add_argument('--sides', type=self.int, default=4)
+        self.add_argument('--rings', ype=self.int, default=7)
+        self.add_argument('--simplify_center', type=self.bool, default=0)
 
     def generate_path_tree(self):
         """ Specialized path generation for your origami pattern
