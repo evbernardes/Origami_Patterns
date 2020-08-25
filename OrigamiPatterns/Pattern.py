@@ -98,7 +98,6 @@ class Pattern(inkex.Effect):
 
         self.add_argument('-u', '--units', type=self.str, default='mm')
 
-        # --------------------------------------------------------------------------------------------------------------
         # mountain options
         self.add_argument('--mountain_stroke_color', type=self.str,  default=4278190335)  # Red
         self.add_argument('--mountain_stroke_width', type=self.float, default=0.1)
@@ -107,16 +106,14 @@ class Pattern(inkex.Effect):
         self.add_argument('--mountain_dashes_bool', type=self.bool, default=True)
         self.add_argument('--mountain_bool', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # valley options
-        self.add_argument('--valley_stroke_color', type=self.str, default=65535)  # Blue---------
+        self.add_argument('--valley_stroke_color', type=self.str, default=65535)  # Blue
         self.add_argument('--valley_stroke_width', type=self.float, default=0.1)
         self.add_argument('--valley_dashes_len', type=self.float, default=1.0)
         self.add_argument('--valley_dashes_duty', type=self.float, default=0.25)
         self.add_argument('--valley_dashes_bool', type=self.bool, default=True)
         self.add_argument('--valley_bool', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # edge options
         self.add_argument('--edge_stroke_color', type=self.str,  default=255)  # Black
         self.add_argument('--edge_stroke_width', type=self.float, default=0.1)
@@ -126,7 +123,6 @@ class Pattern(inkex.Effect):
         self.add_argument('--edge_bool', type=self.bool, default=True)
         self.add_argument('--edge_single_path', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # universal crease options
         self.add_argument('--universal_stroke_color', type=self.str, default=4278255615)  # Magenta
         self.add_argument('--universal_stroke_width', type=self.float, default=0.1)
@@ -135,7 +131,6 @@ class Pattern(inkex.Effect):
         self.add_argument('--universal_dashes_bool', type=self.bool, default=False)
         self.add_argument('--universal_bool', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # semicrease options
         self.add_argument('--semicrease_stroke_color', type=self.str, default=4294902015)  # Yellow
         self.add_argument('--semicrease_stroke_width', type=self.float, default=0.1)
@@ -144,7 +139,6 @@ class Pattern(inkex.Effect):
         self.add_argument('--semicrease_dashes_bool', type=self.bool, default=False)
         self.add_argument('--semicrease_bool', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # cut options
         self.add_argument('--cut_stroke_color', type=self.str, default=16711935)  # Green
         self.add_argument('--cut_stroke_width', type=self.float, default=0.1)
@@ -153,7 +147,6 @@ class Pattern(inkex.Effect):
         self.add_argument('--cut_dashes_bool', type=self.bool, default=False)
         self.add_argument('--cut_bool', type=self.bool, default=True)
 
-        # --------------------------------------------------------------------------------------------------------------
         # vertex options
         self.add_argument('--vertex_stroke_color', type=self.str, default=255)  # Black
         self.add_argument('--vertex_stroke_width', type=self.float, default=0.1)
