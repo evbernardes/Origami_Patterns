@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from math import pi, sin, cos, tan, acos, sqrt
 import inkex
+import os
 
 from Path import Path
 from Pattern import Pattern
@@ -160,4 +161,4 @@ class Kresling(Pattern):
 if __name__ == '__main__':
 
     e = Kresling()
-    e.affect()
+    e.draw()

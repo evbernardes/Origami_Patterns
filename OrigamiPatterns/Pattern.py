@@ -206,7 +206,8 @@ class Pattern(inkex.Effect):
             self.run() # new
         except:
             self.affect() # old
-
+        # close(self.tty)
+        self.tty.close()
     # compatibility hack
     def get_layer(self):
         try:
