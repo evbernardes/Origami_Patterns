@@ -71,6 +71,7 @@ class Path:
         of the style. Ex.:
         if path_tree[i].style = 'm', styles_dict must have an element 'm'.
 
+
     generate_hgrid(cls, xlims, ylims, nb_of_divisions, style, include_edge=False)
         Generate list of Path instances, in which each Path is a stroke defining a horizontal grid dividing the space
         xlims * ylims nb_of_divisions times.
@@ -94,8 +95,10 @@ class Path:
 
     list_add(cls, paths, offsets)
         Generate list of new Path instances, adding a different tuple for each list
-
-
+        
+    list_simplify(cls, paths)
+        Gets complicated path-tree list and converts it into 
+        a simple list.
     """
 
     def __init__(self, points, style, closed=False, invert=False, radius=0.1, separated=False):
@@ -165,7 +168,8 @@ class Path:
                     subgroup = inkex.etree.SubElement(group, 'g')
                 Path.draw_paths_recursively(subpath, subgroup, styles_dict)
             else:
-                if styles_dict[subpath.style]['draw']:
+                # ~ if subpath.style != 'n':
+                if subpath.style != 'n' and styles_dict[subpath.style]['draw']:
                     if subpath.type == 'linear':
 
                         points = subpath.points
@@ -175,6 +179,7 @@ class Path:
                         if subpath.closed:
                             path = path + 'L{},{} Z'.format(*points[0])
 
+                        
                         attribs = {'style': format_style(styles_dict[subpath.style]), 'd': path}
                         inkex.etree.SubElement(group, inkex.addNS('path', 'svg'), attribs)
                     else:
@@ -266,6 +271,7 @@ class Path:
             paths.append(cls([points[i], points[j]],
                              styles[i]))
         return paths
+        
 
     def __add__(self, offsets):
         """ " + " operator overload.
@@ -488,4 +494,22 @@ class Path:
             paths_new.append(Path.reflect(path, p1, p2))
 
         return paths_new
+        
+    @classmethod
+    def list_simplify(cls, paths):
+        """ Gets complicated path-tree list and converts it into 
+        a simple list.
+
+        Returns
+        ---------
+        paths: list
+            list of Path instances
+        """
+        simple_list = []
+        for i in range(len(paths)):
+            if type(paths[i]) == Path:
+                simple_list.append(paths[i])
+            elif type(paths[i]) == list:
+                simple_list = simple_list + Path.list_simplify(paths[i])
+        return simple_list
 
