@@ -159,6 +159,7 @@ class Pattern(inkex.Effect):
 
         self.path_tree = []
         self.edge_points = []
+        self.vertex_points = []
         self.translate = (0, 0)
 
     def effect(self):
@@ -174,6 +175,14 @@ class Pattern(inkex.Effect):
         # ~ unit_factor = self.calc_unit_factor()
         # what page are we on
         # page_id = self.options.active_tab # sometimes wrong the very first time
+
+        # get vertex points and add them to path tree
+        vertex_radius = self.options.vertex_radius * self.calc_unit_factor()
+        vertices = []
+        for vertex_point in self.vertex_points:
+            vertices.append(Path(vertex_point, style='p', radius=vertex_radius))
+        self.path_tree.append(vertices)
+
 
         # Translate according to translate attribute
         g_attribs = {inkex.addNS('label', 'inkscape'): '{} Origami pattern'.format(self.options.pattern),
@@ -208,6 +217,7 @@ class Pattern(inkex.Effect):
             self.affect() # old
         # close(self.tty)
         self.tty.close()
+
     # compatibility hack
     def get_layer(self):
         try:
