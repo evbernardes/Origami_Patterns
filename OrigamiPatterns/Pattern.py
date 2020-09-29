@@ -179,6 +179,7 @@ class Pattern(inkex.Effect):
         # get vertex points and add them to path tree
         vertex_radius = self.options.vertex_radius * self.calc_unit_factor()
         vertices = []
+        self.vertex_points = list(set([i for i in self.vertex_points])) # remove duplicates
         for vertex_point in self.vertex_points:
             vertices.append(Path(vertex_point, style='p', radius=vertex_radius))
         self.path_tree.append(vertices)

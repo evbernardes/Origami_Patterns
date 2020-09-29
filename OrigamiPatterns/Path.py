@@ -99,6 +99,9 @@ class Path:
     list_simplify(cls, paths)
         Gets complicated path-tree list and converts it into 
         a simple list.
+
+    list_invert(cls, paths)
+        Invert list of paths and points of each path.
     """
 
     def __init__(self, points, style, closed=False, invert=False, radius=0.1, separated=False):
@@ -505,6 +508,9 @@ class Path:
         paths: list
             list of Path instances
         """
+        if type(paths) == Path:
+            return paths
+
         simple_list = []
         for i in range(len(paths)):
             if type(paths[i]) == Path:
@@ -512,4 +518,23 @@ class Path:
             elif type(paths[i]) == list:
                 simple_list = simple_list + Path.list_simplify(paths[i])
         return simple_list
+
+    @classmethod
+    def list_invert(cls, paths):
+        """ Invert list of paths and points of each path.
+
+        Returns
+        ---------
+        paths: list
+            list of Path instances
+        """
+
+        if type(paths) == Path:
+            return Path(paths.points[::-1], paths.style, paths.closed, paths.invert)
+        elif type(paths) == list:
+            paths_inverted = []
+            n = len(paths)
+            for i in range(n):
+                paths_inverted.append(Path.list_invert(paths[n-1-i]))
+            return paths_inverted
 
