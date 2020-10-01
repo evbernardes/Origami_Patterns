@@ -306,3 +306,6 @@ class Pattern(inkex.Effect):
 
 
 
+
+
+

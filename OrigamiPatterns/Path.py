@@ -102,6 +102,9 @@ class Path:
 
     list_invert(cls, paths)
         Invert list of paths and points of each path.
+
+    debug_points(cls, paths):
+        Plots points of path tree in drawing order.
     """
 
     def __init__(self, points, style, closed=False, invert=False, radius=0.1, separated=False):
@@ -530,11 +533,26 @@ class Path:
         """
 
         if type(paths) == Path:
-            return Path(paths.points[::-1], paths.style, paths.closed, paths.invert)
+            # return Path(paths.points[::-1], paths.style, paths.closed, paths.invert)
+            return Path(paths.points, paths.style, paths.closed, True)
         elif type(paths) == list:
             paths_inverted = []
-            n = len(paths)
-            for i in range(n):
-                paths_inverted.append(Path.list_invert(paths[n-1-i]))
-            return paths_inverted
+            # n = len(paths)
+            # for i in range(n):
+            #     # paths_inverted.append(Path.list_invert(paths[n-1-i]))
+            #     paths_inverted.append(Path.list_invert(paths[i]))
+            for path in paths:
+                # paths_inverted.append(Path.list_invert(paths[n-1-i]))
+                paths_inverted.append(Path.list_invert(path))
+            return paths_inverted[::-1]
 
+    @classmethod
+    def debug_points(cls, paths):
+        """ Plots points of path tree in drawing order.
+
+        """
+        if type(paths) == Path:
+            inkex.debug(paths.points)
+        elif type(paths) == list:
+            for sub_path in paths:
+                Path.debug_points(sub_path)
